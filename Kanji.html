@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kanji Lernen</title>
+    <link rel="icon" href="kanji_icon.png" type="image/x-icon">
+    <!-- Einbindung von Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            text-align: center;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            color: #333;
+        }
+        h1 {
+            background-color: #1abc9c;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px 0;
+            font-size: 36px;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #selection, #learning {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        #question {
+            font-size: 32px;
+            margin: 50px 0 20px 0;
+            color: #2c3e50;
+        }
+        #score, #statistics {
+            margin-top: 10px;
+        }
+        #score {
+            font-size: 24px;
+            color: #16a085;
+        }
+        #statistics {
+            font-size: 18px;
+            color: #34495e;
+        }
+        #correctAnswer {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        .correct {
+            color: #27ae60;
+        }
+        .incorrect {
+            color: #e74c3c;
+        }
+        input[type="text"], input[type="number"] {
+            font-size: 18px;
+            padding: 10px;
+            width: 80%;
+            max-width: 300px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            font-size: 18px;
+            padding: 12px 25px;
+            margin: 10px 5px;
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #backButton {
+            background-color: #e74c3c;
+        }
+        #backButton:hover {
+            background-color: #c0392b;
+        }
+        #options {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: left;
+        }
+        #options h3 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        #timer {
+            font-size: 20px;
+            color: #e74c3c;
+            margin-top: 10px;
+        }
+        /* Fortschrittsleiste */
+        #progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 25px;
+            overflow: hidden;
+            height: 20px;
+            margin-top: 20px;
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #76c7c0;
+            transition: width 0.3s ease;
+        }
+        .top-links-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .top-link {
+            font-size: 16px;
+            color: #ffffff;
+            text-decoration: none;
+            background-color: #3498db;
+            padding: 10px 15px;
+            border-radius: 50px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        .top-link:hover {
+            background-color: #2980b9;
+        }
+        /* Styles für das Formular zum Hinzufügen von Kanji */
+        #addKanjiForm {
+            margin-top: 30px;
+            text-align: left;
+        }
+        #addKanjiForm h3 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        #addKanjiForm label {
+            display: block;
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+        #addKanjiForm input {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Kanji Lernen</h1>
+    <!-- Link zurück zur Hiragana- und Vokabel-Seite -->
+    <div class="top-links-container">
+        <a href="Lernen.html" class="top-link">Zur Hiragana-Seite</a>
+        <a href="Vokabeln.html" class="top-link">Zur Vokabel-Seite</a>
+    </div>
+
+    <div id="container">
+        <!-- Auswahl der Kategorie -->
+        <div id="selection">
+            <p style="font-size: 24px; color: #2c3e50;">Wähle eine Kanji-Kategorie zum Lernen:</p>
+            <div id="categoryButtons"></div>
+            <!-- Einstellungen -->
+            <div id="options">
+                <h3>Einstellungen</h3>
+                <label><input type="checkbox" id="timeLimitCheck"> Zeitlimit pro Frage</label>
+                <input type="number" id="timeLimit" min="5" max="60" value="10"> Sekunden
+                <br><br>
+                <label>Wähle den Lernmodus:</label>
+                <select id="learningModeSelect">
+                    <option value="practice">Übungsmodus</option>
+                    <option value="multipleChoice">Multiple Choice</option>
+                </select>
+            </div>
+            <!-- Formular zum Hinzufügen von Kanji -->
+            <div id="addKanjiForm">
+                <h3>Eigenes Kanji hinzufügen</h3>
+                <label>Kanji:</label>
+                <input type="text" id="newKanji" placeholder="漢字">
+                <label>Lesung (Kun'yomi):</label>
+                <input type="text" id="newKunReading" placeholder="くんよみ">
+                <label>Lesung (On'yomi):</label>
+                <input type="text" id="newOnReading" placeholder="オンヨミ">
+                <label>Bedeutung (Deutsch):</label>
+                <input type="text" id="newMeaning" placeholder="Bedeutung">
+                <label>Kategorie:</label>
+                <input type="text" id="newCategory" placeholder="z.B. eigene Kanji">
+                <button onclick="addNewKanji()">Kanji hinzufügen</button>
+            </div>
+        </div>
+
+        <!-- Lernbereich -->
+        <div id="learning" style="display: none;">
+            <div id="score"></div>
+            <div id="statistics"></div>
+            <!-- Fortschrittsleiste -->
+            <div id="progress-container" style="display: none;">
+                <div id="progress-bar"></div>
+            </div>
+            <div id="question"></div>
+            <input type="text" id="answer" placeholder="Deine Antwort">
+            <div id="choices" style="display: none;"></div>
+            <br><br>
+            <button onclick="showAnswer()">Antwort anzeigen</button>
+            <button id="backButton" onclick="goToStart()">Zurück zum Startbildschirm</button>
+            <p id="correctAnswer"></p>
+            <p id="timer"></p>
+        </div>
+    </div>
+
+    <script>
+        // Beispiel-Kanji (Diese können durch tatsächliche Kanji ersetzt werden)
+        var defaultKanji = {
+            "N5 Kanji": [
+                { kanji: "日", kunReading: "ひ, -び, -か", onReading: "ニチ, ジツ", meaning: "Tag, Sonne" },
+                { kanji: "一", kunReading: "ひと-つ", onReading: "イチ", meaning: "eins" },
+                { kanji: "国", kunReading: "くに", onReading: "コク", meaning: "Land" },
+                { kanji: "人", kunReading: "ひと", onReading: "ジン, ニン", meaning: "Person" },
+                { kanji: "年", kunReading: "とし", onReading: "ネン", meaning: "Jahr" }
+            ],
+            "N4 Kanji": [
+                { kanji: "事", kunReading: "こと", onReading: "ジ, ズ", meaning: "Sache, Ereignis" },
+                { kanji: "作", kunReading: "つく-る", onReading: "サク, サ", meaning: "machen, herstellen" },
+                { kanji: "使", kunReading: "つか-う", onReading: "シ", meaning: "benutzen" },
+                { kanji: "動", kunReading: "うご-く", onReading: "ドウ", meaning: "bewegen" },
+                { kanji: "多", kunReading: "おお-い", onReading: "タ", meaning: "viel" }
+            ]
+        };
+
+        // Kanji aus dem lokalen Speicher laden oder Standard-Kanji verwenden
+        var kanjiData = JSON.parse(localStorage.getItem('kanjiData')) || defaultKanji;
+
+        var selectedKanji = [];
+        var currentKanji = {};
+        var totalQuestions = 0;
+        var correctAnswers = 0;
+        var incorrectAnswers = 0;
+        var timeLimit = 10;
+        var timerInterval;
+        var isMultipleChoice = false;
+        var learningMode = 'practice';
+        var remainingKanji = [];
+        var incorrectKanji = [];
+        var totalKanji = 0;
+        var correctlyAnsweredKanji = [];
+        var currentCategory = '';
+
+        function populateCategoryButtons() {
+            var categoryButtonsDiv = document.getElementById('categoryButtons');
+            categoryButtonsDiv.innerHTML = '';
+            for (var category in kanjiData) {
+                var button = document.createElement('button');
+                button.innerText = category;
+                button.onclick = (function(cat) {
+                    return function() {
+                        startLearning(cat);
+                    }
+                })(category);
+                categoryButtonsDiv.appendChild(button);
+            }
+        }
+
+        function addNewKanji() {
+            var kanji = document.getElementById('newKanji').value.trim();
+            var kunReading = document.getElementById('newKunReading').value.trim();
+            var onReading = document.getElementById('newOnReading').value.trim();
+            var meaning = document.getElementById('newMeaning').value.trim();
+            var category = document.getElementById('newCategory').value.trim();
+
+            if (kanji && (kunReading || onReading) && meaning && category) {
+                if (!kanjiData[category]) {
+                    kanjiData[category] = [];
+                }
+                kanjiData[category].push({
+                    kanji: kanji,
+                    kunReading: kunReading,
+                    onReading: onReading,
+                    meaning: meaning
+                });
+                // Kanji im lokalen Speicher speichern
+                localStorage.setItem('kanjiData', JSON.stringify(kanjiData));
+
+                // Formular zurücksetzen
+                document.getElementById('newKanji').value = '';
+                document.getElementById('newKunReading').value = '';
+                document.getElementById('newOnReading').value = '';
+                document.getElementById('newMeaning').value = '';
+                document.getElementById('newCategory').value = '';
+
+                // Kategorie-Buttons aktualisieren
+                populateCategoryButtons();
+
+                alert('Kanji erfolgreich hinzugefügt!');
+            } else {
+                alert('Bitte fülle alle erforderlichen Felder aus.');
+            }
+        }
+
+        function startLearning(category) {
+            currentCategory = category;
+            selectedKanji = kanjiData[category];
+
+            if (!selectedKanji || selectedKanji.length === 0) {
+                alert('Keine Kanji in dieser Kategorie gefunden.');
+                return;
+            }
+
+            learningMode = document.getElementById('learningModeSelect').value;
+            var timeLimitEnabled = document.getElementById('timeLimitCheck').checked;
+            timeLimit = parseInt(document.getElementById('timeLimit').value);
+
+            document.getElementById('selection').style.display = 'none';
+            document.getElementById('learning').style.display = 'block';
+
+            totalQuestions = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            correctlyAnsweredKanji = [];
+
+            if (learningMode === 'practice') {
+                remainingKanji = shuffleArray(selectedKanji.slice());
+                incorrectKanji = [];
+                totalKanji = selectedKanji.length;
+                document.getElementById('progress-container').style.display = 'block';
+                updateProgressBar();
+            } else {
+                remainingKanji = [];
+                document.getElementById('progress-container').style.display = 'none';
+            }
+
+            isMultipleChoice = (learningMode === 'multipleChoice');
+
+            nextKanji();
+        }
+
+        function updateScore() {
+            document.getElementById('score').innerText = 'Richtige Antworten: ' + correctAnswers;
+            if (totalQuestions > 0) {
+                document.getElementById('statistics').innerText = 'Fragen beantwortet: ' + totalQuestions +
+                    ' | Richtig: ' + correctAnswers + ' | Falsch: ' + incorrectAnswers +
+                    ' | Erfolgsquote: ' + ((correctAnswers / totalQuestions) * 100).toFixed(1) + '%';
+            } else {
+                document.getElementById('statistics').innerText = '';
+            }
+        }
+
+        function updateProgressBar() {
+            var progressBar = document.getElementById('progress-bar');
+            var progressPercent = (correctlyAnsweredKanji.length / totalKanji) * 100;
+            progressBar.style.width = progressPercent + '%';
+        }
+
+        function nextKanji() {
+            clearInterval(timerInterval);
+            document.getElementById('timer').innerText = '';
+            if (learningMode === 'practice') {
+                if (remainingKanji.length === 0 && incorrectKanji.length === 0) {
+                    alert('Du hast alle Kanji korrekt beantwortet! Gute Arbeit!');
+                    goToStart();
+                    return;
+                }
+                if (remainingKanji.length === 0 && incorrectKanji.length > 0) {
+                    remainingKanji = shuffleArray(incorrectKanji.slice());
+                    incorrectKanji = [];
+                }
+                currentKanji = remainingKanji.shift();
+            } else {
+                var randomIndex = Math.floor(Math.random() * selectedKanji.length);
+                currentKanji = selectedKanji[randomIndex];
+            }
+
+            totalQuestions++;
+            updateScore();
+
+            document.getElementById('question').innerText = 'Wie lautet die Bedeutung von: ' + currentKanji.kanji +
+                '\nKun\'yomi: ' + currentKanji.kunReading +
+                '\nOn\'yomi: ' + currentKanji.onReading;
+            document.getElementById('answer').value = '';
+            document.getElementById('answer').focus();
+            document.getElementById('correctAnswer').innerText = '';
+
+            if (isMultipleChoice) {
+                generateMultipleChoiceOptions();
+            } else {
+                document.getElementById('choices').style.display = 'none';
+                document.getElementById('answer').style.display = 'inline-block';
+                document.getElementById('answer').onkeydown = function(event) {
+                    if (event.key === 'Enter') {
+                        checkAnswer();
+                    }
+                };
+            }
+
+            if (document.getElementById('timeLimitCheck').checked) {
+                startTimer();
+            }
+        }
+
+        function checkAnswer() {
+            var userAnswer = document.getElementById('answer').value.trim().toLowerCase();
+            var correctAnswer = currentKanji.meaning.toLowerCase();
+            if (userAnswer === correctAnswer) {
+                markAnswer(true);
+            } else {
+                markAnswer(false, userAnswer);
+            }
+        }
+
+        function markAnswer(isCorrect, userAnswer = '') {
+            clearInterval(timerInterval);
+            document.getElementById('timer').innerText = '';
+            if (isCorrect) {
+                correctAnswers++;
+                document.getElementById('correctAnswer').innerText = 'Richtig!';
+                document.getElementById('correctAnswer').className = 'correct';
+
+                // Hinzugefügt: Kanji zu korrekt beantworteten hinzufügen
+                if (!correctlyAnsweredKanji.includes(currentKanji.kanji)) {
+                    correctlyAnsweredKanji.push(currentKanji.kanji);
+                }
+            } else {
+                incorrectAnswers++;
+                var feedbackMessage = 'Falsch! Die richtige Antwort war: ' + currentKanji.meaning;
+                document.getElementById('correctAnswer').innerText = feedbackMessage;
+                document.getElementById('correctAnswer').className = 'incorrect';
+                if (learningMode === 'practice') {
+                    incorrectKanji.push(currentKanji);
+                }
+            }
+            updateScore();
+            if (learningMode === 'practice') {
+                updateProgressBar();
+            }
+
+            setTimeout(function() {
+                nextKanji();
+            }, 2000);
+        }
+
+        function showAnswer() {
+            document.getElementById('correctAnswer').innerText = 'Die richtige Antwort ist: ' + currentKanji.meaning;
+            document.getElementById('correctAnswer').className = '';
+        }
+
+        function startTimer() {
+            var timeLeft = timeLimit;
+            document.getElementById('timer').innerText = 'Zeit: ' + timeLeft + 's';
+            timerInterval = setInterval(function() {
+                timeLeft--;
+                document.getElementById('timer').innerText = 'Zeit: ' + timeLeft + 's';
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    markAnswer(false);
+                }
+            }, 1000);
+        }
+
+        function generateMultipleChoiceOptions() {
+            var choicesDiv = document.getElementById('choices');
+            choicesDiv.innerHTML = '';
+            var options = [currentKanji.meaning];
+            while (options.length < 4) {
+                var randomKanji = selectedKanji[Math.floor(Math.random() * selectedKanji.length)].meaning;
+                if (!options.includes(randomKanji)) {
+                    options.push(randomKanji);
+                }
+            }
+            shuffleArray(options);
+            for (var i = 0; i < options.length; i++) {
+                var button = document.createElement('button');
+                button.innerText = options[i];
+                button.onclick = function() {
+                    if (this.innerText === currentKanji.meaning) {
+                        markAnswer(true);
+                    } else {
+                        markAnswer(false, this.innerText);
+                    }
+                };
+                choicesDiv.appendChild(button);
+            }
+            choicesDiv.style.display = 'block';
+            document.getElementById('answer').style.display = 'none';
+        }
+
+        function goToStart() {
+            document.getElementById('learning').style.display = 'none';
+            selectedKanji = [];
+            currentKanji = {};
+            totalQuestions = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            remainingKanji = [];
+            incorrectKanji = [];
+            totalKanji = 0;
+            correctlyAnsweredKanji = [];
+            clearInterval(timerInterval);
+            document.getElementById('timer').innerText = '';
+
+            document.getElementById('selection').style.display = 'block';
+        }
+
+        function shuffleArray(array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+            return array;
+        }
+
+        window.onload = function() {
+            populateCategoryButtons();
+        };
+    </script>
+
+</body>
+</html>
