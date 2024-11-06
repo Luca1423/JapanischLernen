@@ -245,7 +245,6 @@
                 }
             }, 1000);
         }
-
         function generateMultipleChoiceOptions() {
             var choicesDiv = document.getElementById('choices');
             choicesDiv.innerHTML = '';
