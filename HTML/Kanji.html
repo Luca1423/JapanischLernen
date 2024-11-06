@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kanji Lernen</title>
+	<link rel="stylesheet" href="CSS/KCSS.css">
+    <link rel="icon" href="Bilder/HiraganaA.ico" type="image/x-icon">
+	<script src="JS/KJS.js" defer></script>
+    <!-- Einbindung von Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+	
+</head>
+<body>
+
+    <h1>Kanji Lernen</h1>
+    <!-- Link zurück zur Hiragana- und Vokabel-Seite -->
+    <div class="top-links-container">
+        <a href="Lernen.html" class="top-link">Zur Hiragana-Seite</a>
+        <a href="Vokabeln.html" class="top-link">Zur Vokabel-Seite</a>
+    </div>
+
+    <div id="container">
+        <!-- Auswahl der Kategorie -->
+        <div id="selection">
+            <p style="font-size: 24px; color: #2c3e50;">Wähle eine Kanji-Kategorie zum Lernen:</p>
+            <div id="categoryButtons"></div>
+            <!-- Einstellungen -->
+            <div id="options">
+                <h3>Einstellungen</h3>
+                <label><input type="checkbox" id="timeLimitCheck"> Zeitlimit pro Frage</label>
+                <input type="number" id="timeLimit" min="5" max="60" value="10"> Sekunden
+                <br><br>
+                <label>Wähle den Lernmodus:</label>
+                <select id="learningModeSelect">
+                    <option value="practice">Übungsmodus</option>
+                    <option value="multipleChoice">Multiple Choice</option>
+                </select>
+            </div>
+            <!-- Formular zum Hinzufügen von Kanji -->
+            <div id="addKanjiForm">
+                <h3>Eigenes Kanji hinzufügen</h3>
+                <label>Kanji:</label>
+                <input type="text" id="newKanji" placeholder="漢字">
+                <label>Lesung (Kun'yomi):</label>
+                <input type="text" id="newKunReading" placeholder="くんよみ">
+                <label>Lesung (On'yomi):</label>
+                <input type="text" id="newOnReading" placeholder="オンヨミ">
+                <label>Bedeutung (Deutsch):</label>
+                <input type="text" id="newMeaning" placeholder="Bedeutung">
+                <label>Kategorie:</label>
+                <input type="text" id="newCategory" placeholder="z.B. eigene Kanji">
+                <button onclick="addNewKanji()">Kanji hinzufügen</button>
+            </div>
+        </div>
+
+        <!-- Lernbereich -->
+        <div id="learning" style="display: none;">
+            <div id="score"></div>
+            <div id="statistics"></div>
+            <!-- Fortschrittsleiste -->
+            <div id="progress-container" style="display: none;">
+                <div id="progress-bar"></div>
+            </div>
+            <div id="question"></div>
+            <input type="text" id="answer" placeholder="Deine Antwort">
+            <div id="choices" style="display: none;"></div>
+            <br><br>
+            <button onclick="showAnswer()">Antwort anzeigen</button>
+            <button id="backButton" onclick="goToStart()">Zurück zum Startbildschirm</button>
+            <p id="correctAnswer"></p>
+            <p id="timer"></p>
+        </div>
+    </div>
+</body>
+</html>
