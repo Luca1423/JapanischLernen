@@ -4,8 +4,8 @@ Dieses Repository enthält eine Sammlung von Materialien, um Japanisch zu lernen
 
 ## Struktur und Inhalte
 
-- **Vokabeln.html** - Eine Liste mit grundlegenden japanischen Vokabeln.
 - **Lernen.html** - Eine Übersicht über die verschiedenen Lerninhalte.
+- **Vokabeln.html** - Eine Liste mit grundlegenden japanischen Vokabeln.
 - **Kanji.html** - Enthält eine Sammlung von Kanji und deren Bedeutungen.
 - **Bilder** - Ein Ordner, der verschiedene Bilder für das Projekt enthält.
 
