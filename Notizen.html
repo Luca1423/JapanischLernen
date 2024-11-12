@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Notizenseite</title>
+    <script src="JS/NJS.js" defer></script>
+    <link rel="stylesheet" href="CSS/NCSS.css">
+</head>
+<body>
+    <h1>Notizen</h1>
+	<div class="top-links-container">
+        <a href="Lernen.html" class="top-link">Zur Partikel-Seite</a>
+		<a href="Vokabeln.html" id="vocabularyLink" class="top-link">Zur Vokabelseite</a>
+        <a href="Kanji.html" class="top-link">Zur Kanji-Seite</a>
+    </div>
+    <div id="container">
+        <div id="noteEditor">
+            <textarea id="noteContent" placeholder="Schreibe hier deine Notiz..."></textarea>
+            <br>
+            <input type="text" id="noteTitle" placeholder="Titel der Notiz eingeben">
+            <br>
+            <button id="saveNote">Notiz speichern</button>
+        </div>
+
+        <div id="noteList">
+            <!-- Hier werden die gespeicherten Notizen angezeigt -->
+        </div>
+    </div>
+</body>
+</html>
