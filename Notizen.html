@@ -3,28 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Notizenseite</title>
-	<link rel="icon" href="Bilder/HiraganaA.ico" type="image/x-icon">
-    <script src="JS/NJS.js" defer></script>
+    <link rel="icon" href="Bilder/HiraganaA.ico" type="image/x-icon">
+	<script src="JS/NJS.js" defer></script>
     <link rel="stylesheet" href="CSS/NCSS.css">
 </head>
 <body>
     <h1>Notizen</h1>
-	<div class="top-links-container">
+    <div class="top-links-container">
         <a href="Lernen.html" class="top-link">Zur Partikel-Seite</a>
-		<a href="Vokabeln.html" id="vocabularyLink" class="top-link">Zur Vokabelseite</a>
+        <a href="Vokabeln.html" id="vocabularyLink" class="top-link">Zur Vokabelseite</a>
         <a href="Kanji.html" class="top-link">Zur Kanji-Seite</a>
     </div>
     <div id="container">
+        <!-- Bereich zum Erstellen neuer Gruppen -->
+        <div id="groupCreator">
+            <input type="text" id="groupTitle" placeholder="Gib den Namen der Gruppe ein">
+            <button id="createGroup">Gruppe erstellen</button>
+        </div>
+
+        <!-- Bereich, in dem die Gruppen und Notizen angezeigt werden -->
+        <div id="groupsContainer">
+            <!-- Gruppen werden hier dynamisch hinzugefügt -->
+        </div>
+
+        <!-- Notizeditor -->
         <div id="noteEditor">
             <textarea id="noteContent" placeholder="Schreibe hier deine Notiz..."></textarea>
             <br>
             <input type="text" id="noteTitle" placeholder="Titel der Notiz eingeben">
             <br>
+            <!-- Dropdown zum Auswählen der Gruppe -->
+            <select id="groupSelect">
+                <!-- Optionen werden dynamisch hinzugefügt -->
+            </select>
+            <br>
             <button id="saveNote">Notiz speichern</button>
-        </div>
-
-        <div id="noteList">
-            <!-- Hier werden die gespeicherten Notizen angezeigt -->
         </div>
     </div>
 </body>
