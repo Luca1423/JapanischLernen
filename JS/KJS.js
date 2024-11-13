@@ -9,6 +9,8 @@ let kanjiList = [
 let currentKanjiIndex = 0;
 let score = 0;
 let isAnswerChecked = false;
+let isEditing = false;
+let currentEditIndex = null;
 
 // Elemente auswählen
 const startButton = document.getElementById('startButton');
@@ -25,6 +27,7 @@ const progressBar = document.getElementById('progress-bar');
 const backButton = document.getElementById('backButton');
 const backButton2 = document.getElementById('backButton2');
 const addKanjiButton = document.getElementById('addKanjiButton');
+const formTitle = document.getElementById('formTitle');
 
 // Event Listener
 startButton.addEventListener('click', startLearning);
@@ -107,6 +110,15 @@ function goBack() {
     answerInput.style.display = 'block';
     submitButton.style.display = 'inline-block';
     isAnswerChecked = false;
+
+    if (isEditing) {
+        isEditing = false;
+        currentEditIndex = null;
+        formTitle.textContent = 'Neues Kanji hinzufügen';
+        addKanjiButton.textContent = 'Kanji hinzufügen';
+        document.getElementById('kanjiInput').value = '';
+        document.getElementById('meaningInput').value = '';
+    }
 }
 
 function showAddKanjiForm() {
@@ -120,11 +132,24 @@ function addKanji() {
     const meaningInputValue = document.getElementById('meaningInput').value.trim();
 
     if (kanjiInputValue && meaningInputValue) {
-        kanjiList.push({ kanji: kanjiInputValue, meaning: meaningInputValue });
-        alert('Kanji hinzugefügt!');
+        if (isEditing) {
+            // Update existing Kanji
+            kanjiList[currentEditIndex] = { kanji: kanjiInputValue, meaning: meaningInputValue };
+            alert('Kanji aktualisiert!');
+            isEditing = false;
+            currentEditIndex = null;
+            formTitle.textContent = 'Neues Kanji hinzufügen';
+            addKanjiButton.textContent = 'Kanji hinzufügen';
+        } else {
+            // Add new Kanji
+            kanjiList.push({ kanji: kanjiInputValue, meaning: meaningInputValue });
+            alert('Kanji hinzugefügt!');
+        }
         document.getElementById('kanjiInput').value = '';
         document.getElementById('meaningInput').value = '';
         displayKanjiList();
+        // Zurück zur Auswahlseite
+        goBack();
     } else {
         alert('Bitte sowohl Kanji als auch Bedeutung eingeben.');
     }
@@ -133,11 +158,57 @@ function addKanji() {
 function displayKanjiList() {
     const kanjiListDisplay = document.getElementById('kanjiListDisplay');
     kanjiListDisplay.innerHTML = '';
-    kanjiList.forEach(kanjiItem => {
+    kanjiList.forEach((kanjiItem, index) => {
         const li = document.createElement('li');
         li.textContent = `${kanjiItem.kanji} - ${kanjiItem.meaning}`;
+
+        // Edit Button
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Bearbeiten';
+        editButton.className = 'edit-button';
+        editButton.addEventListener('click', () => {
+            editKanji(index);
+        });
+
+        // Delete Button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Löschen';
+        deleteButton.className = 'delete-button';
+        deleteButton.addEventListener('click', () => {
+            deleteKanji(index);
+        });
+
+        li.appendChild(editButton);
+        li.appendChild(deleteButton);
         kanjiListDisplay.appendChild(li);
     });
+}
+
+function editKanji(index) {
+    isEditing = true;
+    currentEditIndex = index;
+
+    const kanjiItem = kanjiList[index];
+
+    // Pre-fill the form with existing data
+    document.getElementById('kanjiInput').value = kanjiItem.kanji;
+    document.getElementById('meaningInput').value = kanjiItem.meaning;
+
+    // Update form title and button text
+    formTitle.textContent = 'Kanji bearbeiten';
+    addKanjiButton.textContent = 'Kanji aktualisieren';
+
+    // Show the form
+    selectionDiv.style.display = 'none';
+    addKanjiForm.style.display = 'block';
+    learningDiv.style.display = 'none';
+}
+
+function deleteKanji(index) {
+    if (confirm('Möchtest du dieses Kanji wirklich löschen?')) {
+        kanjiList.splice(index, 1);
+        displayKanjiList();
+    }
 }
 
 // Kanji-Liste beim Laden der Seite anzeigen
