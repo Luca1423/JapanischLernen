@@ -8,69 +8,52 @@
 	<script src="JS/KJS.js" defer></script>
     <!-- Einbindung von Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-	
 </head>
 <body>
-
     <h1>Kanji Lernen</h1>
-    <!-- Link zurück zur Hiragana- und Vokabel-Seite -->
     <div class="top-links-container">
         <a href="Lernen.html" class="top-link">Zur Partikel-Seite</a>
         <a href="Vokabeln.html" class="top-link">Zur Vokabel-Seite</a>
 		<a href="Notizen.html" class="top-link">Zur Notizen-Seite</a>
     </div>
+    <div class="top-links-container">
+        <a href="#" class="top-link" id="learnLink">Lernen</a>
+        <a href="#" class="top-link" id="addKanjiLink">Kanji hinzufügen</a>
+    </div>
 
     <div id="container">
-        <!-- Auswahl der Kategorie -->
+        <!-- Auswahlbereich -->
         <div id="selection">
-            <p style="font-size: 24px; color: #2c3e50;">Wähle eine Kanji-Kategorie zum Lernen:</p>
-            <div id="categoryButtons"></div>
-            <!-- Einstellungen -->
-            <div id="options">
-                <h3>Einstellungen</h3>
-                <label><input type="checkbox" id="timeLimitCheck"> Zeitlimit pro Frage</label>
-                <input type="number" id="timeLimit" min="5" max="60" value="10"> Sekunden
-                <br><br>
-                <label>Wähle den Lernmodus:</label>
-                <select id="learningModeSelect">
-                    <option value="practice">Übungsmodus</option>
-                    <option value="multipleChoice">Multiple Choice</option>
-                </select>
-            </div>
-            <!-- Formular zum Hinzufügen von Kanji -->
-            <div id="addKanjiForm">
-                <h3>Eigenes Kanji hinzufügen</h3>
-                <label>Kanji:</label>
-                <input type="text" id="newKanji" placeholder="漢字">
-                <label>Lesung (Kun'yomi):</label>
-                <input type="text" id="newKunReading" placeholder="くんよみ">
-                <label>Lesung (On'yomi):</label>
-                <input type="text" id="newOnReading" placeholder="オンヨミ">
-                <label>Bedeutung (Deutsch):</label>
-                <input type="text" id="newMeaning" placeholder="Bedeutung">
-                <label>Kategorie:</label>
-                <input type="text" id="newCategory" placeholder="z.B. eigene Kanji">
-                <button onclick="addNewKanji()">Kanji hinzufügen</button>
-            </div>
+            <h2>Willkommen zum Kanji-Lernprogramm!</h2>
+            <button id="startButton">Lernsession starten</button>
         </div>
 
         <!-- Lernbereich -->
         <div id="learning" style="display: none;">
+            <div id="question"></div>
+            <input type="text" id="answerInput" placeholder="Antwort eingeben">
+            <div id="timer"></div>
+            <button id="submitButton">Antwort prüfen</button>
+            <div id="correctAnswer"></div>
             <div id="score"></div>
-            <div id="statistics"></div>
-            <!-- Fortschrittsleiste -->
-            <div id="progress-container" style="display: none;">
+            <div id="progress-container">
                 <div id="progress-bar"></div>
             </div>
-            <div id="question"></div>
-            <input type="text" id="answer" placeholder="Deine Antwort">
-            <div id="choices" style="display: none;"></div>
-            <br><br>
-            <button onclick="showAnswer()">Antwort anzeigen</button>
-            <button id="backButton" onclick="goToStart()">Zurück zum Startbildschirm</button>
-            <p id="correctAnswer"></p>
-            <p id="timer"></p>
+            <button id="backButton">Zurück</button>
+        </div>
+
+        <!-- Kanji hinzufügen Bereich -->
+        <div id="addKanjiForm" style="display: none;">
+            <h3>Neues Kanji hinzufügen</h3>
+            <label for="kanjiInput">Kanji:</label>
+            <input type="text" id="kanjiInput">
+            <label for="meaningInput">Bedeutung:</label>
+            <input type="text" id="meaningInput">
+            <button id="addKanjiButton">Kanji hinzufügen</button>
+            <button id="backButton2">Zurück</button>
         </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
