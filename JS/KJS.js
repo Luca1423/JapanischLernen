@@ -96,6 +96,8 @@ function shuffleArray(array) {
 
 // Funktionen
 function startLearning() {
+	answerInput.style.display = 'block';
+	submitButton.style.display = 'inline-block';
     selectionDiv.style.display = 'none';
     learningDiv.style.display = 'block';
     currentKanjiIndex = 0;
@@ -114,6 +116,8 @@ function showKanji() {
         correctAnswerDiv.textContent = '';
         updateProgressBar();
         answerInput.focus();
+		answerInput.style.display = 'block';
+		submitButton.style.display = 'inline-block';
     } else {
         questionDiv.textContent = 'Lernsession abgeschlossen!';
         answerInput.style.display = 'none';
