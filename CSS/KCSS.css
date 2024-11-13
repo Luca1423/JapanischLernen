@@ -18,17 +18,12 @@ h1 {
 }
 
 /* Navigation */
-.nav-container {
+.top-links-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1abc9c;
-    padding: 10px 20px;
-}
-
-.nav-left, .nav-right {
-    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 10px;
+    margin-top: 20px;
 }
 
 .top-link {
@@ -38,6 +33,7 @@ h1 {
     background-color: #3498db;
     padding: 10px 15px;
     border-radius: 50px;
+    display: inline-block;
     transition: background-color 0.3s ease;
 }
 
