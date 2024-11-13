@@ -1,6 +1,9 @@
 // Initialisiere die Kanji-Liste
 let kanjiList = [];
 
+// Variable für die zufällig gemischte Kanji-Liste während des Lernens
+let shuffledKanjiList = [];
+
 // Funktion zum Laden der Kanji aus LocalStorage
 function loadKanjiList() {
     const storedKanji = localStorage.getItem('kanjiList');
@@ -71,6 +74,26 @@ answerInput.addEventListener('keydown', function(event) {
     }
 });
 
+// Funktion zum Mischen eines Arrays (Fisher-Yates-Algorithmus)
+function shuffleArray(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+
+    // Solange es noch Elemente gibt
+    while (0 !== currentIndex) {
+
+        // Wähle ein verbleibendes Element
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // Und tausche es mit dem aktuellen Element
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+}
+
 // Funktionen
 function startLearning() {
     selectionDiv.style.display = 'none';
@@ -78,13 +101,15 @@ function startLearning() {
     currentKanjiIndex = 0;
     score = 0;
     isAnswerChecked = false;
+    // Erstelle eine gemischte Kopie der Kanji-Liste
+    shuffledKanjiList = shuffleArray(kanjiList.slice());
     showKanji();
 }
 
 function showKanji() {
     isAnswerChecked = false;
-    if (currentKanjiIndex < kanjiList.length) {
-        questionDiv.textContent = kanjiList[currentKanjiIndex].kanji;
+    if (currentKanjiIndex < shuffledKanjiList.length) {
+        questionDiv.textContent = shuffledKanjiList[currentKanjiIndex].kanji;
         answerInput.value = '';
         correctAnswerDiv.textContent = '';
         updateProgressBar();
@@ -95,12 +120,12 @@ function showKanji() {
         submitButton.style.display = 'none';
         correctAnswerDiv.textContent = '';
     }
-    scoreDiv.textContent = `Punkte: ${score} / ${kanjiList.length}`;
+    scoreDiv.textContent = `Punkte: ${score} / ${shuffledKanjiList.length}`;
 }
 
 function checkAnswer() {
     const userAnswer = answerInput.value.trim();
-    const correctAnswer = kanjiList[currentKanjiIndex].meaning;
+    const correctAnswer = shuffledKanjiList[currentKanjiIndex].meaning;
 
     if (userAnswer === correctAnswer) {
         correctAnswerDiv.textContent = 'Richtig!';
@@ -116,7 +141,7 @@ function checkAnswer() {
 }
 
 function updateProgressBar() {
-    const progress = (currentKanjiIndex / kanjiList.length) * 100;
+    const progress = (currentKanjiIndex / shuffledKanjiList.length) * 100;
     progressBar.style.width = progress + '%';
 }
 
