@@ -1,3 +1,4 @@
+/* Styles für den gesamten Body */
 body {
     font-family: 'Roboto', Arial, sans-serif;
     text-align: center;
@@ -7,6 +8,8 @@ body {
     position: relative;
     color: #333;
 }
+
+/* Header */
 h1 {
     background-color: #1abc9c;
     color: #ffffff;
@@ -16,44 +19,60 @@ h1 {
     position: relative;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+/* Container */
 #container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
-#selection, #learning {
+
+/* Sektionen */
+#selection, #learning, #addKanjiForm {
     background-color: #ffffff;
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     margin-top: 30px;
 }
+
+/* Frage */
 #question {
     font-size: 32px;
     margin: 50px 0 20px 0;
     color: #2c3e50;
 }
+
+/* Punkteanzeige */
 #score, #statistics {
     margin-top: 10px;
 }
+
 #score {
     font-size: 24px;
     color: #16a085;
 }
+
 #statistics {
     font-size: 18px;
     color: #34495e;
 }
+
+/* Korrekte/inkorrekte Antworten */
 #correctAnswer {
     font-size: 24px;
     margin-top: 20px;
 }
+
 .correct {
     color: #27ae60;
 }
+
 .incorrect {
     color: #e74c3c;
 }
+
+/* Eingabefelder */
 input[type="text"], input[type="number"] {
     font-size: 18px;
     padding: 10px;
@@ -63,6 +82,8 @@ input[type="text"], input[type="number"] {
     border-radius: 5px;
     margin-bottom: 10px;
 }
+
+/* Buttons */
 button {
     font-size: 18px;
     padding: 12px 25px;
@@ -74,29 +95,38 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
 button:hover {
     background-color: #2980b9;
 }
+
 #backButton, #backButton2 {
     background-color: #e74c3c;
 }
+
 #backButton:hover, #backButton2:hover {
     background-color: #c0392b;
 }
+
+/* Optionen */
 #options {
     margin-top: 20px;
     font-size: 18px;
     text-align: left;
 }
+
 #options h3 {
     text-align: center;
     color: #2c3e50;
 }
+
+/* Timer */
 #timer {
     font-size: 20px;
     color: #e74c3c;
     margin-top: 10px;
 }
+
 /* Fortschrittsleiste */
 #progress-container {
     width: 100%;
@@ -106,19 +136,23 @@ button:hover {
     height: 20px;
     margin-top: 20px;
 }
+
 #progress-bar {
     height: 100%;
     width: 0%;
     background-color: #76c7c0;
     transition: width 0.3s ease;
 }
+
+/* Top-Links */
 .top-links-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 10px;
+    margin-top: 20px;
 }
+
 .top-link {
     font-size: 16px;
     color: #ffffff;
@@ -129,23 +163,27 @@ button:hover {
     display: inline-block;
     transition: background-color 0.3s ease;
 }
+
 .top-link:hover {
     background-color: #2980b9;
 }
-/* Styles für das Formular zum Hinzufügen von Kanji */
+
+/* Formular zum Hinzufügen von Kanji */
 #addKanjiForm {
-    margin-top: 30px;
     text-align: left;
 }
+
 #addKanjiForm h3 {
     text-align: center;
     color: #2c3e50;
 }
+
 #addKanjiForm label {
     display: block;
     margin-bottom: 5px;
     color: #34495e;
 }
+
 #addKanjiForm input {
     width: 100%;
     margin-bottom: 15px;
