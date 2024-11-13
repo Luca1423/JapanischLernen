@@ -160,7 +160,15 @@ function displayKanjiList() {
     kanjiListDisplay.innerHTML = '';
     kanjiList.forEach((kanjiItem, index) => {
         const li = document.createElement('li');
-        li.textContent = `${kanjiItem.kanji} - ${kanjiItem.meaning}`;
+
+        // Kanji Text
+        const kanjiText = document.createElement('span');
+        kanjiText.className = 'kanji-text';
+        kanjiText.textContent = `${kanjiItem.kanji} - ${kanjiItem.meaning}`;
+
+        // Button Gruppe
+        const buttonGroup = document.createElement('div');
+        buttonGroup.className = 'button-group';
 
         // Edit Button
         const editButton = document.createElement('button');
@@ -178,8 +186,11 @@ function displayKanjiList() {
             deleteKanji(index);
         });
 
-        li.appendChild(editButton);
-        li.appendChild(deleteButton);
+        buttonGroup.appendChild(editButton);
+        buttonGroup.appendChild(deleteButton);
+
+        li.appendChild(kanjiText);
+        li.appendChild(buttonGroup);
         kanjiListDisplay.appendChild(li);
     });
 }
