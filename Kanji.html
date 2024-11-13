@@ -13,30 +13,24 @@
     <h1>Kanji Lernen</h1>
 
     <!-- Hauptnavigation -->
-    <div class="nav-container">
-        <div class="nav-left">
-            <a href="#" class="top-link" id="addKanjiLink">Kanji hinzufügen</a>
-        </div>
-        <div class="nav-right">
-            <a href="Lernen.html" class="top-link">Zur Partikel-Seite</a>
-            <a href="Vokabeln.html" class="top-link">Zur Vokabel-Seite</a>
-            <a href="Notizen.html" class="top-link">Zur Notizen-Seite</a>
-            <a href="#" class="top-link" id="learnLink">Lernen</a>
-        </div>
+    <div class="top-links-container">
+        <a href="Lernen.html" class="top-link">Zur Partikel-Seite</a>
+        <a href="Vokabeln.html" class="top-link">Zur Vokabel-Seite</a>
+        <a href="Notizen.html" class="top-link">Zur Notizen-Seite</a>
+        <a href="#" class="top-link" id="addKanjiLink">Kanji hinzufügen</a>
     </div>
 
     <div id="container">
         <!-- Auswahlbereich -->
         <div id="selection">
             <h2>Willkommen zum Kanji-Lernprogramm!</h2>
+            <button id="startButton">Lernsession starten</button>
 
             <!-- Anzeige aller Kanji -->
             <div id="kanjiListContainer">
                 <h3>Verfügbare Kanji:</h3>
                 <ul id="kanjiListDisplay"></ul>
             </div>
-
-            <button id="startButton">Lernsession starten</button>
         </div>
 
         <!-- Lernbereich -->
