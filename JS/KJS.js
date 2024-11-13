@@ -8,6 +8,7 @@ let kanjiList = [
 
 let currentKanjiIndex = 0;
 let score = 0;
+let isAnswerChecked = false;
 
 // Elemente auswählen
 const startButton = document.getElementById('startButton');
@@ -28,7 +29,13 @@ const addKanjiButton = document.getElementById('addKanjiButton');
 
 // Event Listener
 startButton.addEventListener('click', startLearning);
-submitButton.addEventListener('click', checkAnswer);
+submitButton.addEventListener('click', function() {
+    if (!isAnswerChecked) {
+        checkAnswer();
+    } else {
+        showKanji();
+    }
+});
 backButton.addEventListener('click', goBack);
 backButton2.addEventListener('click', goBack);
 addKanjiButton.addEventListener('click', addKanji);
@@ -38,24 +45,32 @@ addKanjiLink.addEventListener('click', showAddKanjiForm);
 // Event Listener für Enter-Taste im Antwortfeld
 answerInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
-        checkAnswer();
+        if (!isAnswerChecked) {
+            checkAnswer();
+        } else {
+            showKanji();
+        }
     }
 });
 
+// Funktionen
 function startLearning() {
     selectionDiv.style.display = 'none';
     learningDiv.style.display = 'block';
     currentKanjiIndex = 0;
     score = 0;
+    isAnswerChecked = false;
     showKanji();
 }
 
 function showKanji() {
+    isAnswerChecked = false;
     if (currentKanjiIndex < kanjiList.length) {
         questionDiv.textContent = kanjiList[currentKanjiIndex].kanji;
         answerInput.value = '';
         correctAnswerDiv.textContent = '';
         updateProgressBar();
+        answerInput.focus();
     } else {
         questionDiv.textContent = 'Lernsession abgeschlossen!';
         answerInput.style.display = 'none';
@@ -78,8 +93,8 @@ function checkAnswer() {
         correctAnswerDiv.className = 'incorrect';
     }
 
+    isAnswerChecked = true;
     currentKanjiIndex++;
-    setTimeout(showKanji, 2000);
 }
 
 function updateProgressBar() {
@@ -93,6 +108,7 @@ function goBack() {
     selectionDiv.style.display = 'block';
     answerInput.style.display = 'block';
     submitButton.style.display = 'inline-block';
+    isAnswerChecked = false;
 }
 
 function showAddKanjiForm() {
@@ -117,7 +133,23 @@ function addKanji() {
         alert('Kanji hinzugefügt!');
         document.getElementById('kanjiInput').value = '';
         document.getElementById('meaningInput').value = '';
+        displayKanjiList();
     } else {
         alert('Bitte sowohl Kanji als auch Bedeutung eingeben.');
     }
 }
+
+function displayKanjiList() {
+    const kanjiListDisplay = document.getElementById('kanjiListDisplay');
+    kanjiListDisplay.innerHTML = '';
+    kanjiList.forEach(kanjiItem => {
+        const li = document.createElement('li');
+        li.textContent = `${kanjiItem.kanji} - ${kanjiItem.meaning}`;
+        kanjiListDisplay.appendChild(li);
+    });
+}
+
+// Kanji-Liste beim Laden der Seite anzeigen
+window.onload = function() {
+    displayKanjiList();
+};
