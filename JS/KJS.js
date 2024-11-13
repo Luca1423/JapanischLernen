@@ -96,13 +96,16 @@ function shuffleArray(array) {
 
 // Funktionen
 function startLearning() {
-	answerInput.style.display = 'block';
-	submitButton.style.display = 'inline-block';
     selectionDiv.style.display = 'none';
     learningDiv.style.display = 'block';
     currentKanjiIndex = 0;
     score = 0;
     isAnswerChecked = false;
+
+    // Stelle sicher, dass das Eingabefeld und der Button sichtbar sind
+    answerInput.style.display = 'block';
+    submitButton.style.display = 'inline-block';
+
     // Erstelle eine gemischte Kopie der Kanji-Liste
     shuffledKanjiList = shuffleArray(kanjiList.slice());
     showKanji();
@@ -114,10 +117,13 @@ function showKanji() {
         questionDiv.textContent = shuffledKanjiList[currentKanjiIndex].kanji;
         answerInput.value = '';
         correctAnswerDiv.textContent = '';
+
+        // Stelle sicher, dass das Eingabefeld und der Button sichtbar sind
+        answerInput.style.display = 'block';
+        submitButton.style.display = 'inline-block';
+
         updateProgressBar();
         answerInput.focus();
-		answerInput.style.display = 'block';
-		submitButton.style.display = 'inline-block';
     } else {
         questionDiv.textContent = 'Lernsession abgeschlossen!';
         answerInput.style.display = 'none';
