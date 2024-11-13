@@ -1,10 +1,27 @@
-// Liste der Kanji-Zeichen
-let kanjiList = [
-    { kanji: '日', meaning: 'Tag, Sonne' },
-    { kanji: '月', meaning: 'Mond, Monat' },
-    { kanji: '山', meaning: 'Berg' },
-    // Weitere Kanji hier hinzufügen
-];
+// Initialisiere die Kanji-Liste
+let kanjiList = [];
+
+// Funktion zum Laden der Kanji aus LocalStorage
+function loadKanjiList() {
+    const storedKanji = localStorage.getItem('kanjiList');
+    if (storedKanji) {
+        kanjiList = JSON.parse(storedKanji);
+    } else {
+        // Wenn nichts gespeichert ist, initialisiere mit Standard-Kanji
+        kanjiList = [
+            { kanji: '日', meaning: 'Tag, Sonne' },
+            { kanji: '月', meaning: 'Mond, Monat' },
+            { kanji: '山', meaning: 'Berg' },
+            // Weitere Kanji hier hinzufügen
+        ];
+        saveKanjiList(); // Speichere die Standardliste in LocalStorage
+    }
+}
+
+// Funktion zum Speichern der Kanji-Liste in LocalStorage
+function saveKanjiList() {
+    localStorage.setItem('kanjiList', JSON.stringify(kanjiList));
+}
 
 let currentKanjiIndex = 0;
 let score = 0;
@@ -147,6 +164,7 @@ function addKanji() {
         }
         document.getElementById('kanjiInput').value = '';
         document.getElementById('meaningInput').value = '';
+        saveKanjiList(); // Speichere die aktualisierte Liste
         displayKanjiList();
         // Zurück zur Auswahlseite
         goBack();
@@ -218,11 +236,13 @@ function editKanji(index) {
 function deleteKanji(index) {
     if (confirm('Möchtest du dieses Kanji wirklich löschen?')) {
         kanjiList.splice(index, 1);
+        saveKanjiList(); // Speichere die aktualisierte Liste
         displayKanjiList();
     }
 }
 
 // Kanji-Liste beim Laden der Seite anzeigen
 window.onload = function() {
+    loadKanjiList();
     displayKanjiList();
 };
