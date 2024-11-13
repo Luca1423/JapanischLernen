@@ -15,7 +15,6 @@ const startButton = document.getElementById('startButton');
 const selectionDiv = document.getElementById('selection');
 const learningDiv = document.getElementById('learning');
 const addKanjiForm = document.getElementById('addKanjiForm');
-const learnLink = document.getElementById('learnLink');
 const addKanjiLink = document.getElementById('addKanjiLink');
 const questionDiv = document.getElementById('question');
 const answerInput = document.getElementById('answerInput');
@@ -39,7 +38,6 @@ submitButton.addEventListener('click', function() {
 backButton.addEventListener('click', goBack);
 backButton2.addEventListener('click', goBack);
 addKanjiButton.addEventListener('click', addKanji);
-learnLink.addEventListener('click', showLearning);
 addKanjiLink.addEventListener('click', showAddKanjiForm);
 
 // Event Listener für Enter-Taste im Antwortfeld
@@ -115,13 +113,6 @@ function showAddKanjiForm() {
     selectionDiv.style.display = 'none';
     addKanjiForm.style.display = 'block';
     learningDiv.style.display = 'none';
-}
-
-function showLearning() {
-    selectionDiv.style.display = 'none';
-    addKanjiForm.style.display = 'none';
-    learningDiv.style.display = 'block';
-    startLearning();
 }
 
 function addKanji() {
