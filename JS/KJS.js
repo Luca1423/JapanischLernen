@@ -35,6 +35,13 @@ addKanjiButton.addEventListener('click', addKanji);
 learnLink.addEventListener('click', showLearning);
 addKanjiLink.addEventListener('click', showAddKanjiForm);
 
+// Event Listener für Enter-Taste im Antwortfeld
+answerInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        checkAnswer();
+    }
+});
+
 function startLearning() {
     selectionDiv.style.display = 'none';
     learningDiv.style.display = 'block';
@@ -102,11 +109,11 @@ function showLearning() {
 }
 
 function addKanji() {
-    const kanjiInput = document.getElementById('kanjiInput').value.trim();
-    const meaningInput = document.getElementById('meaningInput').value.trim();
+    const kanjiInputValue = document.getElementById('kanjiInput').value.trim();
+    const meaningInputValue = document.getElementById('meaningInput').value.trim();
 
-    if (kanjiInput && meaningInput) {
-        kanjiList.push({ kanji: kanjiInput, meaning: meaningInput });
+    if (kanjiInputValue && meaningInputValue) {
+        kanjiList.push({ kanji: kanjiInputValue, meaning: meaningInputValue });
         alert('Kanji hinzugefügt!');
         document.getElementById('kanjiInput').value = '';
         document.getElementById('meaningInput').value = '';
