@@ -15,20 +15,17 @@ h1 {
     padding: 20px 0;
     font-size: 36px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
 }
 
 /* Navigation */
-.nav-container {
+.top-links-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1abc9c;
-    padding: 10px 20px;
-}
-
-.nav-left, .nav-right {
-    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
+    margin-top: 0;
+    padding: 10px 20px;
+    background-color: #1abc9c;
 }
 
 .top-link {
@@ -111,7 +108,7 @@ input[type="text"], input[type="number"] {
 /* Buttons */
 button {
     font-size: 18px;
-    padding: 12px 25px;
+    padding: 10px 20px;
     margin: 10px 5px;
     background-color: #3498db;
     color: #ffffff;
@@ -170,4 +167,65 @@ button:hover {
     padding: 5px 0;
     font-size: 18px;
     color: #2c3e50;
+    display: flex;
+    align-items: center;
+}
+
+/* Edit und Delete Buttons in der Kanji-Liste */
+#kanjiListDisplay button {
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#kanjiListDisplay .edit-button {
+    background-color: #3498db;
+    color: #ffffff;
+}
+
+#kanjiListDisplay .edit-button:hover {
+    background-color: #2980b9;
+}
+
+#kanjiListDisplay .delete-button {
+    background-color: #e74c3c;
+    color: #ffffff;
+}
+
+#kanjiListDisplay .delete-button:hover {
+    background-color: #c0392b;
+}
+
+/* Formular zum Hinzufügen von Kanji */
+#addKanjiForm {
+    text-align: left;
+}
+
+#addKanjiForm h3 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+#addKanjiForm label {
+    display: block;
+    margin-bottom: 5px;
+    color: #34495e;
+}
+
+#addKanjiForm input {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* Anpassung der Navigationsleiste */
+.top-links-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 0;
+    padding: 10px 20px;
+    background-color: #1abc9c;
 }
