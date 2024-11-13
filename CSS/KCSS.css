@@ -1,152 +1,152 @@
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            text-align: center;
-            background-color: #eef2f7;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            color: #333;
-        }
-        h1 {
-            background-color: #1abc9c;
-            color: #ffffff;
-            margin: 0;
-            padding: 20px 0;
-            font-size: 36px;
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        #container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        #selection, #learning {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            margin-top: 30px;
-        }
-        #question {
-            font-size: 32px;
-            margin: 50px 0 20px 0;
-            color: #2c3e50;
-        }
-        #score, #statistics {
-            margin-top: 10px;
-        }
-        #score {
-            font-size: 24px;
-            color: #16a085;
-        }
-        #statistics {
-            font-size: 18px;
-            color: #34495e;
-        }
-        #correctAnswer {
-            font-size: 24px;
-            margin-top: 20px;
-        }
-        .correct {
-            color: #27ae60;
-        }
-        .incorrect {
-            color: #e74c3c;
-        }
-        input[type="text"], input[type="number"] {
-            font-size: 18px;
-            padding: 10px;
-            width: 80%;
-            max-width: 300px;
-            border: 2px solid #bdc3c7;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        button {
-            font-size: 18px;
-            padding: 12px 25px;
-            margin: 10px 5px;
-            background-color: #3498db;
-            color: #ffffff;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        #backButton {
-            background-color: #e74c3c;
-        }
-        #backButton:hover {
-            background-color: #c0392b;
-        }
-        #options {
-            margin-top: 20px;
-            font-size: 18px;
-            text-align: left;
-        }
-        #options h3 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        #timer {
-            font-size: 20px;
-            color: #e74c3c;
-            margin-top: 10px;
-        }
-        /* Fortschrittsleiste */
-        #progress-container {
-            width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 25px;
-            overflow: hidden;
-            height: 20px;
-            margin-top: 20px;
-        }
-        #progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: #76c7c0;
-            transition: width 0.3s ease;
-        }
-        .top-links-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        .top-link {
-            font-size: 16px;
-            color: #ffffff;
-            text-decoration: none;
-            background-color: #3498db;
-            padding: 10px 15px;
-            border-radius: 50px;
-            display: inline-block;
-            transition: background-color 0.3s ease;
-        }
-        .top-link:hover {
-            background-color: #2980b9;
-        }
-        /* Styles für das Formular zum Hinzufügen von Kanji */
-        #addKanjiForm {
-            margin-top: 30px;
-            text-align: left;
-        }
-        #addKanjiForm h3 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        #addKanjiForm label {
-            display: block;
-            margin-bottom: 5px;
-            color: #34495e;
-        }
-        #addKanjiForm input {
-            width: 100%;
-            margin-bottom: 15px;
-        }
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    text-align: center;
+    background-color: #eef2f7;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    color: #333;
+}
+h1 {
+    background-color: #1abc9c;
+    color: #ffffff;
+    margin: 0;
+    padding: 20px 0;
+    font-size: 36px;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+#container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+#selection, #learning {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-top: 30px;
+}
+#question {
+    font-size: 32px;
+    margin: 50px 0 20px 0;
+    color: #2c3e50;
+}
+#score, #statistics {
+    margin-top: 10px;
+}
+#score {
+    font-size: 24px;
+    color: #16a085;
+}
+#statistics {
+    font-size: 18px;
+    color: #34495e;
+}
+#correctAnswer {
+    font-size: 24px;
+    margin-top: 20px;
+}
+.correct {
+    color: #27ae60;
+}
+.incorrect {
+    color: #e74c3c;
+}
+input[type="text"], input[type="number"] {
+    font-size: 18px;
+    padding: 10px;
+    width: 80%;
+    max-width: 300px;
+    border: 2px solid #bdc3c7;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+button {
+    font-size: 18px;
+    padding: 12px 25px;
+    margin: 10px 5px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background-color: #2980b9;
+}
+#backButton, #backButton2 {
+    background-color: #e74c3c;
+}
+#backButton:hover, #backButton2:hover {
+    background-color: #c0392b;
+}
+#options {
+    margin-top: 20px;
+    font-size: 18px;
+    text-align: left;
+}
+#options h3 {
+    text-align: center;
+    color: #2c3e50;
+}
+#timer {
+    font-size: 20px;
+    color: #e74c3c;
+    margin-top: 10px;
+}
+/* Fortschrittsleiste */
+#progress-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 25px;
+    overflow: hidden;
+    height: 20px;
+    margin-top: 20px;
+}
+#progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #76c7c0;
+    transition: width 0.3s ease;
+}
+.top-links-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+}
+.top-link {
+    font-size: 16px;
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #3498db;
+    padding: 10px 15px;
+    border-radius: 50px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+.top-link:hover {
+    background-color: #2980b9;
+}
+/* Styles für das Formular zum Hinzufügen von Kanji */
+#addKanjiForm {
+    margin-top: 30px;
+    text-align: left;
+}
+#addKanjiForm h3 {
+    text-align: center;
+    color: #2c3e50;
+}
+#addKanjiForm label {
+    display: block;
+    margin-bottom: 5px;
+    color: #34495e;
+}
+#addKanjiForm input {
+    width: 100%;
+    margin-bottom: 15px;
+}
