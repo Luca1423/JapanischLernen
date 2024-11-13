@@ -103,7 +103,7 @@ function startLearning() {
     isAnswerChecked = false;
 
     // Stelle sicher, dass das Eingabefeld und der Button sichtbar sind
-    answerInput.style.display = 'block';
+    answerInput.style.display = 'inline-block';
     submitButton.style.display = 'inline-block';
 
     // Erstelle eine gemischte Kopie der Kanji-Liste
@@ -119,7 +119,7 @@ function showKanji() {
         correctAnswerDiv.textContent = '';
 
         // Stelle sicher, dass das Eingabefeld und der Button sichtbar sind
-        answerInput.style.display = 'block';
+        answerInput.style.display = 'inline-block';
         submitButton.style.display = 'inline-block';
 
         updateProgressBar();
@@ -132,6 +132,7 @@ function showKanji() {
     }
     scoreDiv.textContent = `Punkte: ${score} / ${shuffledKanjiList.length}`;
 }
+
 
 function checkAnswer() {
     const userAnswer = answerInput.value.trim();
