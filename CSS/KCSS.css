@@ -20,6 +20,30 @@ h1 {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* Top-Links */
+.top-links-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.top-link {
+    font-size: 16px;
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #3498db;
+    padding: 10px 15px;
+    border-radius: 50px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.top-link:hover {
+    background-color: #2980b9;
+}
+
 /* Container */
 #container {
     max-width: 800px;
@@ -108,18 +132,6 @@ button:hover {
     background-color: #c0392b;
 }
 
-/* Optionen */
-#options {
-    margin-top: 20px;
-    font-size: 18px;
-    text-align: left;
-}
-
-#options h3 {
-    text-align: center;
-    color: #2c3e50;
-}
-
 /* Timer */
 #timer {
     font-size: 20px;
@@ -142,30 +154,6 @@ button:hover {
     width: 0%;
     background-color: #76c7c0;
     transition: width 0.3s ease;
-}
-
-/* Top-Links */
-.top-links-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.top-link {
-    font-size: 16px;
-    color: #ffffff;
-    text-decoration: none;
-    background-color: #3498db;
-    padding: 10px 15px;
-    border-radius: 50px;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-}
-
-.top-link:hover {
-    background-color: #2980b9;
 }
 
 /* Formular zum Hinzufügen von Kanji */
