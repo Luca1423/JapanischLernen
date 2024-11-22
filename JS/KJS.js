@@ -8,7 +8,7 @@ let shuffledKanjiList = [];
 // Funktion zum Laden der Kanji aus der JSON-Datei
 async function loadKanjiData() {
     try {
-        const response = await fetch('Json/kanjiData.json');
+        const response = await fetch('JS/Json/kanjiData.json');
         const data = await response.json();
         kanjiList = data.kanji;
         generateGroupList();
