@@ -2,13 +2,16 @@
 let kanjiList = [];
 let groupList = [];
 
-// Variable für die zufällig gemischte Kanji-Liste während des Lernens
-let shuffledKanjiList = [];
+// Variable für die zufällig gemischte Kanji-Warteschlange während des Lernens
+let kanjiQueue = [];
 
 // Funktion zum Laden der Kanji aus der JSON-Datei
 async function loadKanjiData() {
     try {
-        const response = await fetch('JS/Json/kanjiData.json');
+        const response = await fetch('JS/Json/kanjiData.json'); // Passe den Pfad entsprechend an
+        if (!response.ok) {
+            throw new Error(`HTTP-Fehler! Status: ${response.status}`);
+        }
         const data = await response.json();
         kanjiList = data.kanji;
         generateGroupList();
@@ -51,7 +54,6 @@ function displayGroupCheckboxes() {
     });
 }
 
-let currentKanjiIndex = 0;
 let score = 0;
 let isAnswerChecked = false;
 let isEditing = false;
@@ -138,7 +140,6 @@ function startLearning() {
 
     selectionDiv.style.display = 'none';
     learningDiv.style.display = 'block';
-    currentKanjiIndex = 0;
     score = 0;
     isAnswerChecked = false;
 
@@ -146,15 +147,25 @@ function startLearning() {
     answerInput.style.display = 'inline-block';
     submitButton.style.display = 'inline-block';
 
-    // Erstelle eine gemischte Kopie der Kanji-Liste
-    shuffledKanjiList = shuffleArray(filteredKanjiList.slice());
+    // Erstelle eine gemischte Warteschlange der Kanji
+    kanjiQueue = shuffleArray(filteredKanjiList.slice());
+
+    // Setze den Fortschrittsbalken zurück
+    progressBar.style.width = '0%';
+
+    // Speichere die anfängliche Gesamtzahl der Kanji für die Fortschrittsberechnung
+    totalKanjiCount = kanjiQueue.length;
+
     showKanji();
 }
 
+let totalKanjiCount = 0;
+
 function showKanji() {
     isAnswerChecked = false;
-    if (currentKanjiIndex < shuffledKanjiList.length) {
-        questionDiv.textContent = shuffledKanjiList[currentKanjiIndex].kanji;
+    if (kanjiQueue.length > 0) {
+        const currentKanji = kanjiQueue[0];
+        questionDiv.textContent = currentKanji.kanji;
         answerInput.value = '';
         correctAnswerDiv.textContent = '';
 
@@ -162,20 +173,21 @@ function showKanji() {
         answerInput.style.display = 'inline-block';
         submitButton.style.display = 'inline-block';
 
-        updateProgressBar();
         answerInput.focus();
     } else {
         questionDiv.textContent = 'Lernsession abgeschlossen!';
         answerInput.style.display = 'none';
         submitButton.style.display = 'none';
         correctAnswerDiv.textContent = '';
+        progressBar.style.width = '100%';
     }
-    scoreDiv.textContent = `Punkte: ${score} / ${shuffledKanjiList.length}`;
+    scoreDiv.textContent = `Punkte: ${score} / ${totalKanjiCount}`;
 }
 
 function checkAnswer() {
+    const currentKanji = kanjiQueue.shift(); // Nimm das aktuelle Kanji aus der Warteschlange
     const userAnswer = answerInput.value.trim();
-    const correctAnswer = shuffledKanjiList[currentKanjiIndex].meaning;
+    const correctAnswer = currentKanji.meaning;
 
     if (userAnswer === correctAnswer) {
         correctAnswerDiv.textContent = 'Richtig!';
@@ -184,14 +196,17 @@ function checkAnswer() {
     } else {
         correctAnswerDiv.textContent = `Falsch! Die richtige Antwort ist: ${correctAnswer}`;
         correctAnswerDiv.className = 'incorrect';
+        // Füge das Kanji am Ende der Warteschlange wieder hinzu
+        kanjiQueue.push(currentKanji);
     }
 
     isAnswerChecked = true;
-    currentKanjiIndex++;
+    updateProgressBar();
 }
 
 function updateProgressBar() {
-    const progress = (currentKanjiIndex / shuffledKanjiList.length) * 100;
+    const answeredKanjiCount = totalKanjiCount - kanjiQueue.length;
+    const progress = (answeredKanjiCount / totalKanjiCount) * 100;
     progressBar.style.width = progress + '%';
 }
 
@@ -324,10 +339,8 @@ function deleteKanji(index) {
     }
 }
 
-// Funktion zum Speichern der aktualisierten Kanji-Daten in die JSON-Datei (nur möglich mit Server)
+// Funktion zum Speichern der aktualisierten Kanji-Daten in den localStorage
 function updateKanjiData() {
-    // In einer realen Anwendung müssten hier API-Aufrufe gemacht werden, um die Daten auf dem Server zu aktualisieren.
-    // Für lokale Tests speichern wir die Daten in localStorage.
     localStorage.setItem('kanjiData', JSON.stringify(kanjiList));
 }
 
