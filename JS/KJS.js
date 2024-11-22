@@ -1,29 +1,54 @@
-// Initialisiere die Kanji-Liste
+// Initialisiere die Kanji-Liste und Gruppen
 let kanjiList = [];
+let groupList = [];
 
 // Variable für die zufällig gemischte Kanji-Liste während des Lernens
 let shuffledKanjiList = [];
 
-// Funktion zum Laden der Kanji aus LocalStorage
-function loadKanjiList() {
-    const storedKanji = localStorage.getItem('kanjiList');
-    if (storedKanji) {
-        kanjiList = JSON.parse(storedKanji);
-    } else {
-        // Wenn nichts gespeichert ist, initialisiere mit Standard-Kanji
-        kanjiList = [
-            { kanji: '日', meaning: 'Tag, Sonne' },
-            { kanji: '月', meaning: 'Mond, Monat' },
-            { kanji: '山', meaning: 'Berg' },
-            // Weitere Kanji hier hinzufügen
-        ];
-        saveKanjiList(); // Speichere die Standardliste in LocalStorage
+// Funktion zum Laden der Kanji aus der JSON-Datei
+async function loadKanjiData() {
+    try {
+        const response = await fetch('Json/kanjiData.json');
+        const data = await response.json();
+        kanjiList = data.kanji;
+        generateGroupList();
+        displayGroupCheckboxes();
+        displayKanjiList();
+    } catch (error) {
+        console.error('Fehler beim Laden der Kanji-Daten:', error);
     }
 }
 
-// Funktion zum Speichern der Kanji-Liste in LocalStorage
-function saveKanjiList() {
-    localStorage.setItem('kanjiList', JSON.stringify(kanjiList));
+// Funktion zum Generieren der Gruppenliste
+function generateGroupList() {
+    const groups = new Set();
+    kanjiList.forEach(item => {
+        if (item.group) {
+            groups.add(item.group);
+        }
+    });
+    groupList = Array.from(groups);
+}
+
+// Funktion zum Anzeigen der Gruppen-Checkboxen
+function displayGroupCheckboxes() {
+    const groupCheckboxesDiv = document.getElementById('groupCheckboxes');
+    groupCheckboxesDiv.innerHTML = '';
+
+    groupList.forEach(group => {
+        const label = document.createElement('label');
+        label.style.display = 'block';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = group;
+        checkbox.checked = true; // Standardmäßig ausgewählt
+
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(' ' + group));
+
+        groupCheckboxesDiv.appendChild(label);
+    });
 }
 
 let currentKanjiIndex = 0;
@@ -96,6 +121,21 @@ function shuffleArray(array) {
 
 // Funktionen
 function startLearning() {
+    const selectedGroups = Array.from(document.querySelectorAll('#groupCheckboxes input[type="checkbox"]:checked')).map(cb => cb.value);
+
+    if (selectedGroups.length === 0) {
+        alert('Bitte wähle mindestens eine Gruppe aus.');
+        return;
+    }
+
+    // Filtere die Kanji-Liste nach den ausgewählten Gruppen
+    const filteredKanjiList = kanjiList.filter(item => selectedGroups.includes(item.group));
+
+    if (filteredKanjiList.length === 0) {
+        alert('Keine Kanji in den ausgewählten Gruppen gefunden.');
+        return;
+    }
+
     selectionDiv.style.display = 'none';
     learningDiv.style.display = 'block';
     currentKanjiIndex = 0;
@@ -107,7 +147,7 @@ function startLearning() {
     submitButton.style.display = 'inline-block';
 
     // Erstelle eine gemischte Kopie der Kanji-Liste
-    shuffledKanjiList = shuffleArray(kanjiList.slice());
+    shuffledKanjiList = shuffleArray(filteredKanjiList.slice());
     showKanji();
 }
 
@@ -132,7 +172,6 @@ function showKanji() {
     }
     scoreDiv.textContent = `Punkte: ${score} / ${shuffledKanjiList.length}`;
 }
-
 
 function checkAnswer() {
     const userAnswer = answerInput.value.trim();
@@ -171,6 +210,7 @@ function goBack() {
         addKanjiButton.textContent = 'Kanji hinzufügen';
         document.getElementById('kanjiInput').value = '';
         document.getElementById('meaningInput').value = '';
+        document.getElementById('groupInput').value = '';
     }
 }
 
@@ -183,11 +223,12 @@ function showAddKanjiForm() {
 function addKanji() {
     const kanjiInputValue = document.getElementById('kanjiInput').value.trim();
     const meaningInputValue = document.getElementById('meaningInput').value.trim();
+    const groupInputValue = document.getElementById('groupInput').value.trim();
 
-    if (kanjiInputValue && meaningInputValue) {
+    if (kanjiInputValue && meaningInputValue && groupInputValue) {
         if (isEditing) {
             // Update existing Kanji
-            kanjiList[currentEditIndex] = { kanji: kanjiInputValue, meaning: meaningInputValue };
+            kanjiList[currentEditIndex] = { kanji: kanjiInputValue, meaning: meaningInputValue, group: groupInputValue };
             alert('Kanji aktualisiert!');
             isEditing = false;
             currentEditIndex = null;
@@ -195,17 +236,20 @@ function addKanji() {
             addKanjiButton.textContent = 'Kanji hinzufügen';
         } else {
             // Add new Kanji
-            kanjiList.push({ kanji: kanjiInputValue, meaning: meaningInputValue });
+            kanjiList.push({ kanji: kanjiInputValue, meaning: meaningInputValue, group: groupInputValue });
             alert('Kanji hinzugefügt!');
         }
         document.getElementById('kanjiInput').value = '';
         document.getElementById('meaningInput').value = '';
-        saveKanjiList(); // Speichere die aktualisierte Liste
+        document.getElementById('groupInput').value = '';
+        updateKanjiData(); // Speichere die aktualisierte Liste
+        generateGroupList();
+        displayGroupCheckboxes();
         displayKanjiList();
         // Zurück zur Auswahlseite
         goBack();
     } else {
-        alert('Bitte sowohl Kanji als auch Bedeutung eingeben.');
+        alert('Bitte alle Felder ausfüllen.');
     }
 }
 
@@ -218,7 +262,7 @@ function displayKanjiList() {
         // Kanji Text
         const kanjiText = document.createElement('span');
         kanjiText.className = 'kanji-text';
-        kanjiText.textContent = `${kanjiItem.kanji} - ${kanjiItem.meaning}`;
+        kanjiText.textContent = `${kanjiItem.kanji} (${kanjiItem.group}) - ${kanjiItem.meaning}`;
 
         // Button Gruppe
         const buttonGroup = document.createElement('div');
@@ -258,6 +302,7 @@ function editKanji(index) {
     // Pre-fill the form with existing data
     document.getElementById('kanjiInput').value = kanjiItem.kanji;
     document.getElementById('meaningInput').value = kanjiItem.meaning;
+    document.getElementById('groupInput').value = kanjiItem.group;
 
     // Update form title and button text
     formTitle.textContent = 'Kanji bearbeiten';
@@ -272,13 +317,29 @@ function editKanji(index) {
 function deleteKanji(index) {
     if (confirm('Möchtest du dieses Kanji wirklich löschen?')) {
         kanjiList.splice(index, 1);
-        saveKanjiList(); // Speichere die aktualisierte Liste
+        updateKanjiData(); // Speichere die aktualisierte Liste
+        generateGroupList();
+        displayGroupCheckboxes();
         displayKanjiList();
     }
 }
 
+// Funktion zum Speichern der aktualisierten Kanji-Daten in die JSON-Datei (nur möglich mit Server)
+function updateKanjiData() {
+    // In einer realen Anwendung müssten hier API-Aufrufe gemacht werden, um die Daten auf dem Server zu aktualisieren.
+    // Für lokale Tests speichern wir die Daten in localStorage.
+    localStorage.setItem('kanjiData', JSON.stringify(kanjiList));
+}
+
 // Kanji-Liste beim Laden der Seite anzeigen
 window.onload = function() {
-    loadKanjiList();
-    displayKanjiList();
+    const storedKanjiData = localStorage.getItem('kanjiData');
+    if (storedKanjiData) {
+        kanjiList = JSON.parse(storedKanjiData);
+        generateGroupList();
+        displayGroupCheckboxes();
+        displayKanjiList();
+    } else {
+        loadKanjiData();
+    }
 };
