@@ -179,7 +179,7 @@ button:hover {
     color: #2c3e50;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Hinzugefügt */
+    justify-content: space-between;
 }
 
 #kanjiListDisplay .kanji-text {
@@ -237,4 +237,14 @@ button:hover {
 #addKanjiForm input {
     width: 100%;
     margin-bottom: 15px;
+}
+
+/* Gruppen-Auswahl */
+#groupSelection {
+    margin-top: 20px;
+}
+
+#groupSelection label {
+    font-size: 18px;
+    color: #2c3e50;
 }
