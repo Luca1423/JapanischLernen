@@ -8,7 +8,7 @@ let kanjiQueue = [];
 // Funktion zum Laden der Kanji aus der JSON-Datei
 async function loadKanjiData() {
     try {
-        const response = await fetch('JS/Json/kanjiData.json''); // Passe den Pfad entsprechend an
+        const response = await fetch('JS/Json/kanjiData.json'); // Passe den Pfad entsprechend an
         if (!response.ok) {
             throw new Error(`HTTP-Fehler! Status: ${response.status}`);
         }
