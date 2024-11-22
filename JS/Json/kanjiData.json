@@ -1,10 +1,23 @@
 {
-    "kanji": [
-        { "kanji": "日", "meaning": "Tag, Sonne", "group": "Grundlagen" },
-        { "kanji": "月", "meaning": "Mond, Monat", "group": "Grundlagen" },
-        { "kanji": "山", "meaning": "Berg", "group": "Natur" },
-        { "kanji": "川", "meaning": "Fluss", "group": "Natur" },
-        { "kanji": "田", "meaning": "Reisfeld", "group": "Natur" }
-        
-    ]
+  "kanji": [
+    { "kanji": "一", "meaning": "eins", "group": "Zahlen" },
+    { "kanji": "二", "meaning": "zwei", "group": "Zahlen" },
+    { "kanji": "三", "meaning": "drei", "group": "Zahlen" },
+    { "kanji": "四", "meaning": "vier", "group": "Zahlen" },
+    { "kanji": "五", "meaning": "fünf", "group": "Zahlen" },
+    { "kanji": "六", "meaning": "sechs", "group": "Zahlen" },
+    { "kanji": "七", "meaning": "sieben", "group": "Zahlen" },
+    { "kanji": "八", "meaning": "acht", "group": "Zahlen" },
+    { "kanji": "九", "meaning": "neun", "group": "Zahlen" },
+    { "kanji": "十", "meaning": "zehn", "group": "Zahlen" },
+    { "kanji": "百", "meaning": "hundert", "group": "Zahlen" },
+    { "kanji": "千", "meaning": "tausend", "group": "Zahlen" },
+    { "kanji": "万", "meaning": "zehntausend", "group": "Zahlen" },
+	{ "kanji": "日", "meaning": "Tag, Sonne", "group": "A1 Anfang" },
+    { "kanji": "円", "meaning": "Yen", "group": "A1 Anfang" },
+    { "kanji": "本", "meaning": "Buch", "group": "A1 Anfang" },
+    { "kanji": "人", "meaning": "Person, Mensch", "group": "A1 Anfang" },
+    { "kanji": "時", "meaning": "Zeit, Uhrzeit", "group": "A1 Anfang" }
+  ]
 }
+
