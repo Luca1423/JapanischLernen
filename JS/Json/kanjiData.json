@@ -1,0 +1,10 @@
+{
+    "kanji": [
+        { "kanji": "日", "meaning": "Tag, Sonne", "group": "Grundlagen" },
+        { "kanji": "月", "meaning": "Mond, Monat", "group": "Grundlagen" },
+        { "kanji": "山", "meaning": "Berg", "group": "Natur" },
+        { "kanji": "川", "meaning": "Fluss", "group": "Natur" },
+        { "kanji": "田", "meaning": "Reisfeld", "group": "Natur" }
+        
+    ]
+}
