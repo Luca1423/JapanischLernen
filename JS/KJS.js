@@ -5,20 +5,16 @@ let groupList = [];
 // Variable für die zufällig gemischte Kanji-Warteschlange während des Lernens
 let kanjiQueue = [];
 
-// Variable zum Speichern der ausgewählten Gruppen
-let selectedGroups = [];
-
 // Funktion zum Laden der Kanji aus der JSON-Datei
 async function loadKanjiData() {
     try {
-        const response = await fetch(JS/Json/kanjiData.json'); // Passe den Pfad entsprechend an
+        const response = await fetch('JS/Json/kanjiData.json''); // Passe den Pfad entsprechend an
         if (!response.ok) {
             throw new Error(`HTTP-Fehler! Status: ${response.status}`);
         }
         const data = await response.json();
         kanjiList = data.kanji;
         generateGroupList();
-        loadGroupSelection(); // Lade die gespeicherte Gruppen-Auswahl
         displayGroupCheckboxes();
         displayKanjiList();
     } catch (error) {
@@ -49,36 +45,13 @@ function displayGroupCheckboxes() {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.value = group;
-        // Setze den checked Zustand basierend auf gespeicherter Auswahl
-        checkbox.checked = selectedGroups.includes(group);
-
-        // Füge Event Listener hinzu, um die Auswahl zu speichern, wenn sich etwas ändert
-        checkbox.addEventListener('change', saveGroupSelection);
+        checkbox.checked = true; // Standardmäßig ausgewählt
 
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(' ' + group));
 
         groupCheckboxesDiv.appendChild(label);
     });
-}
-
-// Funktion zum Speichern der ausgewählten Gruppen in localStorage
-function saveGroupSelection() {
-    selectedGroups = Array.from(document.querySelectorAll('#groupCheckboxes input[type="checkbox"]:checked')).map(cb => cb.value);
-    localStorage.setItem('selectedGroups', JSON.stringify(selectedGroups));
-}
-
-// Funktion zum Laden der ausgewählten Gruppen aus localStorage
-function loadGroupSelection() {
-    const storedGroups = localStorage.getItem('selectedGroups');
-    if (storedGroups) {
-        selectedGroups = JSON.parse(storedGroups);
-    } else {
-        // Wenn keine Auswahl gespeichert ist, standardmäßig alle Gruppen auswählen
-        selectedGroups = groupList.slice();
-        // Speichere die Auswahl
-        localStorage.setItem('selectedGroups', JSON.stringify(selectedGroups));
-    }
 }
 
 let score = 0;
@@ -150,7 +123,8 @@ function shuffleArray(array) {
 
 // Funktionen
 function startLearning() {
-    // Verwende die gespeicherte Auswahl der Gruppen
+    const selectedGroups = Array.from(document.querySelectorAll('#groupCheckboxes input[type="checkbox"]:checked')).map(cb => cb.value);
+
     if (selectedGroups.length === 0) {
         alert('Bitte wähle mindestens eine Gruppe aus.');
         return;
@@ -285,8 +259,6 @@ function addKanji() {
         document.getElementById('groupInput').value = '';
         updateKanjiData(); // Speichere die aktualisierte Liste
         generateGroupList();
-        // Nach Generierung der Gruppenliste, die gespeicherte Auswahl laden und Checkboxen neu anzeigen
-        loadGroupSelection();
         displayGroupCheckboxes();
         displayKanjiList();
         // Zurück zur Auswahlseite
@@ -362,8 +334,6 @@ function deleteKanji(index) {
         kanjiList.splice(index, 1);
         updateKanjiData(); // Speichere die aktualisierte Liste
         generateGroupList();
-        // Nach Generierung der Gruppenliste, die gespeicherte Auswahl laden und Checkboxen neu anzeigen
-        loadGroupSelection();
         displayGroupCheckboxes();
         displayKanjiList();
     }
@@ -380,7 +350,6 @@ window.onload = function() {
     if (storedKanjiData) {
         kanjiList = JSON.parse(storedKanjiData);
         generateGroupList();
-        loadGroupSelection(); // Lade die gespeicherte Gruppen-Auswahl
         displayGroupCheckboxes();
         displayKanjiList();
     } else {
