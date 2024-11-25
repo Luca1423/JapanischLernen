@@ -168,12 +168,24 @@ button:hover {
     color: #2c3e50;
 }
 
-#kanjiListDisplay {
-    list-style-type: none;
-    padding: 0;
+/* Stil für die Gruppen-Header */
+.group-header {
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px 0;
+    color: #2c3e50;
+    border-bottom: 1px solid #bdc3c7;
 }
 
-#kanjiListDisplay li {
+/* Stil für die Kanji-Gruppenliste */
+.kanji-group-list {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+/* Anpassen der Kanji-Listenelemente */
+.kanji-group-list li {
     padding: 5px 0;
     font-size: 18px;
     color: #2c3e50;
