@@ -271,41 +271,77 @@ function addKanji() {
 function displayKanjiList() {
     const kanjiListDisplay = document.getElementById('kanjiListDisplay');
     kanjiListDisplay.innerHTML = '';
+
+    // Gruppiere die Kanji nach Gruppen
+    const groupMap = {};
     kanjiList.forEach((kanjiItem, index) => {
-        const li = document.createElement('li');
-
-        // Kanji Text
-        const kanjiText = document.createElement('span');
-        kanjiText.className = 'kanji-text';
-        kanjiText.textContent = `${kanjiItem.kanji} (${kanjiItem.group}) - ${kanjiItem.meaning}`;
-
-        // Button Gruppe
-        const buttonGroup = document.createElement('div');
-        buttonGroup.className = 'button-group';
-
-        // Edit Button
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Bearbeiten';
-        editButton.className = 'edit-button';
-        editButton.addEventListener('click', () => {
-            editKanji(index);
-        });
-
-        // Delete Button
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Löschen';
-        deleteButton.className = 'delete-button';
-        deleteButton.addEventListener('click', () => {
-            deleteKanji(index);
-        });
-
-        buttonGroup.appendChild(editButton);
-        buttonGroup.appendChild(deleteButton);
-
-        li.appendChild(kanjiText);
-        li.appendChild(buttonGroup);
-        kanjiListDisplay.appendChild(li);
+        if (!groupMap[kanjiItem.group]) {
+            groupMap[kanjiItem.group] = [];
+        }
+        groupMap[kanjiItem.group].push({ ...kanjiItem, index });
     });
+
+    // Für jede Gruppe eine auf- und zuklappbare Sektion erstellen
+    for (const groupName in groupMap) {
+        // Gruppen-Header erstellen
+        const groupHeader = document.createElement('div');
+        groupHeader.className = 'group-header';
+        groupHeader.textContent = groupName;
+        groupHeader.addEventListener('click', function() {
+            // Toggle der Anzeige der Kanji-Liste
+            const kanjiListDiv = this.nextElementSibling;
+            if (kanjiListDiv.style.display === 'none') {
+                kanjiListDiv.style.display = 'block';
+            } else {
+                kanjiListDiv.style.display = 'none';
+            }
+        });
+
+        // Container für die Kanji-Liste dieser Gruppe erstellen
+        const kanjiListDiv = document.createElement('ul');
+        kanjiListDiv.className = 'kanji-group-list';
+        kanjiListDiv.style.display = 'none'; // Standardmäßig zugeklappt
+
+        // Für jedes Kanji in der Gruppe
+        groupMap[groupName].forEach((kanjiItem) => {
+            const li = document.createElement('li');
+            // Kanji Text
+            const kanjiText = document.createElement('span');
+            kanjiText.className = 'kanji-text';
+            kanjiText.textContent = `${kanjiItem.kanji} - ${kanjiItem.meaning}`;
+
+            // Button Gruppe
+            const buttonGroup = document.createElement('div');
+            buttonGroup.className = 'button-group';
+
+            // Edit Button
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Bearbeiten';
+            editButton.className = 'edit-button';
+            editButton.addEventListener('click', () => {
+                editKanji(kanjiItem.index);
+            });
+
+            // Delete Button
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Löschen';
+            deleteButton.className = 'delete-button';
+            deleteButton.addEventListener('click', () => {
+                deleteKanji(kanjiItem.index);
+            });
+
+            buttonGroup.appendChild(editButton);
+            buttonGroup.appendChild(deleteButton);
+
+            li.appendChild(kanjiText);
+            li.appendChild(buttonGroup);
+            kanjiListDiv.appendChild(li);
+        });
+
+        // Füge den Gruppen-Header und die Kanji-Liste zum Hauptcontainer hinzu
+        kanjiListDisplay.appendChild(groupHeader);
+        kanjiListDisplay.appendChild(kanjiListDiv);
+    }
 }
 
 function editKanji(index) {
@@ -314,16 +350,16 @@ function editKanji(index) {
 
     const kanjiItem = kanjiList[index];
 
-    // Pre-fill the form with existing data
+    // Befülle das Formular mit den bestehenden Daten
     document.getElementById('kanjiInput').value = kanjiItem.kanji;
     document.getElementById('meaningInput').value = kanjiItem.meaning;
     document.getElementById('groupInput').value = kanjiItem.group;
 
-    // Update form title and button text
+    // Aktualisiere den Formular-Titel und Button-Text
     formTitle.textContent = 'Kanji bearbeiten';
     addKanjiButton.textContent = 'Kanji aktualisieren';
 
-    // Show the form
+    // Zeige das Formular
     selectionDiv.style.display = 'none';
     addKanjiForm.style.display = 'block';
     learningDiv.style.display = 'none';
