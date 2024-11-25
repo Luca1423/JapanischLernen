@@ -268,6 +268,17 @@ function addKanji() {
     }
 }
 
+// Funktion zum Speichern der Gruppen-Zustände
+function saveGroupStates(groupStates) {
+    localStorage.setItem('groupStates', JSON.stringify(groupStates));
+}
+
+// Funktion zum Laden der Gruppen-Zustände
+function loadGroupStates() {
+    const states = localStorage.getItem('groupStates');
+    return states ? JSON.parse(states) : {};
+}
+
 function displayKanjiList() {
     const kanjiListDisplay = document.getElementById('kanjiListDisplay');
     kanjiListDisplay.innerHTML = '';
@@ -281,26 +292,40 @@ function displayKanjiList() {
         groupMap[kanjiItem.group].push({ ...kanjiItem, index });
     });
 
+    // Lade die gespeicherten Gruppen-Zustände
+    const groupStates = loadGroupStates();
+
     // Für jede Gruppe eine auf- und zuklappbare Sektion erstellen
     for (const groupName in groupMap) {
         // Gruppen-Header erstellen
         const groupHeader = document.createElement('div');
         groupHeader.className = 'group-header';
         groupHeader.textContent = groupName;
-        groupHeader.addEventListener('click', function() {
-            // Toggle der Anzeige der Kanji-Liste
-            const kanjiListDiv = this.nextElementSibling;
-            if (kanjiListDiv.style.display === 'none') {
-                kanjiListDiv.style.display = 'block';
-            } else {
-                kanjiListDiv.style.display = 'none';
-            }
-        });
 
         // Container für die Kanji-Liste dieser Gruppe erstellen
         const kanjiListDiv = document.createElement('ul');
         kanjiListDiv.className = 'kanji-group-list';
-        kanjiListDiv.style.display = 'none'; // Standardmäßig zugeklappt
+
+        // Prüfe, ob der Zustand der Gruppe gespeichert ist
+        if (groupStates[groupName] === 'expanded') {
+            kanjiListDiv.style.display = 'block';
+        } else {
+            kanjiListDiv.style.display = 'none'; // Standardmäßig zugeklappt
+        }
+
+        // Event Listener für das Auf- und Zuklappen
+        groupHeader.addEventListener('click', function() {
+            // Toggle der Anzeige der Kanji-Liste
+            if (kanjiListDiv.style.display === 'none') {
+                kanjiListDiv.style.display = 'block';
+                groupStates[groupName] = 'expanded';
+            } else {
+                kanjiListDiv.style.display = 'none';
+                groupStates[groupName] = 'collapsed';
+            }
+            // Speichere den aktuellen Zustand
+            saveGroupStates(groupStates);
+        });
 
         // Für jedes Kanji in der Gruppe
         groupMap[groupName].forEach((kanjiItem) => {
@@ -367,11 +392,20 @@ function editKanji(index) {
 
 function deleteKanji(index) {
     if (confirm('Möchtest du dieses Kanji wirklich löschen?')) {
-        kanjiList.splice(index, 1);
+        const deletedKanji = kanjiList.splice(index, 1)[0];
         updateKanjiData(); // Speichere die aktualisierte Liste
         generateGroupList();
         displayGroupCheckboxes();
         displayKanjiList();
+
+        // Aktualisiere den Gruppen-Zustand, falls die Gruppe leer ist
+        const groupStates = loadGroupStates();
+        const groupName = deletedKanji.group;
+        const groupExists = kanjiList.some(item => item.group === groupName);
+        if (!groupExists) {
+            delete groupStates[groupName];
+            saveGroupStates(groupStates);
+        }
     }
 }
 
