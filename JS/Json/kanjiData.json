@@ -13,11 +13,24 @@
     { "kanji": "百", "meaning": "hundert", "group": "Zahlen" },
     { "kanji": "千", "meaning": "tausend", "group": "Zahlen" },
     { "kanji": "万", "meaning": "zehntausend", "group": "Zahlen" },
-	{ "kanji": "日", "meaning": "Tag, Sonne", "group": "A1 Anfang" },
+    { "kanji": "日", "meaning": "Tag, Sonne", "group": "A1 Anfang" },
     { "kanji": "円", "meaning": "Yen", "group": "A1 Anfang" },
     { "kanji": "本", "meaning": "Buch", "group": "A1 Anfang" },
     { "kanji": "人", "meaning": "Person, Mensch", "group": "A1 Anfang" },
-    { "kanji": "時", "meaning": "Zeit, Uhrzeit", "group": "A1 Anfang" }
+    { "kanji": "時", "meaning": "Zeit, Uhrzeit", "group": "A1 Anfang" },
+    { "kanji": "山", "meaning": "Berg", "group": "N5" },
+    { "kanji": "川", "meaning": "Fluss", "group": "N5" },
+    { "kanji": "木", "meaning": "Baum, Holz", "group": "N5" },
+    { "kanji": "水", "meaning": "Wasser", "group": "N5" },
+    { "kanji": "火", "meaning": "Feuer", "group": "N5" },
+    { "kanji": "金", "meaning": "Gold, Geld", "group": "N5" },
+    { "kanji": "土", "meaning": "Erde", "group": "N5" },
+    { "kanji": "空", "meaning": "Himmel", "group": "N5" },
+    { "kanji": "天", "meaning": "Himmel", "group": "N5" },
+    { "kanji": "女", "meaning": "Frau, weiblich", "group": "N5" },
+    { "kanji": "男", "meaning": "Mann, männlich", "group": "N5" },
+    { "kanji": "子", "meaning": "Kind", "group": "N5" },
+    { "kanji": "口", "meaning": "Mund", "group": "N5" },
+    { "kanji": "目", "meaning": "Auge", "group": "N5" }
   ]
 }
-
