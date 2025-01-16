@@ -200,6 +200,21 @@ th {
 .checkbox-wrapper-35 .switch + label {
   display: flex;
   align-items: center;
+  font-size: 14px;
+  white-space: nowrap; /* Verhindert Zeilenumbrüche */
+  gap: 8px; /* Abstand zwischen Schalter und Text */
+}
+
+#soundStatusText {
+  font-weight: bold;
+  color: #333;
+}
+
+
+/* Fix für den Text, damit er nicht abgeschnitten wird */
+.checkbox-wrapper-35 .switch + label {
+  display: flex;
+  align-items: center;
   font-size: 14px; /* Etwas größer für bessere Lesbarkeit */
   white-space: nowrap; /* Verhindert Zeilenumbrüche */
 }
