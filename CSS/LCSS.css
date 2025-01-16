@@ -241,5 +241,36 @@ th {
   font-weight: bold;
   color: #333;
 }
+/* Fix für die Schalterbewegung */
+#soundSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: #ffb500; /* Standardfarbe für "an" */
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#soundSwitch::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Zustand "Sound ist aus" */
+.sound-muted #soundSwitch {
+  background-color: #666;
+}
+
+.sound-muted #soundSwitch::before {
+  transform: translateX(20px);
+}
 
 
