@@ -567,3 +567,26 @@ window.onload = function() {
         }
     });
 };
+// Sounds laden und vorladen
+const correctSound = new Audio('Sounds/right.mp3');
+const wrongSound = new Audio('Sounds/wrong.mp3');
+correctSound.load();
+wrongSound.load();
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.body.addEventListener("click", function() {
+        correctSound.play().catch(error => console.log("Sound aktiviert nach User-Interaktion"));
+        wrongSound.play().catch(error => console.log("Sound aktiviert nach User-Interaktion"));
+    }, { once: true });
+});
+
+function markAnswer(isCorrect) {
+    if (isCorrect) {
+        correctSound.currentTime = 0;
+        correctSound.play();
+    } else {
+        wrongSound.currentTime = 0;
+        wrongSound.play();
+    }
+}
+
