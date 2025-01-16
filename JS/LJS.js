@@ -543,7 +543,13 @@ function shuffleArray(array) {
     }
     return array;
 }
-// Funktion zum Stummschalten des Sounds
+// Sounds laden und vorladen
+const correctSound = new Audio('Sounds/right.mp3');
+const wrongSound = new Audio('Sounds/wrong.mp3');
+correctSound.load();
+wrongSound.load();
+
+// Sound-Mute-Button Steuerung
 document.addEventListener("DOMContentLoaded", function() {
     const soundSwitch = document.getElementById("soundSwitch");
     const soundStatusText = document.getElementById("soundStatusText");
@@ -553,13 +559,8 @@ document.addEventListener("DOMContentLoaded", function() {
     let isSoundOn = localStorage.getItem("muteSound") !== "true"; // Standard: AN
 
     // Setze den richtigen Zustand beim Laden
-    if (isSoundOn) {
-        body.classList.add("sound-on");
-        updateSoundStatus(true);
-    } else {
-        body.classList.remove("sound-on");
-        updateSoundStatus(false);
-    }
+    body.classList.toggle("sound-on", isSoundOn);
+    updateSoundStatus(isSoundOn);
 
     // Event Listener für das Umschalten (sofortige Änderung!)
     soundSwitch.addEventListener("click", function() {
@@ -577,6 +578,92 @@ function updateSoundStatus(isSoundOn) {
     // Aktualisiere den Text passend zum Zustand
     document.getElementById("soundStatusText").innerText = isSoundOn ? "Sound is on" : "Sound is off";
 }
+
+// Event-Listener für den ersten Benutzer-Klick, um Sound zu aktivieren
+document.body.addEventListener("click", function() {
+    correctSound.play().catch(error => console.log("Sound aktiviert nach User-Interaktion"));
+    wrongSound.play().catch(error => console.log("Sound aktiviert nach User-Interaktion"));
+}, { once: true });
+
+// Funktion zur Bewertung der Antwort
+function markAnswer(isCorrect, userAnswer = '') {
+    clearInterval(timerInterval);
+    document.getElementById('timer').innerText = '';
+
+    if (isCorrect) {
+        correctStreak++;
+        correctAnswers++;
+        if (correctStreak > highScore) {
+            highScore = correctStreak;
+            highScores[modeKey] = highScore;
+            saveHighScores();
+        }
+        document.getElementById('correctAnswer').innerText = 'Richtig!';
+        document.getElementById('correctAnswer').className = 'correct';
+
+        if (!correctlyAnsweredCharacters.includes(currentChar.char)) {
+            correctlyAnsweredCharacters.push(currentChar.char);
+        }
+
+        // **Sound für richtige Antwort**
+        correctSound.currentTime = 0;
+        correctSound.play();
+
+    } else {
+        correctStreak = 0;
+        incorrectAnswers++;
+        let feedbackMessage = 'Falsch! Die richtige Antwort war: ' + currentChar.romaji;
+        if (userAnswer && getSimilarity(userAnswer, currentChar.romaji) > 0.7) {
+            feedbackMessage += ' | Tippfehler?';
+        }
+        document.getElementById('correctAnswer').innerText = feedbackMessage;
+        document.getElementById('correctAnswer').className = 'incorrect';
+
+        if (learningMode === 'practice') {
+            incorrectCharacters.push(currentChar);
+        }
+
+        // **Sound für falsche Antwort**
+        wrongSound.currentTime = 0;
+        wrongSound.play();
+    }
+
+    updateScore();
+    if (learningMode === 'practice') {
+        updateProgressBar();
+    }
+
+    if (isMultipleChoice || checkingMode === 'self') {
+        setTimeout(function() {
+            nextCharacter();
+        }, 2000);
+    }
+}
+
+// Event-Listener für STRG + Q zum schnellen Starten
+document.addEventListener('keydown', function(event) {
+    if (event.ctrlKey && event.key.toLowerCase() === 'q') {
+        if (document.getElementById('selection').style.display !== 'none') {
+            startLearning('both');
+        }
+    }
+});
+
+// Seite laden und gespeicherte Einstellungen abrufen
+window.onload = function() {
+    loadHighScores();
+    displayHighScores();
+    loadSettings();
+
+    document.getElementById('includeDakuten').addEventListener('change', saveSettings);
+    document.getElementById('includeCombinations').addEventListener('change', saveSettings);
+    document.getElementById('endlessMode').addEventListener('change', saveSettings);
+    document.getElementById('autoCheck').addEventListener('change', saveSettings);
+    document.getElementById('timeLimitCheck').addEventListener('change', saveSettings);
+    document.getElementById('timeLimit').addEventListener('change', saveSettings);
+    document.getElementById('learningModeSelect').addEventListener('change', saveSettings);
+};
+
 
 
 
@@ -603,11 +690,6 @@ window.onload = function() {
         }
     });
 };
-// Sounds laden und vorladen
-const correctSound = new Audio('Sounds/right.mp3');
-const wrongSound = new Audio('Sounds/wrong.mp3');
-correctSound.load();
-wrongSound.load();
 
 document.addEventListener("DOMContentLoaded", function() {
     document.body.addEventListener("click", function() {
