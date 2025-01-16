@@ -7,6 +7,7 @@ body {
     position: relative;
     color: #333;
 }
+
 h1 {
     background-color: #1abc9c;
     color: #ffffff;
@@ -16,11 +17,13 @@ h1 {
     position: relative;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
 #container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
+
 #selection, #learning {
     background-color: #ffffff;
     border-radius: 10px;
@@ -28,36 +31,45 @@ h1 {
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     margin-top: 30px;
 }
+
 #question {
     font-size: 100px;
     margin: 50px 0 20px 0;
     color: #2c3e50;
 }
+
 #score, #statistics, #highscore {
     margin-top: 10px;
 }
+
 #score {
     font-size: 24px;
     color: #16a085;
 }
+
 #statistics {
     font-size: 18px;
     color: #34495e;
 }
+
 #highscore {
     font-size: 20px;
     color: #e67e22;
 }
+
 #correctAnswer {
     font-size: 24px;
     margin-top: 20px;
 }
+
 .correct {
     color: #27ae60;
 }
+
 .incorrect {
     color: #e74c3c;
 }
+
 input[type="text"] {
     font-size: 24px;
     padding: 10px;
@@ -67,6 +79,7 @@ input[type="text"] {
     border-radius: 5px;
     margin-bottom: 20px;
 }
+
 button {
     font-size: 18px;
     padding: 12px 25px;
@@ -78,74 +91,92 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
 button:hover {
     background-color: #2980b9;
 }
+
 .option-button {
     background-color: #2ecc71;
 }
+
 .option-button:hover {
     background-color: #27ae60;
 }
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     font-size: 16px;
 }
+
 th, td {
     border: 1px solid #ecf0f1;
     padding: 12px;
     text-align: center;
 }
+
 th {
     background-color: #f9fafb;
 }
+
 #backButton {
     background-color: #e74c3c;
 }
+
 #backButton:hover {
     background-color: #c0392b;
 }
+
 #resetButton {
     background-color: #e67e22;
 }
+
 #resetButton:hover {
     background-color: #d35400;
 }
+
 #options {
     margin-top: 20px;
     font-size: 18px;
     text-align: left;
 }
+
 #options h3 {
     text-align: center;
     color: #2c3e50;
 }
+
 .options-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
+
 .option-item {
     width: 48%;
     margin-bottom: 15px;
 }
+
 .option-item label {
     display: inline-block;
     font-size: 16px;
     color: #34495e;
 }
+
 .option-item input[type="number"] {
     width: 70px;
     margin-left: 10px;
     padding: 5px;
 }
+
 #timer {
     font-size: 20px;
     color: #e74c3c;
     margin-top: 10px;
 }
+
 #choices button {
     display: inline-block;
     margin: 5px;
@@ -153,6 +184,7 @@ th {
     font-size: 18px;
     border-radius: 50px;
 }
+
 .top-links-container {
     position: absolute;
     top: 20px;
@@ -160,6 +192,7 @@ th {
     display: flex;
     gap: 10px;
 }
+
 .top-link {
     font-size: 16px;
     color: #ffffff;
@@ -170,9 +203,11 @@ th {
     display: inline-block;
     transition: background-color 0.3s ease;
 }
+
 .top-link:hover {
     background-color: #2980b9;
 }
+
 /* Fortschrittsleiste */
 #progress-container {
     width: 100%;
@@ -182,18 +217,12 @@ th {
     height: 20px;
     margin-top: 20px;
 }
+
 #progress-bar {
     height: 100%;
     width: 0%;
     background-color: #76c7c0;
     transition: width 0.3s ease;
-}
-/* Sound Mute Button oben links */
-.sound-toggle-container {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  z-index: 1000;
 }
 
 /* Sound Mute Button oben links */
@@ -238,11 +267,21 @@ th {
   transform: translateX(20px);
 }
 
-/* Fix für Textposition */
+/* Zustand "Sound ist AUS" (Schalter links) */
+.sound-muted #soundSwitch {
+  background-color: #666;
+}
+
+.sound-muted #soundSwitch::before {
+  transform: translateX(0px);
+}
+
+/* Fix für Textposition neben dem Schalter */
 .checkbox-wrapper-35 label {
   display: flex;
   align-items: center;
   font-size: 14px;
+  white-space: nowrap; /* Verhindert Zeilenumbrüche */
   gap: 8px; /* Abstand zwischen Schalter und Text */
 }
 
@@ -250,60 +289,3 @@ th {
   font-weight: bold;
   color: #333;
 }
-
-
-/* Zustand "Sound ist aus" */
-.sound-muted #soundSwitch {
-  background-color: #666;
-}
-
-.sound-muted #soundSwitch::before {
-  transform: translateX(20px);
-}
-
-/* Fix für den Text */
-.checkbox-wrapper-35 label {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  white-space: nowrap; /* Verhindert Zeilenumbrüche */
-  gap: 8px;
-}
-
-#soundStatusText {
-  font-weight: bold;
-  color: #333;
-}
-/* Fix für die Schalterbewegung */
-#soundSwitch {
-  width: 40px;
-  height: 20px;
-  background-color: #ffb500; /* Standardfarbe für "an" */
-  border-radius: 15px;
-  position: relative;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-}
-
-#soundSwitch::before {
-  content: "";
-  width: 16px;
-  height: 16px;
-  background-color: white;
-  border-radius: 50%;
-  position: absolute;
-  top: 2px;
-  left: 3px;
-  transition: transform 0.3s ease-in-out;
-}
-
-/* Zustand "Sound ist aus" */
-.sound-muted #soundSwitch {
-  background-color: #666;
-}
-
-.sound-muted #soundSwitch::before {
-  transform: translateX(20px);
-}
-
-
