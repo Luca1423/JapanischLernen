@@ -564,11 +564,31 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+// Funktion zum Stummschalten des Sounds
+document.addEventListener("DOMContentLoaded", function() {
+    const soundSwitch = document.getElementById("soundSwitch");
+    const soundStatusText = document.getElementById("soundStatusText");
 
-// Funktion zum Stummschalten oder Aktivieren aller Sounds
-function muteAllSounds(mute) {
+    // Überprüfen, ob eine Einstellung gespeichert ist
+    let isMuted = localStorage.getItem("muteSound") === "true";
+    soundSwitch.checked = isMuted;
+    updateSoundStatus(isMuted);
+
+    // Event Listener für das Umschalten (sofortige Änderung!)
+    soundSwitch.addEventListener("change", function() {
+        let mute = soundSwitch.checked;
+        updateSoundStatus(mute);
+        localStorage.setItem("muteSound", mute);
+    });
+});
+
+// Funktion zum Umschalten von Sound & Text sofort
+function updateSoundStatus(mute) {
     correctSound.muted = mute;
     wrongSound.muted = mute;
+    
+    // Aktualisiere den Text passend zum Zustand
+    document.getElementById("soundStatusText").innerText = mute ? "Sound is off" : "Sound is on";
 }
 
 window.onload = function() {
