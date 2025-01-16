@@ -550,22 +550,22 @@ document.addEventListener("DOMContentLoaded", function() {
     const body = document.body; // Für die Klassensteuerung
 
     // Standardmäßig Sound **AN**, wenn keine Einstellung gespeichert ist
-    let isMuted = localStorage.getItem("muteSound") === "true";
+    let isSoundOn = localStorage.getItem("muteSound") !== "true"; // Standard: AN
 
-    // Setze den korrekten Zustand beim Laden
-    if (isMuted) {
-        body.classList.add("sound-muted");
-        updateSoundStatus(false); // Sound ist aus
+    // Setze den richtigen Zustand beim Laden
+    if (isSoundOn) {
+        body.classList.add("sound-on");
+        updateSoundStatus(true);
     } else {
-        body.classList.remove("sound-muted");
-        updateSoundStatus(true); // Sound ist an
+        body.classList.remove("sound-on");
+        updateSoundStatus(false);
     }
 
     // Event Listener für das Umschalten (sofortige Änderung!)
     soundSwitch.addEventListener("click", function() {
-        let mute = body.classList.toggle("sound-muted"); // Schaltet Klasse um
-        updateSoundStatus(!mute); // Aktualisiert den Sound-Status
-        localStorage.setItem("muteSound", mute); // Speichert Zustand
+        let isNowSoundOn = body.classList.toggle("sound-on"); // Klasse togglen
+        updateSoundStatus(isNowSoundOn);
+        localStorage.setItem("muteSound", !isNowSoundOn); // Richtig speichern
     });
 });
 
@@ -577,6 +577,7 @@ function updateSoundStatus(isSoundOn) {
     // Aktualisiere den Text passend zum Zustand
     document.getElementById("soundStatusText").innerText = isSoundOn ? "Sound is on" : "Sound is off";
 }
+
 
 
 window.onload = function() {
