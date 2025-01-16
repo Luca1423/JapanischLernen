@@ -83,5 +83,18 @@
         </div>
     </div>
 
+    <script>
+        // Sounds laden
+        const correctSound = new Audio('/sounds/right.mp3');
+        const wrongSound = new Audio('/sounds/wrong.mp3');
+
+        function markAnswer(isCorrect) {
+            if (isCorrect) {
+                correctSound.play();
+            } else {
+                wrongSound.play();
+            }
+        }
+    </script>
 </body>
 </html>
