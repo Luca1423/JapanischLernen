@@ -546,39 +546,22 @@ function shuffleArray(array) {
 // Funktion zum Stummschalten des Sounds
 document.addEventListener("DOMContentLoaded", function() {
     const soundSwitch = document.getElementById("soundSwitch");
-
-    // Überprüfen, ob eine Einstellung gespeichert ist
-    if (localStorage.getItem("muteSound") === "true") {
-        muteAllSounds(true);
-        soundSwitch.checked = true;
-    }
-
-    // Event Listener für das Umschalten
-    soundSwitch.addEventListener("change", function() {
-        if (soundSwitch.checked) {
-            muteAllSounds(true);
-            localStorage.setItem("muteSound", "true");
-        } else {
-            muteAllSounds(false);
-            localStorage.setItem("muteSound", "false");
-        }
-    });
-});
-// Funktion zum Stummschalten des Sounds
-document.addEventListener("DOMContentLoaded", function() {
-    const soundSwitch = document.getElementById("soundSwitch");
     const soundStatusText = document.getElementById("soundStatusText");
+    const body = document.body; // Für die Klassensteuerung
 
     // Standardmäßig Sound **AN**, wenn keine Einstellung gespeichert ist
     let isMuted = localStorage.getItem("muteSound") === "true";
 
-    // Fix: Der Schalter ist NUR aktiv (rechts), wenn der Sound an ist
-    soundSwitch.checked = !isMuted;
+    // Fix: Klasse für Schalter setzen
+    if (isMuted) {
+        body.classList.add("sound-muted");
+    }
+
     updateSoundStatus(!isMuted); 
 
     // Event Listener für das Umschalten (sofortige Änderung!)
-    soundSwitch.addEventListener("change", function() {
-        let mute = !soundSwitch.checked; // **Fix: Invertierte Logik**
+    soundSwitch.addEventListener("click", function() {
+        let mute = body.classList.toggle("sound-muted");
         updateSoundStatus(!mute);
         localStorage.setItem("muteSound", mute);
     });
@@ -592,6 +575,7 @@ function updateSoundStatus(isSoundOn) {
     // Aktualisiere den Text passend zum Zustand
     document.getElementById("soundStatusText").innerText = isSoundOn ? "Sound is on" : "Sound is off";
 }
+
 
 
 window.onload = function() {
