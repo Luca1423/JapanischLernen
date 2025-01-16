@@ -580,13 +580,58 @@ document.addEventListener("DOMContentLoaded", function() {
     }, { once: true });
 });
 
-function markAnswer(isCorrect) {
+function markAnswer(isCorrect, userAnswer = '') {
+    clearInterval(timerInterval);
+    document.getElementById('timer').innerText = '';
+
     if (isCorrect) {
+        correctStreak++;
+        correctAnswers++;
+        if (correctStreak > highScore) {
+            highScore = correctStreak;
+            highScores[modeKey] = highScore;
+            saveHighScores();
+        }
+        document.getElementById('correctAnswer').innerText = 'Richtig!';
+        document.getElementById('correctAnswer').className = 'correct';
+
+        if (!correctlyAnsweredCharacters.includes(currentChar.char)) {
+            correctlyAnsweredCharacters.push(currentChar.char);
+        }
+
+        // **Sound für richtige Antwort**
         correctSound.currentTime = 0;
         correctSound.play();
+
     } else {
+        correctStreak = 0;
+        incorrectAnswers++;
+        var feedbackMessage = 'Falsch! Die richtige Antwort war: ' + currentChar.romaji;
+        if (userAnswer && getSimilarity(userAnswer, currentChar.romaji) > 0.7) {
+            feedbackMessage += ' | Tippfehler?';
+        }
+        document.getElementById('correctAnswer').innerText = feedbackMessage;
+        document.getElementById('correctAnswer').className = 'incorrect';
+
+        if (learningMode === 'practice') {
+            incorrectCharacters.push(currentChar);
+        }
+
+        // **Sound für falsche Antwort**
         wrongSound.currentTime = 0;
         wrongSound.play();
     }
+
+    updateScore();
+    if (learningMode === 'practice') {
+        updateProgressBar();
+    }
+
+    if (isMultipleChoice || checkingMode === 'self') {
+        setTimeout(function() {
+            nextCharacter();
+        }, 2000);
+    }
 }
+
 
