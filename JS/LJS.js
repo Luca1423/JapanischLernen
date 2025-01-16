@@ -543,6 +543,33 @@ function shuffleArray(array) {
     }
     return array;
 }
+// Funktion zum Stummschalten des Sounds
+document.addEventListener("DOMContentLoaded", function() {
+    const soundSwitch = document.getElementById("soundSwitch");
+
+    // Überprüfen, ob eine Einstellung gespeichert ist
+    if (localStorage.getItem("muteSound") === "true") {
+        muteAllSounds(true);
+        soundSwitch.checked = true;
+    }
+
+    // Event Listener für das Umschalten
+    soundSwitch.addEventListener("change", function() {
+        if (soundSwitch.checked) {
+            muteAllSounds(true);
+            localStorage.setItem("muteSound", "true");
+        } else {
+            muteAllSounds(false);
+            localStorage.setItem("muteSound", "false");
+        }
+    });
+});
+
+// Funktion zum Stummschalten oder Aktivieren aller Sounds
+function muteAllSounds(mute) {
+    correctSound.muted = mute;
+    wrongSound.muted = mute;
+}
 
 window.onload = function() {
     loadHighScores();
