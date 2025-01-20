@@ -12,13 +12,13 @@ var defaultVocabList = [
     { word: "花", romaji: "hana", meaning: "Blume" }
 ];
 
-// Unsere "echte" Vokabelliste im Spiel
+// Unsere "echte" Vokabelliste
 var vocabList = [];
 
-// Zum Tracken, wie viele einmal korrekt gelöst wurden
+// Für das Tracking, welche Vokabeln schon min. einmal richtig beantwortet wurden
 var uniqueCorrectSet = new Set();
 
-// Lernvariablen
+// Lern-Variablen
 var currentWord = null;
 var correctStreak = 0;
 var highScore = 0;
@@ -29,12 +29,19 @@ var incorrectAnswers = 0;
 var timerInterval = null;
 var timeLimit = 10;
 var isMultipleChoice = false;
-var isAnswerChecked = false; // Für Enter-Logik
+var isAnswerChecked = false;   // Für das Doppel-Enter
+var isEndlessMode = false;     // Normal oder Endlos-Modus
+
+// Im Normalmodus arbeiten wir mit einer Kopie (remainingVocab):
+var remainingVocab = [];
 
 // Sounds
 const correctSound = new Audio('Sounds/right.mp3');
 const wrongSound = new Audio('Sounds/wrong.mp3');
 
+// ====================
+// Initialisierung
+// ====================
 window.onload = function() {
     loadVocabListFromStorage();
     loadHighScores();
@@ -46,8 +53,6 @@ window.onload = function() {
 // ====================
 // Vokabeln verwalten
 // ====================
-
-// Lade Vokabeln aus LocalStorage oder verwende Defaultliste
 function loadVocabListFromStorage() {
     var storedVocab = localStorage.getItem("myVocabList");
     if (storedVocab) {
@@ -57,12 +62,10 @@ function loadVocabListFromStorage() {
     }
 }
 
-// Speichere Vokabeln in LocalStorage
 function saveVocabListToStorage() {
     localStorage.setItem("myVocabList", JSON.stringify(vocabList));
 }
 
-// Neue Vokabel hinzufügen
 function addNewVocab() {
     var newWordElem = document.getElementById('newWord');
     var newRomajiElem = document.getElementById('newRomaji');
@@ -86,7 +89,6 @@ function addNewVocab() {
     vocabList.push(newVocabObj);
     saveVocabListToStorage();
 
-    // Eingabefelder leeren
     newWordElem.value = "";
     newRomajiElem.value = "";
     newMeaningElem.value = "";
@@ -105,9 +107,11 @@ function loadHighScores() {
         highScores = {};
     }
 }
+
 function saveHighScores() {
     localStorage.setItem('vocabHighScores', JSON.stringify(highScores));
 }
+
 function displayHighScores() {
     var tableHTML = '<table><tr><th>Modus</th><th>Highscore</th></tr>';
     var mode = 'vocabMode'; 
@@ -116,6 +120,7 @@ function displayHighScores() {
     tableHTML += '</table>';
     document.getElementById('highScoresTable').innerHTML = tableHTML;
 }
+
 function resetHighScores() {
     if (confirm('Möchtest du wirklich alle Highscores zurücksetzen?')) {
         highScores = {};
@@ -124,6 +129,7 @@ function resetHighScores() {
         alert('Alle Highscores wurden zurückgesetzt.');
     }
 }
+
 function displayHighScore() {
     var mode = 'vocabMode';
     highScore = highScores[mode] || 0;
@@ -134,16 +140,18 @@ function saveSettings() {
     localStorage.setItem("timeLimit", document.getElementById('timeLimit').value);
     localStorage.setItem("learningModeSelect", document.getElementById('learningModeSelect').value);
     localStorage.setItem("timeLimitCheck", document.getElementById('timeLimitCheck').checked);
+    localStorage.setItem("endlessMode", document.getElementById('endlessMode').checked);
 }
 function loadSettings() {
     document.getElementById('timeLimit').value = localStorage.getItem("timeLimit") || 10;
     var storedMode = localStorage.getItem("learningModeSelect") || "normal";
     document.getElementById('learningModeSelect').value = storedMode;
     document.getElementById('timeLimitCheck').checked = (localStorage.getItem("timeLimitCheck") === "true");
+    document.getElementById('endlessMode').checked = (localStorage.getItem("endlessMode") === "true");
 }
 
 // ====================
-// Lernlogik
+// Lernen starten
 // ====================
 function startLearning() {
     // Einstellungen laden
@@ -151,6 +159,8 @@ function startLearning() {
     timeLimit = parseInt(document.getElementById('timeLimit').value);
     var selectedMode = document.getElementById('learningModeSelect').value;
     isMultipleChoice = (selectedMode === 'multipleChoice');
+
+    isEndlessMode = document.getElementById('endlessMode').checked;
 
     // Ansicht wechseln
     document.getElementById('selection').style.display = 'none';
@@ -161,37 +171,59 @@ function startLearning() {
     totalQuestions = 0;
     correctAnswers = 0;
     incorrectAnswers = 0;
-    uniqueCorrectSet.clear();  // Set für einmal-korrekt beantwortete Vokabeln leeren
+    uniqueCorrectSet.clear();
     isAnswerChecked = false;
 
-    // Fortschrittsleiste aktivieren
+    // Fortschrittsleiste anzeigen
     document.getElementById('progress-container').style.display = 'block';
     document.getElementById('progress-bar').style.width = '0%';
+
+    // Falls normaler Modus: Kopie von vocabList erstellen und mischen
+    if (!isEndlessMode) {
+        remainingVocab = shuffleArray(vocabList.slice());
+    }
 
     nextWord();
 }
 
+// ====================
+// Nächste Vokabel
+// ====================
 function nextWord() {
     clearInterval(timerInterval);
     document.getElementById('timer').innerText = '';
     document.getElementById('correctAnswer').innerText = '';
-
-    if (vocabList.length === 0) {
-        alert('Keine Vokabeln mehr verfügbar!');
-        goToStart();
-        return;
-    }
-    // Zufällige Vokabel
-    var randomIndex = Math.floor(Math.random() * vocabList.length);
-    currentWord = vocabList[randomIndex];
-
-    document.getElementById('question').innerText = currentWord.word;
-    document.getElementById('answer').value = '';
     isAnswerChecked = false;
 
+    // Normalmodus: Wenn keine mehr übrig -> Fertig
+    if (!isEndlessMode) {
+        if (remainingVocab.length === 0) {
+            alert('Super! Du hast alle Vokabeln einmal durch.');
+            goToStart();
+            return;
+        }
+        // Nimm die erste aus remainingVocab
+        currentWord = remainingVocab.shift();
+    } else {
+        // Endlosmodus: Zufälliger Pick aus kompletter Vokabelliste
+        if (vocabList.length === 0) {
+            alert('Keine Vokabeln verfügbar! Bitte füge neue Vokabeln hinzu.');
+            goToStart();
+            return;
+        }
+        var randomIndex = Math.floor(Math.random() * vocabList.length);
+        currentWord = vocabList[randomIndex];
+    }
+
+    // Frage anzeigen
+    document.getElementById('question').innerText = currentWord.word;
+    document.getElementById('answer').value = '';
+
+    // Zähler
     totalQuestions++;
     updateScore();
 
+    // Multiple Choice oder normale Eingabe
     if (isMultipleChoice) {
         generateMultipleChoiceOptions();
     } else {
@@ -199,12 +231,15 @@ function nextWord() {
         document.getElementById('answer').style.display = 'inline-block';
     }
 
+    // Zeitlimit
     if (document.getElementById('timeLimitCheck').checked) {
         startTimer();
     }
 }
 
+// ====================
 // Timer
+// ====================
 function startTimer() {
     var timeLeft = timeLimit;
     document.getElementById('timer').innerText = 'Zeit: ' + timeLeft + 's';
@@ -219,7 +254,9 @@ function startTimer() {
     }, 1000);
 }
 
-// Antwort bewerten
+// ====================
+// Antwort prüfen
+// ====================
 function markAnswer(isCorrect, userAnswer = '') {
     clearInterval(timerInterval);
     document.getElementById('timer').innerText = '';
@@ -227,11 +264,10 @@ function markAnswer(isCorrect, userAnswer = '') {
     if (isCorrect) {
         correctStreak++;
         correctAnswers++;
-        // Wenn wir dieses Wort noch nie richtig beantwortet hatten, jetzt hinzufügen
+        // Eintragen in Set, falls noch nicht drin
         if (!uniqueCorrectSet.has(currentWord.word)) {
             uniqueCorrectSet.add(currentWord.word);
         }
-
         document.getElementById('correctAnswer').innerText = 
             'Richtig! ' + currentWord.word + ' = ' + currentWord.meaning;
         document.getElementById('correctAnswer').className = 'correct';
@@ -256,25 +292,32 @@ function markAnswer(isCorrect, userAnswer = '') {
         wrongSound.currentTime = 0;
         wrongSound.play();
     }
+
     updateScore();
     updateProgressBar();
 }
 
-// Bei Texteingabe Enter: 1. Enter => bewerten, 2. Enter => nächste Vokabel
+// ====================
+// Eingabefeld: Doppel-Enter
+// ====================
 document.getElementById('answer').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         if (!isAnswerChecked) {
             var userAnswer = this.value.trim().toLowerCase();
+            // Korrekt, wenn meaning passt
             var correct = (userAnswer === currentWord.meaning.toLowerCase());
             markAnswer(correct, userAnswer);
             isAnswerChecked = true;
         } else {
+            // Nächste Vokabel
             nextWord();
         }
     }
 });
 
+// ====================
 // Multiple Choice
+// ====================
 function generateMultipleChoiceOptions() {
     var choicesDiv = document.getElementById('choices');
     choicesDiv.style.display = 'block';
@@ -298,7 +341,7 @@ function generateMultipleChoiceOptions() {
             let correct = (option === currentWord.meaning);
             markAnswer(correct, option);
             isAnswerChecked = true;
-            // Bei Multiple Choice: autom. nach 2s nächste
+            // Im Multiple-Choice starten wir nach 2s automatisch die nächste
             setTimeout(function() {
                 nextWord();
             }, 2000);
@@ -307,27 +350,29 @@ function generateMultipleChoiceOptions() {
     });
 }
 
-// Score aktualisieren
+// ====================
+// Fortschritt
+// ====================
 function updateScore() {
     document.getElementById('score').innerText = 'Streak: ' + correctStreak;
     document.getElementById('highscore').innerText = 'Highscore: ' + highScore;
-    document.getElementById('statistics').innerText = 
-        'Fragen: ' + totalQuestions + 
-        ' | Richtig: ' + correctAnswers + 
+    document.getElementById('statistics').innerText =
+        'Fragen: ' + totalQuestions +
+        ' | Richtig: ' + correctAnswers +
         ' | Falsch: ' + incorrectAnswers;
 }
 
-// Fortschrittsanzeige basierend auf "uniqueCorrectSet"
 function updateProgressBar() {
-    // Gesamte Vokabelanzahl
-    var totalVocab = vocabList.length;
-    // Wie viele schon mindestens 1x richtig
+    // Gesamtanzahl Vokabeln
+    var totalCount = vocabList.length;
     var solvedCount = uniqueCorrectSet.size;
-    var percent = (solvedCount / totalVocab) * 100;
+    var percent = (solvedCount / totalCount) * 100;
     document.getElementById('progress-bar').style.width = percent + '%';
 }
 
-// Zurück zur Auswahl
+// ====================
+// Zurück
+// ====================
 function goToStart() {
     clearInterval(timerInterval);
     document.getElementById('timer').innerText = '';
@@ -337,7 +382,9 @@ function goToStart() {
     displayHighScore();
 }
 
-// Array Mischen
+// ====================
+// Hilfsfunktionen
+// ====================
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -348,7 +395,7 @@ function shuffleArray(array) {
     return array;
 }
 
-// Tippfehler-Erkennung (Levenshtein)
+// Levenshtein für Tippfehler-Check
 function getSimilarity(a, b) {
     var longer = a.length > b.length ? a : b;
     var shorter = a.length > b.length ? b : a;
@@ -388,8 +435,9 @@ function editDistance(a, b) {
 // ====================
 document.addEventListener("DOMContentLoaded", function() {
     let isSoundOn = localStorage.getItem("muteSound") !== "true"; 
-    // Toggle am Container (nicht mehr body)
     const muteContainer = document.getElementById("muteContainer");
+
+    // Setze die optische Darstellung
     muteContainer.classList.toggle("sound-on", isSoundOn);
     muteContainer.classList.toggle("sound-muted", !isSoundOn);
     updateSoundStatus(isSoundOn);
