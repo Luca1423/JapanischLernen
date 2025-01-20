@@ -5,25 +5,25 @@
     <title>Japanische Vokabeln Lernen</title>
     <!-- Verweis auf die CSS-Datei -->
     <link rel="stylesheet" href="CSS/VCSS.css">
-    <!-- Favicon (falls vorhanden) -->
+    <!-- Favicon (optional) -->
     <link rel="shortcut icon" href="Bilder/Vokabeln.ico" type="image/png">
     <!-- JS-Datei einbinden -->
     <script src="JS/VJS.js" defer></script>
-    <!-- Einbindung von Google Fonts -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <h1>Japanische Vokabeln Lernen</h1>
 
-    <!-- Links zu anderen Seiten (z.B. Partikel, Kanji, Notizen) -->
+    <!-- Links zu deinen anderen Seiten -->
     <div class="top-links-container">
         <a href="Lernen.html" class="top-link">Zur Partikel-Seite</a>
         <a href="Kanji.html" class="top-link">Zur Kanji-Seite</a>
         <a href="Notizen.html" class="top-link">Zur Notizen-Seite</a>
     </div>
 
-    <!-- Button für Sound Mute/On (oben links) -->
+    <!-- Sound an/aus -->
     <div class="sound-toggle-container sound-muted" id="muteContainer">
         <div id="soundSwitch"></div>
         <span id="soundStatusText">Sound is off</span>
@@ -31,7 +31,7 @@
 
     <!-- Hauptcontainer -->
     <div id="container">
-        <!-- Auswahlbereich (könntest du erweitern um Einstellungen etc.) -->
+        <!-- Auswahlbereich / Einstellungen -->
         <div id="selection">
             <h2>Willkommen beim Vokabeltrainer</h2>
             <p>Wähle aus, wie du lernen möchtest:</p>
@@ -58,26 +58,30 @@
 
             <button onclick="startLearning()">Lernen starten</button>
             <button onclick="resetHighScores()" id="resetButton">Highscores zurücksetzen</button>
+
+            <!-- Neue Vokabel hinzufügen -->
+            <div id="addVocabSection">
+                <h3>Neue Vokabel hinzufügen</h3>
+                <input type="text" id="newWord" placeholder="Japanisch (z.B. 犬)">
+                <input type="text" id="newRomaji" placeholder="Romaji (z.B. inu)">
+                <input type="text" id="newMeaning" placeholder="Übersetzung (z.B. Hund)">
+                <button onclick="addNewVocab()">Hinzufügen</button>
+            </div>
         </div>
 
         <!-- Lernbereich -->
         <div id="learning" style="display: none;">
             <div id="question">Vokabel</div>
 
-            <!-- Multiple-Choice-Antworten -->
+            <!-- Multiple Choice -->
             <div id="choices" style="display: none;"></div>
 
-            <!-- Eingabefeld (bei normalem Modus) -->
-            <input type="text" id="answer" placeholder="Antwort hier eingeben">
-
-            <div>
-                <button id="correctButton" style="display:none;" onclick="markAnswer(true)">Richtig</button>
-                <button id="incorrectButton" style="display:none;" onclick="markAnswer(false)">Falsch</button>
-            </div>
+            <!-- Texteingabe-Feld (wenn nicht Multiple Choice) -->
+            <input type="text" id="answer" placeholder="Deutsche Übersetzung eingeben">
 
             <div id="correctAnswer"></div>
 
-            <!-- Anzeige für Punktestand/Statistiken -->
+            <!-- Punktestand -->
             <div id="score"></div>
             <div id="highscore"></div>
             <div id="statistics"></div>
@@ -93,9 +97,8 @@
             </div>
         </div>
 
-        <!-- Highscore-Liste -->
+        <!-- Highscore-Anzeige -->
         <div id="highScoresTable"></div>
-
     </div>
 </body>
 </html>
