@@ -1,304 +1,352 @@
-// Beispielvokabeln (Diese können durch tatsächliche Vokabeln ersetzt werden)
-        var defaultVocabulary = {
-            "Grundlegende Vokabeln": [
-                { japanese: "猫", reading: "ねこ", meaning: "Katze" },
-                { japanese: "犬", reading: "いぬ", meaning: "Hund" },
-                { japanese: "本", reading: "ほん", meaning: "Buch" },
-                { japanese: "水", reading: "みず", meaning: "Wasser" },
-                { japanese: "食べる", reading: "たべる", meaning: "essen" }
-            ],
-            "Zahlen": [
-                { japanese: "一", reading: "いち", meaning: "eins" },
-                { japanese: "二", reading: "に", meaning: "zwei" },
-                { japanese: "三", reading: "さん", meaning: "drei" },
-                { japanese: "四", reading: "よん/し", meaning: "vier" },
-                { japanese: "五", reading: "ご", meaning: "fünf" }
-            ],
-            "Begrüßungen": [
-                { japanese: "こんにちは", reading: "こんにちは", meaning: "Hallo" },
-                { japanese: "おはようございます", reading: "おはようございます", meaning: "Guten Morgen" },
-                { japanese: "こんばんは", reading: "こんばんは", meaning: "Guten Abend" },
-                { japanese: "さようなら", reading: "さようなら", meaning: "Auf Wiedersehen" },
-                { japanese: "ありがとうございます", reading: "ありがとうございます", meaning: "Vielen Dank" }
-            ]
+// Beispiel-Vokabelliste: Du kannst so viele Vokabeln hinzufügen, wie du möchtest.
+var vocabList = [
+    { word: "犬", romaji: "inu", meaning: "Hund" },
+    { word: "猫", romaji: "neko", meaning: "Katze" },
+    { word: "水", romaji: "mizu", meaning: "Wasser" },
+    { word: "山", romaji: "yama", meaning: "Berg" },
+    { word: "本", romaji: "hon", meaning: "Buch" },
+    { word: "友達", romaji: "tomodachi", meaning: "Freund" },
+    { word: "学校", romaji: "gakkou", meaning: "Schule" },
+    { word: "車", romaji: "kuruma", meaning: "Auto" },
+    { word: "先生", romaji: "sensei", meaning: "Lehrer" },
+    { word: "花", romaji: "hana", meaning: "Blume" }
+];
+
+// Globale Variablen
+var currentWord = {};
+var correctStreak = 0;
+var highScore = 0;
+var highScores = {};  // Wenn du pro Modus verschiedene Scores möchtest
+var totalQuestions = 0;
+var correctAnswers = 0;
+var incorrectAnswers = 0;
+var timerInterval;
+var timeLimit = 10;
+var isMultipleChoice = false;
+var waitingForNext = false;
+
+// Sounds laden
+const correctSound = new Audio('Sounds/right.mp3');
+const wrongSound = new Audio('Sounds/wrong.mp3');
+
+// Beim Laden
+window.onload = function() {
+    loadHighScores();
+    displayHighScores();
+    loadSettings();
+    displayHighScore();
+};
+
+// Einstellungen/Highscores laden und anzeigen
+function loadHighScores() {
+    var storedHighScores = localStorage.getItem('vocabHighScores');
+    if (storedHighScores) {
+        highScores = JSON.parse(storedHighScores);
+    } else {
+        highScores = {};
+    }
+}
+
+function saveHighScores() {
+    localStorage.setItem('vocabHighScores', JSON.stringify(highScores));
+}
+
+function displayHighScores() {
+    var tableHTML = '<table><tr><th>Modus</th><th>Highscore</th></tr>';
+    // Für dieses Beispiel gibt es nur einen Modus "Vokabeln", du könntest aber mehrere definieren.
+    var mode = 'vocabMode'; 
+    var score = highScores[mode] || 0;
+    tableHTML += '<tr><td>Vokabel-Modus</td><td>' + score + '</td></tr>';
+    tableHTML += '</table>';
+
+    document.getElementById('highScoresTable').innerHTML = tableHTML;
+}
+
+function resetHighScores() {
+    if (confirm('Möchtest du wirklich alle Highscores zurücksetzen?')) {
+        highScores = {};
+        saveHighScores();
+        displayHighScores();
+        alert('Alle Highscores wurden zurückgesetzt.');
+    }
+}
+
+// Aktueller Score
+function displayHighScore() {
+    // Hole den Highscore aus dem globalen Objekt
+    var mode = 'vocabMode';
+    highScore = highScores[mode] || 0;
+    updateScore();
+}
+
+// Einstellungen speichern/laden
+function saveSettings() {
+    localStorage.setItem("timeLimit", document.getElementById('timeLimit').value);
+    localStorage.setItem("learningModeSelect", document.getElementById('learningModeSelect').value);
+    localStorage.setItem("timeLimitCheck", document.getElementById('timeLimitCheck').checked);
+}
+function loadSettings() {
+    document.getElementById('timeLimit').value = localStorage.getItem("timeLimit") || 10;
+    var storedMode = localStorage.getItem("learningModeSelect") || "normal";
+    document.getElementById('learningModeSelect').value = storedMode;
+    document.getElementById('timeLimitCheck').checked = (localStorage.getItem("timeLimitCheck") === "true");
+}
+
+// Lernen starten
+function startLearning() {
+    // Einstellungen übernehmen
+    saveSettings();
+    timeLimit = parseInt(document.getElementById('timeLimit').value);
+    var selectedMode = document.getElementById('learningModeSelect').value;
+    isMultipleChoice = (selectedMode === 'multipleChoice');
+
+    // Sichtbarkeit umschalten
+    document.getElementById('selection').style.display = 'none';
+    document.getElementById('learning').style.display = 'block';
+
+    // Initialwerte
+    correctStreak = 0;
+    totalQuestions = 0;
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+
+    // Fortschrittsbalken bei jedem Start zurücksetzen
+    document.getElementById('progress-container').style.display = 'block';
+    document.getElementById('progress-bar').style.width = '0%';
+
+    nextWord();
+}
+
+// Nächstes Wort anzeigen
+function nextWord() {
+    clearInterval(timerInterval);
+    document.getElementById('timer').innerText = '';
+
+    if (vocabList.length === 0) {
+        alert('Keine Vokabeln mehr verfügbar!');
+        goToStart();
+        return;
+    }
+    
+    // Zufällige Auswahl
+    var randomIndex = Math.floor(Math.random() * vocabList.length);
+    currentWord = vocabList[randomIndex];
+
+    // Anzeigen
+    document.getElementById('question').innerText = currentWord.word;
+    document.getElementById('answer').value = '';
+    document.getElementById('correctAnswer').innerText = '';
+    waitingForNext = false;
+
+    totalQuestions++;
+    updateScore();
+
+    // Multiple-Choice vs. Eingabe
+    if (isMultipleChoice) {
+        generateMultipleChoiceOptions();
+    } else {
+        document.getElementById('choices').style.display = 'none';
+        document.getElementById('answer').style.display = 'inline-block';
+    }
+
+    // Timer starten, wenn aktiviert
+    if (document.getElementById('timeLimitCheck').checked) {
+        startTimer();
+    }
+}
+
+// Timer-Funktion
+function startTimer() {
+    var timeLeft = timeLimit;
+    document.getElementById('timer').innerText = 'Zeit: ' + timeLeft + 's';
+    timerInterval = setInterval(function() {
+        timeLeft--;
+        document.getElementById('timer').innerText = 'Zeit: ' + timeLeft + 's';
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            markAnswer(false);
+            waitingForNext = true;
+        }
+    }, 1000);
+}
+
+// Antwort prüfen
+// (Dieselbe Funktion wird von Multiple-Choice-Buttons und Texteingabe verwendet)
+function markAnswer(isCorrect, userAnswer = '') {
+    clearInterval(timerInterval);
+    document.getElementById('timer').innerText = '';
+
+    if (isCorrect) {
+        correctStreak++;
+        correctAnswers++;
+        document.getElementById('correctAnswer').innerText = 'Richtig! (' + currentWord.romaji + ' = ' + currentWord.meaning + ')';
+        document.getElementById('correctAnswer').className = 'correct';
+        // Sound
+        correctSound.currentTime = 0;
+        correctSound.play();
+
+        // Highscore updaten
+        if (correctStreak > highScore) {
+            highScore = correctStreak;
+            highScores['vocabMode'] = highScore;
+            saveHighScores();
+        }
+    } else {
+        correctStreak = 0;
+        incorrectAnswers++;
+        var feedbackMsg = 'Falsch! Richtige Antwort: ' + currentWord.romaji + ' (' + currentWord.meaning + ')';
+        // Optional: Tippfehler-Erkennung via getSimilarity()
+        if (userAnswer && getSimilarity(userAnswer, currentWord.romaji) > 0.7) {
+            feedbackMsg += ' - Tippfehler?';
+        }
+        document.getElementById('correctAnswer').innerText = feedbackMsg;
+        document.getElementById('correctAnswer').className = 'incorrect';
+        wrongSound.currentTime = 0;
+        wrongSound.play();
+    }
+
+    updateScore();
+    updateProgressBar();
+
+    // Nach kurzer Zeit das nächste Wort
+    setTimeout(function() {
+        nextWord();
+    }, 2000);
+}
+
+// Bei Eingabe Enter drücken
+document.getElementById('answer').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && !waitingForNext && !isMultipleChoice) {
+        var userAnswer = this.value.trim().toLowerCase();
+        // Vergleich mit .romaji
+        markAnswer(userAnswer === currentWord.romaji, userAnswer);
+        waitingForNext = true;
+    }
+});
+
+// Score aktualisieren
+function updateScore() {
+    document.getElementById('score').innerText = 'Streak: ' + correctStreak;
+    document.getElementById('highscore').innerText = 'Highscore: ' + highScore;
+    document.getElementById('statistics').innerText = 'Fragen: ' + totalQuestions +
+        ' | Richtig: ' + correctAnswers + ' | Falsch: ' + incorrectAnswers;
+}
+
+// Fortschrittsleiste aktualisieren
+function updateProgressBar() {
+    var percent = 0;
+    if (totalQuestions > 0) {
+        percent = (correctAnswers / totalQuestions) * 100;
+    }
+    document.getElementById('progress-bar').style.width = percent + '%';
+}
+
+// Multiple-Choice-Optionen erzeugen
+function generateMultipleChoiceOptions() {
+    var choicesDiv = document.getElementById('choices');
+    choicesDiv.innerHTML = '';
+    choicesDiv.style.display = 'block';
+
+    // Verstecke Eingabefeld im MC-Modus
+    document.getElementById('answer').style.display = 'none';
+
+    var options = [currentWord.romaji];
+    while (options.length < 4) {
+        var randomRomaji = vocabList[Math.floor(Math.random() * vocabList.length)].romaji;
+        if (!options.includes(randomRomaji)) {
+            options.push(randomRomaji);
+        }
+    }
+    shuffleArray(options);
+
+    options.forEach(option => {
+        var btn = document.createElement('button');
+        btn.innerText = option;
+        btn.onclick = function() {
+            markAnswer(option === currentWord.romaji, option);
+            waitingForNext = true;
         };
+        choicesDiv.appendChild(btn);
+    });
+}
 
-        // Vokabeln aus dem lokalen Speicher laden oder Standardvokabeln verwenden
-        var vocabulary = JSON.parse(localStorage.getItem('vocabulary')) || defaultVocabulary;
+// Zum Startbildschirm zurück
+function goToStart() {
+    clearInterval(timerInterval);
+    document.getElementById('timer').innerText = '';
+    document.getElementById('selection').style.display = 'block';
+    document.getElementById('learning').style.display = 'none';
+    displayHighScores();
+    displayHighScore();
+}
 
-        var selectedVocabulary = [];
-        var currentWord = {};
-        var totalQuestions = 0;
-        var correctAnswers = 0;
-        var incorrectAnswers = 0;
-        var timeLimit = 10;
-        var timerInterval;
-        var isMultipleChoice = false;
-        var learningMode = 'practice';
-        var remainingWords = [];
-        var incorrectWords = [];
-        var totalWords = 0;
-        var correctlyAnsweredWords = [];
-        var currentCategory = '';
+// Array mischen
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
 
-        function populateCategoryButtons() {
-            var categoryButtonsDiv = document.getElementById('categoryButtons');
-            categoryButtonsDiv.innerHTML = '';
-            for (var category in vocabulary) {
-                var button = document.createElement('button');
-                button.innerText = category;
-                button.onclick = (function(cat) {
-                    return function() {
-                        startLearning(cat);
-                    }
-                })(category);
-                categoryButtonsDiv.appendChild(button);
-            }
-        }
-
-        function addNewVocabulary() {
-            var japanese = document.getElementById('newJapanese').value.trim();
-            var reading = document.getElementById('newReading').value.trim();
-            var meaning = document.getElementById('newMeaning').value.trim();
-            var category = document.getElementById('newCategory').value.trim();
-
-            if (japanese && reading && meaning && category) {
-                if (!vocabulary[category]) {
-                    vocabulary[category] = [];
-                }
-                vocabulary[category].push({
-                    japanese: japanese,
-                    reading: reading,
-                    meaning: meaning
-                });
-                // Vokabeln im lokalen Speicher speichern
-                localStorage.setItem('vocabulary', JSON.stringify(vocabulary));
-
-                // Formular zurücksetzen
-                document.getElementById('newJapanese').value = '';
-                document.getElementById('newReading').value = '';
-                document.getElementById('newMeaning').value = '';
-                document.getElementById('newCategory').value = '';
-
-                // Kategorie-Buttons aktualisieren
-                populateCategoryButtons();
-
-                alert('Vokabel erfolgreich hinzugefügt!');
-            } else {
-                alert('Bitte fülle alle Felder aus.');
-            }
-        }
-
-        function startLearning(category) {
-            currentCategory = category;
-            selectedVocabulary = vocabulary[category];
-
-            if (!selectedVocabulary || selectedVocabulary.length === 0) {
-                alert('Keine Vokabeln in dieser Kategorie gefunden.');
-                return;
-            }
-
-            learningMode = document.getElementById('learningModeSelect').value;
-            var timeLimitEnabled = document.getElementById('timeLimitCheck').checked;
-            timeLimit = parseInt(document.getElementById('timeLimit').value);
-
-            document.getElementById('selection').style.display = 'none';
-            document.getElementById('learning').style.display = 'block';
-
-            totalQuestions = 0;
-            correctAnswers = 0;
-            incorrectAnswers = 0;
-            correctlyAnsweredWords = [];
-
-            if (learningMode === 'practice') {
-                remainingWords = shuffleArray(selectedVocabulary.slice());
-                incorrectWords = [];
-                totalWords = selectedVocabulary.length;
-                document.getElementById('progress-container').style.display = 'block';
-                updateProgressBar();
-            } else {
-                remainingWords = [];
-                document.getElementById('progress-container').style.display = 'none';
-            }
-
-            isMultipleChoice = (learningMode === 'multipleChoice');
-
-            nextWord();
-        }
-
-        function updateScore() {
-            document.getElementById('score').innerText = 'Richtige Antworten: ' + correctAnswers;
-            if (totalQuestions > 0) {
-                document.getElementById('statistics').innerText = 'Fragen beantwortet: ' + totalQuestions +
-                    ' | Richtig: ' + correctAnswers + ' | Falsch: ' + incorrectAnswers +
-                    ' | Erfolgsquote: ' + ((correctAnswers / totalQuestions) * 100).toFixed(1) + '%';
-            } else {
-                document.getElementById('statistics').innerText = '';
-            }
-        }
-
-        function updateProgressBar() {
-            var progressBar = document.getElementById('progress-bar');
-            var progressPercent = (correctlyAnsweredWords.length / totalWords) * 100;
-            progressBar.style.width = progressPercent + '%';
-        }
-
-        function nextWord() {
-            clearInterval(timerInterval);
-            document.getElementById('timer').innerText = '';
-            if (learningMode === 'practice') {
-                if (remainingWords.length === 0 && incorrectWords.length === 0) {
-                    alert('Du hast alle Vokabeln korrekt beantwortet! Gute Arbeit!');
-                    goToStart();
-                    return;
-                }
-                if (remainingWords.length === 0 && incorrectWords.length > 0) {
-                    remainingWords = shuffleArray(incorrectWords.slice());
-                    incorrectWords = [];
-                }
-                currentWord = remainingWords.shift();
-            } else {
-                var randomIndex = Math.floor(Math.random() * selectedVocabulary.length);
-                currentWord = selectedVocabulary[randomIndex];
-            }
-
-            totalQuestions++;
-            updateScore();
-
-            document.getElementById('question').innerText = 'Was bedeutet: ' + currentWord.japanese + ' (' + currentWord.reading + ')';
-            document.getElementById('answer').value = '';
-            document.getElementById('answer').focus();
-            document.getElementById('correctAnswer').innerText = '';
-
-            if (isMultipleChoice) {
-                generateMultipleChoiceOptions();
-            } else {
-                document.getElementById('choices').style.display = 'none';
-                document.getElementById('answer').style.display = 'inline-block';
-                document.getElementById('answer').onkeydown = function(event) {
-                    if (event.key === 'Enter') {
-                        checkAnswer();
-                    }
-                };
-            }
-
-            if (document.getElementById('timeLimitCheck').checked) {
-                startTimer();
-            }
-        }
-
-        function checkAnswer() {
-            var userAnswer = document.getElementById('answer').value.trim().toLowerCase();
-            var correctAnswer = currentWord.meaning.toLowerCase();
-            if (userAnswer === correctAnswer) {
-                markAnswer(true);
-            } else {
-                markAnswer(false, userAnswer);
-            }
-        }
-
-        function markAnswer(isCorrect, userAnswer = '') {
-            clearInterval(timerInterval);
-            document.getElementById('timer').innerText = '';
-            if (isCorrect) {
-                correctAnswers++;
-                document.getElementById('correctAnswer').innerText = 'Richtig!';
-                document.getElementById('correctAnswer').className = 'correct';
-
-                // Hinzugefügt: Wort zu korrekt beantworteten hinzufügen
-                if (!correctlyAnsweredWords.includes(currentWord.japanese)) {
-                    correctlyAnsweredWords.push(currentWord.japanese);
-                }
-            } else {
-                incorrectAnswers++;
-                var feedbackMessage = 'Falsch! Die richtige Antwort war: ' + currentWord.meaning;
-                document.getElementById('correctAnswer').innerText = feedbackMessage;
-                document.getElementById('correctAnswer').className = 'incorrect';
-                if (learningMode === 'practice') {
-                    incorrectWords.push(currentWord);
+// Optional: Tippfehler-Erkennung (Levenshtein-Distanz)
+function getSimilarity(a, b) {
+    var longer = a.length > b.length ? a : b;
+    var shorter = a.length > b.length ? b : a;
+    var longerLength = longer.length;
+    if (longerLength === 0) {
+        return 1.0;
+    }
+    return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+}
+function editDistance(a, b) {
+    a = a.toLowerCase();
+    b = b.toLowerCase();
+    var costs = [];
+    for (var i = 0; i <= a.length; i++) {
+        var lastValue = i;
+        for (var j = 0; j <= b.length; j++) {
+            if (i === 0)
+                costs[j] = j;
+            else {
+                if (j > 0) {
+                    var newValue = costs[j - 1];
+                    if (a.charAt(i - 1) !== b.charAt(j - 1))
+                        newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                    costs[j - 1] = lastValue;
+                    lastValue = newValue;
                 }
             }
-            updateScore();
-            if (learningMode === 'practice') {
-                updateProgressBar();
-            }
-
-            setTimeout(function() {
-                nextWord();
-            }, 2000);
         }
+        if (i > 0)
+            costs[b.length] = lastValue;
+    }
+    return costs[b.length];
+}
 
-        function showAnswer() {
-            document.getElementById('correctAnswer').innerText = 'Die richtige Antwort ist: ' + currentWord.meaning;
-            document.getElementById('correctAnswer').className = '';
-        }
+// Sound Mute/Unmute mittels "soundSwitch"
+document.addEventListener("DOMContentLoaded", function() {
+    // Hole den Status aus LocalStorage
+    let isSoundOn = localStorage.getItem("muteSound") !== "true"; // default: Sound an
+    // HTML-Body-Klasse anpassen
+    document.body.classList.toggle("sound-on", isSoundOn);
+    document.body.classList.toggle("sound-muted", !isSoundOn);
+    updateSoundStatus(isSoundOn);
 
-        function startTimer() {
-            var timeLeft = timeLimit;
-            document.getElementById('timer').innerText = 'Zeit: ' + timeLeft + 's';
-            timerInterval = setInterval(function() {
-                timeLeft--;
-                document.getElementById('timer').innerText = 'Zeit: ' + timeLeft + 's';
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    markAnswer(false);
-                }
-            }, 1000);
-        }
-        function generateMultipleChoiceOptions() {
-            var choicesDiv = document.getElementById('choices');
-            choicesDiv.innerHTML = '';
-            var options = [currentWord.meaning];
-            while (options.length < 4) {
-                var randomWord = selectedVocabulary[Math.floor(Math.random() * selectedVocabulary.length)].meaning;
-                if (!options.includes(randomWord)) {
-                    options.push(randomWord);
-                }
-            }
-            shuffleArray(options);
-            for (var i = 0; i < options.length; i++) {
-                var button = document.createElement('button');
-                button.innerText = options[i];
-                button.onclick = function() {
-                    if (this.innerText === currentWord.meaning) {
-                        markAnswer(true);
-                    } else {
-                        markAnswer(false, this.innerText);
-                    }
-                };
-                choicesDiv.appendChild(button);
-            }
-            choicesDiv.style.display = 'block';
-            document.getElementById('answer').style.display = 'none';
-        }
+    // EventListener für Klick auf den Switch
+    document.getElementById("soundSwitch").addEventListener("click", function() {
+        let isNowOn = document.body.classList.toggle("sound-on");
+        document.body.classList.toggle("sound-muted", !isNowOn);
+        updateSoundStatus(isNowOn);
+        localStorage.setItem("muteSound", !isNowOn);
+    });
+});
 
-        function goToStart() {
-            document.getElementById('learning').style.display = 'none';
-            selectedVocabulary = [];
-            currentWord = {};
-            totalQuestions = 0;
-            correctAnswers = 0;
-            incorrectAnswers = 0;
-            remainingWords = [];
-            incorrectWords = [];
-            totalWords = 0;
-            correctlyAnsweredWords = [];
-            clearInterval(timerInterval);
-            document.getElementById('timer').innerText = '';
-
-            document.getElementById('selection').style.display = 'block';
-        }
-
-        function shuffleArray(array) {
-            for (var i = array.length - 1; i > 0; i--) {
-                var j = Math.floor(Math.random() * (i + 1));
-                var temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
-            }
-            return array;
-        }
-
-        window.onload = function() {
-            populateCategoryButtons();
-        };
+// Setze Mute-Status sofort um
+function updateSoundStatus(isSoundOn) {
+    correctSound.muted = !isSoundOn;
+    wrongSound.muted = !isSoundOn;
+    document.getElementById("soundStatusText").innerText = isSoundOn ? "Sound is on" : "Sound is off";
+}
