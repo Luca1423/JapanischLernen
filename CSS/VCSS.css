@@ -19,7 +19,7 @@ h1 {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Navigation rechts oben */
+/* Navigation oben rechts */
 .top-links-container {
     position: absolute;
     top: 20px;
@@ -35,27 +35,23 @@ h1 {
     background-color: #3498db;
     padding: 10px 15px;
     border-radius: 50px;
-    display: inline-block;
     transition: background-color 0.3s ease;
 }
-
 .top-link:hover {
     background-color: #2980b9;
 }
 
-/* Sound-Button links oben */
+/* Sound-Schalter links oben */
 .sound-toggle-container {
     position: absolute;
     top: 15px;
     left: 15px;
     z-index: 1000;
 }
-
-/* Schalter-Design für Sound an/aus */
 #soundSwitch {
   width: 40px;
   height: 20px;
-  background-color: #666; /* Standardmäßig auf "AUS" */
+  background-color: #666; /* Standardmäßig AUS */
   border-radius: 15px;
   position: relative;
   cursor: pointer;
@@ -64,7 +60,6 @@ h1 {
   vertical-align: middle;
   margin-right: 8px;
 }
-
 #soundSwitch::before {
   content: "";
   width: 16px;
@@ -76,16 +71,12 @@ h1 {
   left: 3px;
   transition: transform 0.3s ease-in-out;
 }
-
-/* Zustand "Sound ist AN" (Schalter rechts) */
 .sound-on #soundSwitch {
   background-color: #ffb500;
 }
 .sound-on #soundSwitch::before {
   transform: translateX(20px);
 }
-
-/* Zustand "Sound ist AUS" (Schalter links) */
 .sound-muted #soundSwitch {
   background-color: #666;
 }
@@ -100,7 +91,7 @@ h1 {
     padding: 20px;
 }
 
-/* Boxen für Auswahl und Lernen */
+/* Auswahl und Lernbereich */
 #selection, #learning {
     background-color: #ffffff;
     border-radius: 10px;
@@ -109,34 +100,41 @@ h1 {
     margin-top: 30px;
 }
 
-/* Große Vokabelanzeige */
+/* Eingabe für neue Vokabeln */
+#addVocabSection {
+    margin-top: 20px;
+}
+#addVocabSection input {
+    margin: 5px;
+    padding: 8px;
+    font-size: 14px;
+}
+
+/* Vokabel-Frage */
 #question {
     font-size: 80px;
     margin: 50px 0 20px 0;
     color: #2c3e50;
 }
 
-/* Score und Statistiken */
+/* Score-Bereiche */
 #score, #statistics, #highscore {
     margin-top: 10px;
 }
-
 #score {
     font-size: 24px;
     color: #16a085;
 }
-
 #statistics {
     font-size: 16px;
     color: #34495e;
 }
-
 #highscore {
     font-size: 20px;
     color: #e67e22;
 }
 
-/* Rückmeldung richtige/falsche Antwort */
+/* Ausgabe richtige/falsche Antwort */
 #correctAnswer {
     font-size: 24px;
     margin-top: 20px;
@@ -171,18 +169,15 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
 button:hover {
     background-color: #2980b9;
 }
-
 #backButton {
     background-color: #e74c3c;
 }
 #backButton:hover {
     background-color: #c0392b;
 }
-
 #resetButton {
     background-color: #e67e22;
 }
@@ -190,7 +185,7 @@ button:hover {
     background-color: #d35400;
 }
 
-/* Options-Bereich */
+/* Einstellungen */
 #options {
     margin-top: 20px;
     font-size: 18px;
@@ -220,14 +215,14 @@ button:hover {
     padding: 5px;
 }
 
-/* Timer-Anzeige */
+/* Timer */
 #timer {
     font-size: 20px;
     color: #e74c3c;
     margin-top: 10px;
 }
 
-/* Multiple-Choice-Buttons */
+/* Multiple Choice Buttons */
 #choices button {
     display: inline-block;
     margin: 5px;
@@ -244,7 +239,7 @@ button:hover {
     overflow: hidden;
     height: 20px;
     margin-top: 20px;
-    display: none; /* wird erst im Lernmodus angezeigt */
+    display: none;
 }
 #progress-bar {
     height: 100%;
