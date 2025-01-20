@@ -3,71 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <title>Japanische Vokabeln Lernen</title>
-	<link rel="stylesheet" href="CSS/VCSS.css">
+    <!-- Verweis auf die CSS-Datei -->
+    <link rel="stylesheet" href="CSS/VCSS.css">
+    <!-- Favicon (falls vorhanden) -->
     <link rel="shortcut icon" href="Bilder/Vokabeln.ico" type="image/png">
-	<script src="JS/VJS.js" defer></script>
+    <!-- JS-Datei einbinden -->
+    <script src="JS/VJS.js" defer></script>
     <!-- Einbindung von Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <h1>Japanische Vokabeln Lernen</h1>
-    <!-- Link zurück zur Hiragana-Seite -->
+
+    <!-- Links zu anderen Seiten (z.B. Partikel, Kanji, Notizen) -->
     <div class="top-links-container">
         <a href="Lernen.html" class="top-link">Zur Partikel-Seite</a>
         <a href="Kanji.html" class="top-link">Zur Kanji-Seite</a>
-		<a href="Notizen.html" class="top-link">Zur Notizen-Seite</a>
+        <a href="Notizen.html" class="top-link">Zur Notizen-Seite</a>
     </div>
 
+    <!-- Button für Sound Mute/On (oben links) -->
+    <div class="sound-toggle-container sound-muted" id="muteContainer">
+        <div id="soundSwitch"></div>
+        <span id="soundStatusText">Sound is off</span>
+    </div>
+
+    <!-- Hauptcontainer -->
     <div id="container">
-        <!-- Auswahl der Kategorie -->
+        <!-- Auswahlbereich (könntest du erweitern um Einstellungen etc.) -->
         <div id="selection">
-            <p style="font-size: 24px; color: #2c3e50;">Wähle eine Vokabelkategorie zum Lernen:</p>
-            <div id="categoryButtons"></div>
-            <!-- Einstellungen -->
+            <h2>Willkommen beim Vokabeltrainer</h2>
+            <p>Wähle aus, wie du lernen möchtest:</p>
+
             <div id="options">
                 <h3>Einstellungen</h3>
-                <label><input type="checkbox" id="timeLimitCheck"> Zeitlimit pro Frage</label>
-                <input type="number" id="timeLimit" min="5" max="60" value="10"> Sekunden
-                <br><br>
-                <label>Wähle den Lernmodus:</label>
-                <select id="learningModeSelect">
-                    <option value="practice">Übungsmodus</option>
-                    <option value="multipleChoice">Multiple Choice</option>
-                </select>
+                <div class="options-grid">
+                    <div class="option-item">
+                        <label>Multiple Choice?</label>
+                        <select id="learningModeSelect">
+                            <option value="normal">Nein (Eingabe)</option>
+                            <option value="multipleChoice">Ja (Multiple Choice)</option>
+                        </select>
+                    </div>
+                    <div class="option-item">
+                        <label for="timeLimitCheck">
+                            <input type="checkbox" id="timeLimitCheck"> Zeitlimit?
+                        </label>
+                        <label for="timeLimit">Sekunden:</label>
+                        <input type="number" id="timeLimit" value="10" min="5" max="999">
+                    </div>
+                </div>
             </div>
-            <!-- Formular zum Hinzufügen von Vokabeln -->
-            <div id="addVocabularyForm">
-                <h3>Eigene Vokabel hinzufügen</h3>
-                <label>Japanisch:</label>
-                <input type="text" id="newJapanese" placeholder="日本語">
-                <label>Lesung (Kana):</label>
-                <input type="text" id="newReading" placeholder="にほんご">
-                <label>Bedeutung (Deutsch):</label>
-                <input type="text" id="newMeaning" placeholder="Japanische Sprache">
-                <label>Kategorie:</label>
-                <input type="text" id="newCategory" placeholder="z.B. eigene Vokabeln">
-                <button onclick="addNewVocabulary()">Vokabel hinzufügen</button>
-            </div>
+
+            <button onclick="startLearning()">Lernen starten</button>
+            <button onclick="resetHighScores()" id="resetButton">Highscores zurücksetzen</button>
         </div>
 
         <!-- Lernbereich -->
         <div id="learning" style="display: none;">
+            <div id="question">Vokabel</div>
+
+            <!-- Multiple-Choice-Antworten -->
+            <div id="choices" style="display: none;"></div>
+
+            <!-- Eingabefeld (bei normalem Modus) -->
+            <input type="text" id="answer" placeholder="Antwort hier eingeben">
+
+            <div>
+                <button id="correctButton" style="display:none;" onclick="markAnswer(true)">Richtig</button>
+                <button id="incorrectButton" style="display:none;" onclick="markAnswer(false)">Falsch</button>
+            </div>
+
+            <div id="correctAnswer"></div>
+
+            <!-- Anzeige für Punktestand/Statistiken -->
             <div id="score"></div>
+            <div id="highscore"></div>
             <div id="statistics"></div>
+            <div id="timer"></div>
+
             <!-- Fortschrittsleiste -->
-            <div id="progress-container" style="display: none;">
+            <div id="progress-container">
                 <div id="progress-bar"></div>
             </div>
-            <div id="question"></div>
-            <input type="text" id="answer" placeholder="Deine Antwort">
-            <div id="choices" style="display: none;"></div>
-            <br><br>
-            <button onclick="showAnswer()">Antwort anzeigen</button>
-            <button id="backButton" onclick="goToStart()">Zurück zum Startbildschirm</button>
-            <p id="correctAnswer"></p>
-            <p id="timer"></p>
+
+            <div>
+                <button onclick="goToStart()" id="backButton">Zurück zur Auswahl</button>
+            </div>
         </div>
+
+        <!-- Highscore-Liste -->
+        <div id="highScoresTable"></div>
+
     </div>
 </body>
 </html>
