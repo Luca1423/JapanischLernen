@@ -14,43 +14,43 @@
     <h1>Hiragana & Katakana Lernen</h1>
     <!-- Container für die Links zur Vokabel- und Kanji-Seite -->
     <div class="top-links-container">
-        <a href="Vokabeln.html" id="vocabularyLink" class="top-link">Zur Vokabelseite</a>
-        <a href="Kanji.html" id="kanjiLink" class="top-link">Zur Kanji-Seite</a>
-        <a href="Notizen.html" class="top-link">Zur Notizen-Seite</a>
+        <a href="Vokabeln.html" id="vocabularyLink" class="top-link">Vocabulary</a>
+        <a href="Kanji.html" id="kanjiLink" class="top-link">Kanji</a>
+        <a href="Notizen.html" class="top-link">Personal Notes</a>
     </div>
 
     <div id="container">
         <!-- Auswahl des Alphabets -->
         <div id="selection">
-            <p style="font-size: 24px; color: #2c3e50;">Möchtest du Hiragana oder Katakana lernen?</p>
+            <p style="font-size: 24px; color: #2c3e50;">Hiragana or Katakana?</p>
             <button class="option-button" onclick="startLearning('hiragana')">Hiragana</button>
             <button class="option-button" onclick="startLearning('katakana')">Katakana</button>
 
             <!-- Erweiterte Einstellungen -->
             <div id="options">
-                <h3>Einstellungen</h3>
+                <h3>Settings</h3>
                 <div class="options-grid">
                     <div class="option-item">
-                        <label><input type="checkbox" id="endlessMode"> Endlosmodus</label>
+                        <label><input type="checkbox" id="endlessMode"> Infinite query</label>
                     </div>
                     <div class="option-item">
-                        <label><input type="checkbox" id="timeLimitCheck"> Zeitlimit pro Frage</label>
-                        <input type="number" id="timeLimit" min="5" max="60" value="10"> Sekunden
+                        <label><input type="checkbox" id="timeLimitCheck"> Timelimit per question</label>
+                        <input type="number" id="timeLimit" min="5" max="60" value="10"> seconds
                     </div>
                     <div class="option-item">
-                        <label><input type="checkbox" id="includeDakuten"> Dakuten einschließen</label>
+                        <label><input type="checkbox" id="includeDakuten"> Dakuten YES/ NO</label>
                     </div>
                     <div class="option-item">
-                        <label><input type="checkbox" id="includeCombinations"> Kombinationen einschließen</label>
+                        <label><input type="checkbox" id="includeCombinations"> Combination YES/ NO</label>
                     </div>
                     <div class="option-item">
-                        <label><input type="checkbox" id="autoCheck"> Automatische Überprüfung</label>
+                        <label><input type="checkbox" id="autoCheck"> Automatic review</label>
                     </div>
                 </div>
                 <br>
                 <label>Wähle den Lernmodus:</label>
                 <select id="learningModeSelect">
-                    <option value="practice">Übungsmodus</option>
+                    <option value="practice">Standart</option>
                     <option value="multipleChoice">Multiple Choice</option>
                 </select>
             </div>
@@ -58,7 +58,7 @@
             <!-- Highscore-Tabelle -->
             <div id="highScoresTable"></div>
             <!-- Highscores zurücksetzen -->
-            <button id="resetButton" onclick="resetHighScores()">Highscores zurücksetzen</button>
+            <button id="resetButton" onclick="resetHighScores()">Reset Highscores</button>
         </div>
 
         <!-- Lernbereich -->
@@ -74,10 +74,10 @@
             <input type="text" id="answer" placeholder="Deine Antwort">
             <div id="choices" style="display: none;"></div>
             <br><br>
-            <button id="correctButton" onclick="markAnswer(true)">Richtig</button>
-            <button id="incorrectButton" onclick="markAnswer(false)">Falsch</button>
-            <button onclick="showAnswer()">Antwort anzeigen</button>
-            <button id="backButton" onclick="goToStart()">Zurück zum Startbildschirm</button>
+            <button id="correctButton" onclick="markAnswer(true)">Right</button>
+            <button id="incorrectButton" onclick="markAnswer(false)">Wrong</button>
+            <button onclick="showAnswer()">Show Answer</button>
+            <button id="backButton" onclick="goToStart()">Back to the Start</button>
             <p id="correctAnswer"></p>
             <p id="timer"></p>
         </div>
