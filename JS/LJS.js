@@ -125,8 +125,8 @@ for (var i = 0; i < alphabets.length; i++) {
         for (var k = 0; k < combinationsOptions.length; k++) {
             var key = alphabets[i] + '_' + (dakutenOptions[j] ? 'dakuten' : 'no_dakuten') + '_' + (combinationsOptions[k] ? 'combinations' : 'no_combinations');
             var name = (alphabets[i] === 'hiragana' ? 'Hiragana' : 'Katakana') + ', ' +
-                (dakutenOptions[j] ? 'mit Dakuten' : 'ohne Dakuten') + ', ' +
-                (combinationsOptions[k] ? 'mit Kombinationen' : 'ohne Kombinationen');
+                (dakutenOptions[j] ? 'with voicing marks' : 'without voicing marks') + ', ' +
+                (combinationsOptions[k] ? 'with combination' : 'without combination');
             modes.push({ key: key, name: name });
         }
     }
@@ -147,7 +147,7 @@ function saveHighScores() {
 
 function displayHighScores() {
     var highScoresTable = document.getElementById('highScoresTable');
-    var tableHTML = '<table><tr><th>Modus</th><th>Highscore</th></tr>';
+    var tableHTML = '<table><tr><th>Mode</th><th>Highscore</th></tr>';
 
     for (var i = 0; i < modes.length; i++) {
         var mode = modes[i];
@@ -160,11 +160,11 @@ function displayHighScores() {
 }
 
 function resetHighScores() {
-    if (confirm('Möchtest du wirklich alle Highscores zurücksetzen?')) {
+    if (confirm('Do you really want to reset your Highscores?')) {
         highScores = {};
         saveHighScores();
         displayHighScores();
-        alert('Alle Highscores wurden zurückgesetzt.');
+        alert('All Highscores have been reset.');
     }
 }
 
@@ -315,10 +315,10 @@ function startLearning(alphabet) {
 }
 
 function updateScore() {
-    document.getElementById('score').innerText = 'Richtige Antworten hintereinander: ' + correctStreak;
-    document.getElementById('highscore').innerText = 'Dein Highscore: ' + highScore;
+    document.getElementById('score').innerText = 'Right answers back to back: ' + correctStreak;
+    document.getElementById('highscore').innerText = 'Your Highscore: ' + highScore;
     if (totalQuestions > 0) {
-        document.getElementById('statistics').innerText = 'Fragen beantwortet: ' + totalQuestions +
+        document.getElementById('statistics').innerText = 'Questions answered: ' + totalQuestions +
             ' | Richtig: ' + correctAnswers + ' | Falsch: ' + incorrectAnswers +
             ' | Erfolgsquote: ' + ((correctAnswers / totalQuestions) * 100).toFixed(1) + '%';
     } else {
@@ -337,7 +337,7 @@ function nextCharacter() {
     document.getElementById('timer').innerText = '';
     if (learningMode === 'practice') {
         if (remainingCharacters.length === 0 && incorrectCharacters.length === 0) {
-            alert('Du hast alle Zeichen korrekt beantwortet! Gute Arbeit!');
+            alert('YOU HAVE ANSWERED ALL THE QUESTIONS. NICELY DONE!');
             goToStart();
             return;
         }
@@ -397,9 +397,9 @@ function markAnswer(isCorrect, userAnswer = '') {
     } else {
         correctStreak = 0;
         incorrectAnswers++;
-        var feedbackMessage = 'Falsch! Die richtige Antwort war: ' + currentChar.romaji;
+        var feedbackMessage = 'Wrong! The right answer was: ' + currentChar.romaji;
         if (userAnswer && getSimilarity(userAnswer, currentChar.romaji) > 0.7) {
-            feedbackMessage += ' | Tippfehler?';
+            feedbackMessage += ' | Spelling?';
         }
         document.getElementById('correctAnswer').innerText = feedbackMessage;
         document.getElementById('correctAnswer').className = 'incorrect';
@@ -612,9 +612,9 @@ function markAnswer(isCorrect, userAnswer = '') {
     } else {
         correctStreak = 0;
         incorrectAnswers++;
-        let feedbackMessage = 'Falsch! Die richtige Antwort war: ' + currentChar.romaji;
+        let feedbackMessage = 'Wrong! The right answer was: ' + currentChar.romaji;
         if (userAnswer && getSimilarity(userAnswer, currentChar.romaji) > 0.7) {
-            feedbackMessage += ' | Tippfehler?';
+            feedbackMessage += ' | Spelling?';
         }
         document.getElementById('correctAnswer').innerText = feedbackMessage;
         document.getElementById('correctAnswer').className = 'incorrect';
@@ -710,7 +710,7 @@ function markAnswer(isCorrect, userAnswer = '') {
             highScores[modeKey] = highScore;
             saveHighScores();
         }
-        document.getElementById('correctAnswer').innerText = 'Richtig!';
+        document.getElementById('correctAnswer').innerText = 'Right!';
         document.getElementById('correctAnswer').className = 'correct';
 
         if (!correctlyAnsweredCharacters.includes(currentChar.char)) {
@@ -724,7 +724,7 @@ function markAnswer(isCorrect, userAnswer = '') {
     } else {
         correctStreak = 0;
         incorrectAnswers++;
-        var feedbackMessage = 'Falsch! Die richtige Antwort war: ' + currentChar.romaji;
+        var feedbackMessage = 'Wrong! The right answer was: ' + currentChar.romaji;
         if (userAnswer && getSimilarity(userAnswer, currentChar.romaji) > 0.7) {
             feedbackMessage += ' | Tippfehler?';
         }
