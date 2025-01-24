@@ -18,7 +18,7 @@ async function loadKanjiData() {
         displayGroupCheckboxes();
         displayKanjiList();
     } catch (error) {
-        console.error('Fehler beim Laden der Kanji-Daten:', error);
+        console.error('Error loading Data:', error);
     }
 }
 
