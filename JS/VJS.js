@@ -1,38 +1,38 @@
-// Standard-Vokabelliste (Initial)
+// Standard vocabulary list (initial)
 var defaultVocabList = [
-    { word: "犬", romaji: "inu", meaning: "Hund" },
-    { word: "猫", romaji: "neko", meaning: "Katze" },
-    { word: "水", romaji: "mizu", meaning: "Wasser" },
-    { word: "山", romaji: "yama", meaning: "Berg" },
-    { word: "本", romaji: "hon", meaning: "Buch" },
-    { word: "友達", romaji: "tomodachi", meaning: "Freund" },
-    { word: "学校", romaji: "gakkou", meaning: "Schule" },
-    { word: "車", romaji: "kuruma", meaning: "Auto" },
-    { word: "先生", romaji: "sensei", meaning: "Lehrer" },
-    { word: "花", romaji: "hana", meaning: "Blume" }
+    { word: "犬", romaji: "inu", meaning: "dog" },
+    { word: "猫", romaji: "neko", meaning: "cat" },
+    { word: "水", romaji: "mizu", meaning: "water" },
+    { word: "山", romaji: "yama", meaning: "mountain" },
+    { word: "本", romaji: "hon", meaning: "book" },
+    { word: "友達", romaji: "tomodachi", meaning: "friend" },
+    { word: "学校", romaji: "gakkou", meaning: "school" },
+    { word: "車", romaji: "kuruma", meaning: "car" },
+    { word: "先生", romaji: "sensei", meaning: "teacher" },
+    { word: "花", romaji: "hana", meaning: "flower" }
 ];
 
-// Unsere "echte" Vokabelliste
+// Our "real" vocabulary list
 var vocabList = [];
 
-// Für das Tracking, welche Vokabeln schon min. einmal richtig beantwortet wurden
+// For tracking which words have been answered correctly at least once
 var uniqueCorrectSet = new Set();
 
-// Lern-Variablen
+// Learning-related variables
 var currentWord = null;
 var correctStreak = 0;
 var highScore = 0;
-var highScores = {};  
+var highScores = {};
 var totalQuestions = 0;
 var correctAnswers = 0;
 var incorrectAnswers = 0;
 var timerInterval = null;
 var timeLimit = 10;
 var isMultipleChoice = false;
-var isAnswerChecked = false;   // Für das Doppel-Enter
-var isEndlessMode = false;     // Normal oder Endlos-Modus
+var isAnswerChecked = false;   // For double Enter press
+var isEndlessMode = false;     // Normal or Endless mode
 
-// Im Normalmodus arbeiten wir mit einer Kopie (remainingVocab):
+// In normal mode we work with a copy (remainingVocab):
 var remainingVocab = [];
 
 // Sounds
@@ -40,7 +40,7 @@ const correctSound = new Audio('Sounds/right.mp3');
 const wrongSound = new Audio('Sounds/wrong.mp3');
 
 // ====================
-// Initialisierung
+// Initialization
 // ====================
 window.onload = function() {
     loadVocabListFromStorage();
@@ -51,7 +51,7 @@ window.onload = function() {
 };
 
 // ====================
-// Vokabeln verwalten
+// Manage Vocabulary
 // ====================
 function loadVocabListFromStorage() {
     var storedVocab = localStorage.getItem("myVocabList");
@@ -76,7 +76,7 @@ function addNewVocab() {
     var meaningVal = newMeaningElem.value.trim();
 
     if (wordVal === "" || romajiVal === "" || meaningVal === "") {
-        alert("Bitte alle Felder ausfüllen!");
+        alert("Please fill in all fields!");
         return;
     }
 
@@ -93,7 +93,7 @@ function addNewVocab() {
     newRomajiElem.value = "";
     newMeaningElem.value = "";
 
-    alert("Vokabel hinzugefügt!");
+    alert("Vocabulary added!");
 }
 
 // ====================
@@ -113,20 +113,20 @@ function saveHighScores() {
 }
 
 function displayHighScores() {
-    var tableHTML = '<table><tr><th>Modus</th><th>Highscore</th></tr>';
-    var mode = 'vocabMode'; 
+    var tableHTML = '<table><tr><th>Mode</th><th>Highscore</th></tr>';
+    var mode = 'vocabMode';
     var score = highScores[mode] || 0;
-    tableHTML += '<tr><td>Vokabel-Modus</td><td>' + score + '</td></tr>';
+    tableHTML += '<tr><td>Vocabulary Mode</td><td>' + score + '</td></tr>';
     tableHTML += '</table>';
     document.getElementById('highScoresTable').innerHTML = tableHTML;
 }
 
 function resetHighScores() {
-    if (confirm('Möchtest du wirklich alle Highscores zurücksetzen?')) {
+    if (confirm('Do you really want to reset all highscores?')) {
         highScores = {};
         saveHighScores();
         displayHighScores();
-        alert('Alle Highscores wurden zurückgesetzt.');
+        alert('All highscores have been reset.');
     }
 }
 
@@ -142,6 +142,7 @@ function saveSettings() {
     localStorage.setItem("timeLimitCheck", document.getElementById('timeLimitCheck').checked);
     localStorage.setItem("endlessMode", document.getElementById('endlessMode').checked);
 }
+
 function loadSettings() {
     document.getElementById('timeLimit').value = localStorage.getItem("timeLimit") || 10;
     var storedMode = localStorage.getItem("learningModeSelect") || "normal";
@@ -151,10 +152,10 @@ function loadSettings() {
 }
 
 // ====================
-// Lernen starten
+// Start Learning
 // ====================
 function startLearning() {
-    // Einstellungen laden
+    // Save current settings
     saveSettings();
     timeLimit = parseInt(document.getElementById('timeLimit').value);
     var selectedMode = document.getElementById('learningModeSelect').value;
@@ -162,11 +163,11 @@ function startLearning() {
 
     isEndlessMode = document.getElementById('endlessMode').checked;
 
-    // Ansicht wechseln
+    // Switch view
     document.getElementById('selection').style.display = 'none';
     document.getElementById('learning').style.display = 'block';
 
-    // Werte zurücksetzen
+    // Reset counters
     correctStreak = 0;
     totalQuestions = 0;
     correctAnswers = 0;
@@ -174,11 +175,11 @@ function startLearning() {
     uniqueCorrectSet.clear();
     isAnswerChecked = false;
 
-    // Fortschrittsleiste anzeigen
+    // Show progress bar
     document.getElementById('progress-container').style.display = 'block';
     document.getElementById('progress-bar').style.width = '0%';
 
-    // Falls normaler Modus: Kopie von vocabList erstellen und mischen
+    // For normal mode: create a copy of vocabList and shuffle it
     if (!isEndlessMode) {
         remainingVocab = shuffleArray(vocabList.slice());
     }
@@ -187,7 +188,7 @@ function startLearning() {
 }
 
 // ====================
-// Nächste Vokabel
+// Next Vocabulary
 // ====================
 function nextWord() {
     clearInterval(timerInterval);
@@ -195,19 +196,19 @@ function nextWord() {
     document.getElementById('correctAnswer').innerText = '';
     isAnswerChecked = false;
 
-    // Normalmodus: Wenn keine mehr übrig -> Fertig
+    // Normal mode: if no more words are left -> done
     if (!isEndlessMode) {
         if (remainingVocab.length === 0) {
-            alert('Super! Du hast alle Vokabeln einmal durch.');
+            alert('Great! You have gone through all vocabulary once.');
             goToStart();
             return;
         }
-        // Nimm die erste aus remainingVocab
+        // Take the first from remainingVocab
         currentWord = remainingVocab.shift();
     } else {
-        // Endlosmodus: Zufälliger Pick aus kompletter Vokabelliste
+        // Endless mode: pick a random word from the entire vocabList
         if (vocabList.length === 0) {
-            alert('Keine Vokabeln verfügbar! Bitte füge neue Vokabeln hinzu.');
+            alert('No vocabulary available! Please add new vocabulary.');
             goToStart();
             return;
         }
@@ -215,15 +216,15 @@ function nextWord() {
         currentWord = vocabList[randomIndex];
     }
 
-    // Frage anzeigen
+    // Show question
     document.getElementById('question').innerText = currentWord.word;
     document.getElementById('answer').value = '';
 
-    // Zähler
+    // Increment question count
     totalQuestions++;
     updateScore();
 
-    // Multiple Choice oder normale Eingabe
+    // Multiple choice or normal input?
     if (isMultipleChoice) {
         generateMultipleChoiceOptions();
     } else {
@@ -231,7 +232,7 @@ function nextWord() {
         document.getElementById('answer').style.display = 'inline-block';
     }
 
-    // Zeitlimit
+    // Timer if checkbox is checked
     if (document.getElementById('timeLimitCheck').checked) {
         startTimer();
     }
@@ -242,10 +243,10 @@ function nextWord() {
 // ====================
 function startTimer() {
     var timeLeft = timeLimit;
-    document.getElementById('timer').innerText = 'Zeit: ' + timeLeft + 's';
+    document.getElementById('timer').innerText = 'Time: ' + timeLeft + 's';
     timerInterval = setInterval(function() {
         timeLeft--;
-        document.getElementById('timer').innerText = 'Zeit: ' + timeLeft + 's';
+        document.getElementById('timer').innerText = 'Time: ' + timeLeft + 's';
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             markAnswer(false, "(timeout)");
@@ -255,7 +256,7 @@ function startTimer() {
 }
 
 // ====================
-// Antwort prüfen
+// Check Answer
 // ====================
 function markAnswer(isCorrect, userAnswer = '') {
     clearInterval(timerInterval);
@@ -264,17 +265,17 @@ function markAnswer(isCorrect, userAnswer = '') {
     if (isCorrect) {
         correctStreak++;
         correctAnswers++;
-        // Eintragen in Set, falls noch nicht drin
+        // Add to set if not already present
         if (!uniqueCorrectSet.has(currentWord.word)) {
             uniqueCorrectSet.add(currentWord.word);
         }
         document.getElementById('correctAnswer').innerText = 
-            'Richtig! ' + currentWord.word + ' = ' + currentWord.meaning;
+            'Correct! ' + currentWord.word + ' = ' + currentWord.meaning;
         document.getElementById('correctAnswer').className = 'correct';
         correctSound.currentTime = 0;
         correctSound.play();
 
-        // Highscore
+        // Update highscore
         if (correctStreak > highScore) {
             highScore = correctStreak;
             highScores['vocabMode'] = highScore;
@@ -283,9 +284,9 @@ function markAnswer(isCorrect, userAnswer = '') {
     } else {
         correctStreak = 0;
         incorrectAnswers++;
-        let feedback = 'Falsch! ' + currentWord.word + ' = ' + currentWord.meaning;
+        let feedback = 'Wrong! ' + currentWord.word + ' = ' + currentWord.meaning;
         if (userAnswer && getSimilarity(userAnswer, currentWord.meaning) > 0.7) {
-            feedback += ' (Tippfehler?)';
+            feedback += ' (Typo?)';
         }
         document.getElementById('correctAnswer').innerText = feedback;
         document.getElementById('correctAnswer').className = 'incorrect';
@@ -298,18 +299,18 @@ function markAnswer(isCorrect, userAnswer = '') {
 }
 
 // ====================
-// Eingabefeld: Doppel-Enter
+// Input field: Double Enter
 // ====================
 document.getElementById('answer').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         if (!isAnswerChecked) {
             var userAnswer = this.value.trim().toLowerCase();
-            // Korrekt, wenn meaning passt
+            // Correct if meaning matches
             var correct = (userAnswer === currentWord.meaning.toLowerCase());
             markAnswer(correct, userAnswer);
             isAnswerChecked = true;
         } else {
-            // Nächste Vokabel
+            // Proceed to next word
             nextWord();
         }
     }
@@ -341,7 +342,7 @@ function generateMultipleChoiceOptions() {
             let correct = (option === currentWord.meaning);
             markAnswer(correct, option);
             isAnswerChecked = true;
-            // Im Multiple-Choice starten wir nach 2s automatisch die nächste
+            // In multiple choice mode, automatically proceed after 2s
             setTimeout(function() {
                 nextWord();
             }, 2000);
@@ -351,19 +352,19 @@ function generateMultipleChoiceOptions() {
 }
 
 // ====================
-// Fortschritt
+// Progress
 // ====================
 function updateScore() {
     document.getElementById('score').innerText = 'Streak: ' + correctStreak;
     document.getElementById('highscore').innerText = 'Highscore: ' + highScore;
     document.getElementById('statistics').innerText =
-        'Fragen: ' + totalQuestions +
-        ' | Richtig: ' + correctAnswers +
-        ' | Falsch: ' + incorrectAnswers;
+        'Questions: ' + totalQuestions +
+        ' | Correct: ' + correctAnswers +
+        ' | Incorrect: ' + incorrectAnswers;
 }
 
 function updateProgressBar() {
-    // Gesamtanzahl Vokabeln
+    // Total number of words
     var totalCount = vocabList.length;
     var solvedCount = uniqueCorrectSet.size;
     var percent = (solvedCount / totalCount) * 100;
@@ -371,7 +372,7 @@ function updateProgressBar() {
 }
 
 // ====================
-// Zurück
+// Back to Start
 // ====================
 function goToStart() {
     clearInterval(timerInterval);
@@ -383,7 +384,7 @@ function goToStart() {
 }
 
 // ====================
-// Hilfsfunktionen
+// Helper Functions
 // ====================
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -395,7 +396,7 @@ function shuffleArray(array) {
     return array;
 }
 
-// Levenshtein für Tippfehler-Check
+// Levenshtein distance for checking typos
 function getSimilarity(a, b) {
     var longer = a.length > b.length ? a : b;
     var shorter = a.length > b.length ? b : a;
@@ -434,17 +435,17 @@ function editDistance(a, b) {
 // Sound Mute/Unmute
 // ====================
 document.addEventListener("DOMContentLoaded", function() {
-    let isSoundOn = localStorage.getItem("muteSound") !== "true"; 
+    let isSoundOn = localStorage.getItem("muteSound") !== "true";
     const muteContainer = document.getElementById("muteContainer");
 
-    // Setze die optische Darstellung
+    // Set the initial visual state
     muteContainer.classList.toggle("sound-on", isSoundOn);
     muteContainer.classList.toggle("sound-muted", !isSoundOn);
     updateSoundStatus(isSoundOn);
 
-    // Klick auf Switch
+    // Click on switch
     document.getElementById("soundSwitch").addEventListener("click", function() {
-        let newIsSoundOn = !muteContainer.classList.contains("sound-on"); 
+        let newIsSoundOn = !muteContainer.classList.contains("sound-on");
         muteContainer.classList.toggle("sound-on", newIsSoundOn);
         muteContainer.classList.toggle("sound-muted", !newIsSoundOn);
         updateSoundStatus(newIsSoundOn);
