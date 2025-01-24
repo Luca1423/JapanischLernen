@@ -1,22 +1,22 @@
-# JapanischLernen
+# JapaneseLearning
 
-Dieses Repository enthält eine Sammlung von Materialien, um Japanisch zu lernen, insbesondere Kanji, Hiragana, Katakana und grundlegende Vokabeln. Die HTML-Seiten in diesem Projekt bieten eine einfache, übersichtliche Möglichkeit, diese Inhalte zu üben und zu lernen. Der Hauptzweck dieser Webseite ist es, von überall aus auf die Lernmaterialien zugreifen zu können.
+This repository contains a collection of materials for learning Japanese, specifically Kanji, Hiragana, Katakana, and basic vocabulary. The HTML pages in this project provide a simple and clear way to practice and learn these contents. The main purpose of this website is to allow access to learning materials from anywhere.
 
-## Struktur und Inhalte
+## Structure and Contents
 
-- **Lernen.html** - Eine Übersicht über die verschiedenen Lerninhalte.
-- **Vokabeln.html** - Eine Liste mit grundlegenden japanischen Vokabeln.
-- **Kanji.html** - Enthält eine Sammlung von Kanji und deren Bedeutungen.
-- **Bilder** - Ein Ordner, der verschiedene Bilder für das Projekt enthält.
+- **Lernen.html** - An overview of the different learning materials.
+- **Vokabeln.html** - A list of basic Japanese vocabulary.
+- **Kanji.html** - Contains a collection of Kanji and their meanings.
+- **Images** - A folder containing various images for the project.
 
-## Verwendung
+## Usage
 
-Öffne einfach die HTML-Dateien in einem Webbrowser, um auf die Lerninhalte zuzugreifen. Solange die Dateien im Browser geöffnet werden können, hast du jederzeit und überall Zugriff auf die Materialien.
+Simply open the HTML files in a web browser to access the learning content. As long as the files can be opened in a browser, you will have access to the materials anytime and anywhere.
 
-## Hinweise
+## Notes
 
-Da die Webseite lokal auf deinem Rechner oder in deinem GitHub-Repository gespeichert ist, sind keine weiteren Installationen oder Setups erforderlich. Stelle nur sicher, dass alle Dateien (einschließlich des **Bilder**-Ordners) zusammen an einem Ort gespeichert sind, damit die Bilder und Inhalte korrekt geladen werden.
+Since the website is stored locally on your computer or in your GitHub repository, no additional installation or setup is required. Just make sure that all files (including the **Images** folder) are stored together in one location so that images and content load correctly.
 
-## Lizenz
+## License
 
-Dieses Projekt ist privat und dient ausschließlich zur persönlichen Nutzung.
+This project is private and intended for personal use only.
