@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Kanji Lernen</title>
+    <title>Learn Kanji</title>
     <link rel="stylesheet" href="CSS/KCSS.css">
     <script src="JS/KJS.js" defer></script>
     <link rel="icon" href="Bilder/Kanji.ico" type="image/x-icon">
@@ -10,36 +10,36 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Kanji Lernen</h1>
+    <h1>Learn Kanji</h1>
 
     <!-- Hauptnavigation -->
     <div class="nav-container">
         <div class="nav-left">
-            <a href="#" class="top-link" id="addKanjiLink">Kanji hinzufügen</a>
+            <a href="#" class="top-link" id="addKanjiLink">Add Kanji</a>
         </div>
         <div class="nav-right">
-            <a href="Lernen.html" class="top-link">Zur Partikel-Seite</a>
-            <a href="Vokabeln.html" class="top-link">Zur Vokabel-Seite</a>
-            <a href="Notizen.html" class="top-link">Zur Notizen-Seite</a>
+            <a href="Lernen.html" class="top-link">Kana</a>
+            <a href="Vokabeln.html" class="top-link">Vocabulary</a>
+            <a href="Notizen.html" class="top-link">Personal Notes</a>
         </div>
     </div>
 
     <div id="container">
         <!-- Auswahlbereich -->
         <div id="selection">
-            <h2>Willkommen zum Kanji-Lernprogramm!</h2>
+            <h2>Welcome to the Kanji Learning Program!</h2>
 
             <!-- Gruppen-Auswahl -->
             <div id="groupSelection">
-                <h3>Wähle Gruppen zum Lernen aus:</h3>
+                <h3>Choose the Groups you want to Learn:</h3>
                 <div id="groupCheckboxes"></div>
             </div>
 
-            <button id="startButton">Lernsession starten</button>
+            <button id="startButton">Start Learning</button>
 
             <!-- Anzeige aller Kanji -->
             <div id="kanjiListContainer">
-                <h3>Verfügbare Kanji:</h3>
+                <h3>Implemented Kanji:</h3>
                 <ul id="kanjiListDisplay"></ul>
             </div>
         </div>
@@ -49,26 +49,26 @@
             <div id="question"></div>
             <input type="text" id="answerInput" placeholder="Antwort eingeben">
             <div id="timer"></div>
-            <button id="submitButton">Antwort prüfen</button>
+            <button id="submitButton">Check</button>
             <div id="correctAnswer"></div>
             <div id="score"></div>
             <div id="progress-container">
                 <div id="progress-bar"></div>
             </div>
-            <button id="backButton">Zurück</button>
+            <button id="backButton">Back</button>
         </div>
 
         <!-- Kanji hinzufügen / bearbeiten Bereich -->
         <div id="addKanjiForm" style="display: none;">
-            <h3 id="formTitle">Neues Kanji hinzufügen</h3>
+            <h3 id="formTitle">Add new Kanji </h3>
             <label for="kanjiInput">Kanji:</label>
             <input type="text" id="kanjiInput">
-            <label for="meaningInput">Bedeutung:</label>
+            <label for="meaningInput">Meaning:</label>
             <input type="text" id="meaningInput">
-            <label for="groupInput">Gruppe:</label>
+            <label for="groupInput">Group:</label>
             <input type="text" id="groupInput" placeholder="Gruppe eingeben">
-            <button id="addKanjiButton">Kanji hinzufügen</button>
-            <button id="backButton2">Zurück</button>
+            <button id="addKanjiButton">Add Kanji</button>
+            <button id="backButton2">Back</button>
         </div>
     </div>
 </body>
