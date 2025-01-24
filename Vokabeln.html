@@ -2,25 +2,21 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Japanische Vokabeln Lernen</title>
-    <!-- Verweis auf die CSS-Datei -->
+    <title>Learn Vocabulary</title>
     <link rel="stylesheet" href="CSS/VCSS.css">
-    <!-- Favicon (optional) -->
     <link rel="shortcut icon" href="Bilder/Vokabeln.ico" type="image/png">
-    <!-- JS-Datei einbinden -->
     <script src="JS/VJS.js" defer></script>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <h1>Japanische Vokabeln Lernen</h1>
+    <h1>Vocabulary</h1>
 
     <!-- Links zu deinen anderen Seiten -->
     <div class="top-links-container">
-        <a href="Lernen.html" class="top-link">Zur Partikel-Seite</a>
-        <a href="Kanji.html" class="top-link">Zur Kanji-Seite</a>
-        <a href="Notizen.html" class="top-link">Zur Notizen-Seite</a>
+        <a href="Lernen.html" class="top-link">Kana</a>
+        <a href="Kanji.html" class="top-link">Kanji</a>
+        <a href="Notizen.html" class="top-link">Notes</a>
     </div>
 
     <!-- Sound-Button -->
@@ -33,58 +29,58 @@
     <div id="container">
         <!-- Auswahlbereich / Einstellungen -->
         <div id="selection">
-            <h2>Willkommen beim Vokabeltrainer</h2>
-            <p>Wähle aus, wie du lernen möchtest:</p>
+            <h2>Welcome to the Vocabulary Trainer</h2>
+            <p>Choose what you want to learn</p>
 
             <div id="options">
-                <h3>Einstellungen</h3>
+                <h3>Settings</h3>
                 <div class="options-grid">
                     <div class="option-item">
                         <label>Multiple Choice?</label>
                         <select id="learningModeSelect">
-                            <option value="normal">Nein (Eingabe)</option>
-                            <option value="multipleChoice">Ja (Multiple Choice)</option>
+                            <option value="normal">No</option>
+                            <option value="multipleChoice">Yes</option>
                         </select>
                     </div>
 
                     <div class="option-item">
                         <label for="endlessMode">
-                            <input type="checkbox" id="endlessMode"> Unendlichkeitsmodus?
+                            <input type="checkbox" id="endlessMode"> Infinite query?
                         </label>
                     </div>
 
                     <div class="option-item">
                         <label for="timeLimitCheck">
-                            <input type="checkbox" id="timeLimitCheck"> Zeitlimit?
+                            <input type="checkbox" id="timeLimitCheck"> Time limit?
                         </label>
-                        <label for="timeLimit">Sekunden:</label>
+                        <label for="timeLimit">Seconds:</label>
                         <input type="number" id="timeLimit" value="10" min="5" max="999">
                     </div>
                 </div>
             </div>
 
-            <button onclick="startLearning()">Lernen starten</button>
-            <button onclick="resetHighScores()" id="resetButton">Highscores zurücksetzen</button>
+            <button onclick="startLearning()">Start Learning</button>
+            <button onclick="resetHighScores()" id="resetButton">Reset Highscores</button>
 
             <!-- Neue Vokabel hinzufügen -->
             <div id="addVocabSection">
-                <h3>Neue Vokabel hinzufügen</h3>
-                <input type="text" id="newWord" placeholder="Japanisch (z.B. 犬)">
+                <h3>Add new Vocabulary</h3>
+                <input type="text" id="newWord" placeholder="Japanese (z.B. 犬)">
                 <input type="text" id="newRomaji" placeholder="Romaji (z.B. inu)">
-                <input type="text" id="newMeaning" placeholder="Übersetzung (z.B. Hund)">
-                <button onclick="addNewVocab()">Hinzufügen</button>
+                <input type="text" id="newMeaning" placeholder="Translation (z.B. Dog)">
+                <button onclick="addNewVocab()">Add</button>
             </div>
         </div>
 
         <!-- Lernbereich -->
         <div id="learning" style="display: none;">
-            <div id="question">Vokabel</div>
+            <div id="question">Vocabulary</div>
 
             <!-- Multiple Choice -->
             <div id="choices" style="display: none;"></div>
 
             <!-- Texteingabe-Feld (wenn nicht Multiple Choice) -->
-            <input type="text" id="answer" placeholder="Deutsche Übersetzung eingeben">
+            <input type="text" id="answer" placeholder="Translation">
 
             <div id="correctAnswer"></div>
 
@@ -100,7 +96,7 @@
             </div>
 
             <div>
-                <button onclick="goToStart()" id="backButton">Zurück zur Auswahl</button>
+                <button onclick="goToStart()" id="backButton">Back to the Start</button>
             </div>
         </div>
 
