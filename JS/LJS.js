@@ -662,24 +662,6 @@ window.onload = function() {
     document.getElementById('timeLimitCheck').addEventListener('change', saveSettings);
     document.getElementById('timeLimit').addEventListener('change', saveSettings);
     document.getElementById('learningModeSelect').addEventListener('change', saveSettings);
-};
-
-
-
-
-window.onload = function() {
-    loadHighScores();
-    displayHighScores();
-
-    loadSettings();
-
-    document.getElementById('includeDakuten').addEventListener('change', saveSettings);
-    document.getElementById('includeCombinations').addEventListener('change', saveSettings);
-    document.getElementById('endlessMode').addEventListener('change', saveSettings);
-    document.getElementById('autoCheck').addEventListener('change', saveSettings);
-    document.getElementById('timeLimitCheck').addEventListener('change', saveSettings);
-    document.getElementById('timeLimit').addEventListener('change', saveSettings);
-    document.getElementById('learningModeSelect').addEventListener('change', saveSettings);
 
     // Hinzufügen des Event-Listeners für Strg + Q
     document.addEventListener('keydown', function(event) {
@@ -698,58 +680,29 @@ document.addEventListener("DOMContentLoaded", function() {
     }, { once: true });
 });
 
-function markAnswer(isCorrect, userAnswer = '') {
-    clearInterval(timerInterval);
-    document.getElementById('timer').innerText = '';
-
-    if (isCorrect) {
-        correctStreak++;
-        correctAnswers++;
-        if (correctStreak > highScore) {
-            highScore = correctStreak;
-            highScores[modeKey] = highScore;
-            saveHighScores();
-        }
-        document.getElementById('correctAnswer').innerText = 'Right!';
-        document.getElementById('correctAnswer').className = 'correct';
-
-        if (!correctlyAnsweredCharacters.includes(currentChar.char)) {
-            correctlyAnsweredCharacters.push(currentChar.char);
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   +++++ HIER BEGINNT DIE (NEUE) DARK-MODE-TOGGLE-FUNKTIONALITÄT +++++
+   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+document.addEventListener("DOMContentLoaded", function() {
+    const themeToggleButton = document.getElementById("themeToggleButton");
+    if (themeToggleButton) {
+        // Beim Laden prüfen, ob im localStorage ein Theme gespeichert ist
+        const savedTheme = localStorage.getItem("theme") || "light";
+        if (savedTheme === "dark") {
+            document.body.classList.add("dark-mode");
+            themeToggleButton.innerText = "Light Mode";
         }
 
-        // **Sound für richtige Antwort**
-        correctSound.currentTime = 0;
-        correctSound.play();
-
-    } else {
-        correctStreak = 0;
-        incorrectAnswers++;
-        var feedbackMessage = 'Wrong! The right answer was: ' + currentChar.romaji;
-        if (userAnswer && getSimilarity(userAnswer, currentChar.romaji) > 0.7) {
-            feedbackMessage += ' | Tippfehler?';
-        }
-        document.getElementById('correctAnswer').innerText = feedbackMessage;
-        document.getElementById('correctAnswer').className = 'incorrect';
-
-        if (learningMode === 'practice') {
-            incorrectCharacters.push(currentChar);
-        }
-
-        // **Sound für falsche Antwort**
-        wrongSound.currentTime = 0;
-        wrongSound.play();
+        // Klick-Event zum Umschalten
+        themeToggleButton.addEventListener("click", function() {
+            document.body.classList.toggle("dark-mode");
+            if (document.body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggleButton.innerText = "Light Mode";
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggleButton.innerText = "Dark Mode";
+            }
+        });
     }
-
-    updateScore();
-    if (learningMode === 'practice') {
-        updateProgressBar();
-    }
-
-    if (isMultipleChoice || checkingMode === 'self') {
-        setTimeout(function() {
-            nextCharacter();
-        }, 2000);
-    }
-}
-
-
+});
