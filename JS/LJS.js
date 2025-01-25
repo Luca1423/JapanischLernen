@@ -543,6 +543,7 @@ function shuffleArray(array) {
     }
     return array;
 }
+
 // Sounds laden und vorladen
 const correctSound = new Audio('Sounds/right.mp3');
 const wrongSound = new Audio('Sounds/wrong.mp3');
@@ -555,18 +556,18 @@ document.addEventListener("DOMContentLoaded", function() {
     const soundStatusText = document.getElementById("soundStatusText");
     const body = document.body; // Für die Klassensteuerung
 
-    // Standardmäßig Sound **AN**, wenn keine Einstellung gespeichert ist
-    let isSoundOn = localStorage.getItem("muteSound") !== "true"; // Standard: AN
+    // Standardmäßig Sound AN, wenn keine Einstellung gespeichert ist
+    let isSoundOn = localStorage.getItem("muteSound") !== "true";
 
     // Setze den richtigen Zustand beim Laden
     body.classList.toggle("sound-on", isSoundOn);
     updateSoundStatus(isSoundOn);
 
-    // Event Listener für das Umschalten (sofortige Änderung!)
+    // Event Listener für das Umschalten
     soundSwitch.addEventListener("click", function() {
-        let isNowSoundOn = body.classList.toggle("sound-on"); // Klasse togglen
+        let isNowSoundOn = body.classList.toggle("sound-on");
         updateSoundStatus(isNowSoundOn);
-        localStorage.setItem("muteSound", !isNowSoundOn); // Richtig speichern
+        localStorage.setItem("muteSound", !isNowSoundOn);
     });
 });
 
@@ -575,7 +576,6 @@ function updateSoundStatus(isSoundOn) {
     correctSound.muted = !isSoundOn;
     wrongSound.muted = !isSoundOn;
 
-    // Aktualisiere den Text passend zum Zustand
     document.getElementById("soundStatusText").innerText = isSoundOn ? "Sound is on" : "Sound is off";
 }
 
@@ -585,7 +585,7 @@ document.body.addEventListener("click", function() {
     wrongSound.play().catch(error => console.log("Sound aktiviert nach User-Interaktion"));
 }, { once: true });
 
-// Funktion zur Bewertung der Antwort
+// Funktion zur Bewertung der Antwort (erneut, da du sie doppelt hattest)
 function markAnswer(isCorrect, userAnswer = '') {
     clearInterval(timerInterval);
     document.getElementById('timer').innerText = '';
@@ -605,7 +605,7 @@ function markAnswer(isCorrect, userAnswer = '') {
             correctlyAnsweredCharacters.push(currentChar.char);
         }
 
-        // **Sound für richtige Antwort**
+        // Sound für richtige Antwort
         correctSound.currentTime = 0;
         correctSound.play();
 
@@ -623,7 +623,7 @@ function markAnswer(isCorrect, userAnswer = '') {
             incorrectCharacters.push(currentChar);
         }
 
-        // **Sound für falsche Antwort**
+        // Sound für falsche Antwort
         wrongSound.currentTime = 0;
         wrongSound.play();
     }
@@ -673,36 +673,37 @@ window.onload = function() {
     });
 };
 
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++++++++++   NEUER DARK-MODE-SCHALTER (Switch)   ++++++++++++++
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 document.addEventListener("DOMContentLoaded", function() {
-    document.body.addEventListener("click", function() {
-        correctSound.play().catch(error => console.log("Sound aktiviert nach User-Interaktion"));
-        wrongSound.play().catch(error => console.log("Sound aktiviert nach User-Interaktion"));
-    }, { once: true });
-});
+    // Dark-Mode-Schalter analog zum Sound-Schalter
+    const darkModeSwitch = document.getElementById("darkModeSwitch");
+    const darkModeStatusText = document.getElementById("darkModeStatusText");
+    const body = document.body;
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   +++++ HIER BEGINNT DIE (NEUE) DARK-MODE-TOGGLE-FUNKTIONALITÄT +++++
-   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-document.addEventListener("DOMContentLoaded", function() {
-    const themeToggleButton = document.getElementById("themeToggleButton");
-    if (themeToggleButton) {
-        // Beim Laden prüfen, ob im localStorage ein Theme gespeichert ist
-        const savedTheme = localStorage.getItem("theme") || "light";
-        if (savedTheme === "dark") {
-            document.body.classList.add("dark-mode");
-            themeToggleButton.innerText = "Light Mode";
-        }
+    // Aus Local Storage auslesen
+    let isDarkModeOn = (localStorage.getItem("darkMode") === "true");
 
-        // Klick-Event zum Umschalten
-        themeToggleButton.addEventListener("click", function() {
-            document.body.classList.toggle("dark-mode");
-            if (document.body.classList.contains("dark-mode")) {
-                localStorage.setItem("theme", "dark");
-                themeToggleButton.innerText = "Light Mode";
-            } else {
-                localStorage.setItem("theme", "light");
-                themeToggleButton.innerText = "Dark Mode";
-            }
-        });
+    // Beim Laden Klassen anwenden
+    body.classList.toggle("dark-mode", isDarkModeOn);
+    body.classList.toggle("dark-on", isDarkModeOn);
+    body.classList.toggle("dark-off", !isDarkModeOn);
+    updateDarkModeStatusText(isDarkModeOn);
+
+    // Klick zum Umschalten
+    darkModeSwitch.addEventListener("click", function() {
+        isDarkModeOn = !isDarkModeOn;
+        localStorage.setItem("darkMode", isDarkModeOn);
+
+        body.classList.toggle("dark-mode", isDarkModeOn);
+        body.classList.toggle("dark-on", isDarkModeOn);
+        body.classList.toggle("dark-off", !isDarkModeOn);
+
+        updateDarkModeStatusText(isDarkModeOn);
+    });
+
+    function updateDarkModeStatusText(isOn) {
+        darkModeStatusText.innerText = isOn ? "Dark Mode is on" : "Dark Mode is off";
     }
 });
