@@ -216,16 +216,13 @@ button:hover {
     background-color: #3498db;
     color: #ffffff;
 }
-
 #kanjiListDisplay .edit-button:hover {
     background-color: #2980b9;
 }
-
 #kanjiListDisplay .delete-button {
     background-color: #e74c3c;
     color: #ffffff;
 }
-
 #kanjiListDisplay .delete-button:hover {
     background-color: #c0392b;
 }
@@ -259,4 +256,148 @@ button:hover {
 #groupSelection label {
     font-size: 18px;
     color: #2c3e50;
+}
+
+/* ===============================
+   ====  DARK MODE STYLES   ======
+   =============================== */
+
+/* Container für Dark Mode Switch */
+.darkmode-toggle-container {
+  position: absolute;
+  top: 15px; /* oberhalb der Nav / links */
+  left: 15px;
+  z-index: 2000;
+}
+
+/* Switch-Design */
+#darkModeSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: #666;
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  vertical-align: middle;
+}
+#darkModeSwitch::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Zustand "Dark Mode an" => Schalter rechts */
+.dark-on #darkModeSwitch {
+  background-color: #ffb500;
+}
+.dark-on #darkModeSwitch::before {
+  transform: translateX(20px);
+}
+/* Zustand "Dark Mode aus" => Schalter links */
+.dark-off #darkModeSwitch {
+  background-color: #666;
+}
+.dark-off #darkModeSwitch::before {
+  transform: translateX(0px);
+}
+
+/* Beschriftung neben dem Schalter */
+.checkbox-wrapper-35 label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  white-space: nowrap;
+  gap: 8px;
+}
+
+/* Text im Dark-Mode-Switch */
+#darkModeStatusText {
+  font-weight: bold;
+  color: #333; 
+}
+
+/* ===== BODY im Dark Mode ===== */
+body.dark-mode {
+    background-color: #2c3e50;
+    color: #ffffff;
+}
+
+/* Header in Dark Mode */
+body.dark-mode h1 {
+    background-color: #16a085;
+    color: #ffffff;
+}
+
+/* Container im Dark Mode */
+body.dark-mode #container,
+body.dark-mode #selection,
+body.dark-mode #learning,
+body.dark-mode #addKanjiForm {
+    background-color: #34495e;
+    color: #ffffff;
+}
+
+/* Navigation Links im Dark Mode */
+body.dark-mode .top-link {
+    background-color: #2980b9;
+    color: #ffffff;
+}
+body.dark-mode .top-link:hover {
+    background-color: #1f70a2;
+}
+
+/* Buttons im Dark Mode */
+body.dark-mode button {
+    background-color: #2980b9;
+    color: #ffffff;
+}
+body.dark-mode button:hover {
+    background-color: #1f70a2;
+}
+
+/* Überschriften usw. im Dark Mode */
+body.dark-mode #question,
+body.dark-mode #score,
+body.dark-mode #statistics,
+body.dark-mode #correctAnswer,
+body.dark-mode #kanjiListContainer h3,
+body.dark-mode #addKanjiForm h3,
+body.dark-mode label,
+body.dark-mode #darkModeStatusText,
+body.dark-mode #groupSelection h3 {
+    color: #ffffff !important;
+}
+
+/* Input-Felder im Dark Mode */
+body.dark-mode input[type="text"] {
+    background-color: #2c3e50;
+    color: #ffffff;
+    border: 2px solid #aaa;
+}
+
+/* Gruppen-Header im Dark Mode */
+body.dark-mode .group-header {
+    color: #ffffff;
+    border-bottom: 1px solid #aaa;
+}
+
+/* Kanji-Listenelemente im Dark Mode */
+body.dark-mode .kanji-group-list li {
+    color: #ffffff;
+}
+
+/* Fortschrittsleiste im Dark Mode */
+body.dark-mode #progress-container {
+    background-color: #2c3e50;
+}
+body.dark-mode #progress-bar {
+    background-color: #27ae60;
 }
