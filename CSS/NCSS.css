@@ -1,4 +1,6 @@
-/* Dein vorhandener CSS-Code */
+/* ========================
+   == Standard Styles ==
+   ======================== */
 body {
     font-family: 'Roboto', Arial, sans-serif;
     text-align: center;
@@ -8,6 +10,7 @@ body {
     position: relative;
     color: #333;
 }
+
 h1 {
     background-color: #1abc9c;
     color: #ffffff;
@@ -17,11 +20,14 @@ h1 {
     position: relative;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
 #container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
+
+/* Notiz- und Editor-Bereiche */
 #noteEditor, #noteList {
     background-color: #ffffff;
     border-radius: 10px;
@@ -30,6 +36,7 @@ h1 {
     margin-top: 30px;
     text-align: left;
 }
+
 #noteContent {
     width: 100%;
     height: 200px;
@@ -38,6 +45,7 @@ h1 {
     border: 2px solid #bdc3c7;
     border-radius: 5px;
 }
+
 #noteTitle {
     width: 100%;
     font-size: 18px;
@@ -46,6 +54,8 @@ h1 {
     border: 2px solid #bdc3c7;
     border-radius: 5px;
 }
+
+/* Buttons */
 button {
     font-size: 18px;
     padding: 12px 25px;
@@ -60,6 +70,8 @@ button {
 button:hover {
     background-color: #2980b9;
 }
+
+/* Notiz-Item */
 .note-item {
     border-bottom: 1px solid #bdc3c7;
     padding: 15px 0;
@@ -75,26 +87,31 @@ button:hover {
 .note-item button {
     margin-right: 10px;
 }
+
+/* Navigation oben rechts */
 .top-links-container {
-	position: absolute;
-	top: 20px;
-	right: 20px;
-	display: flex;
-	gap: 10px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
 }
+
 .top-link {
-	font-size: 16px;
-	color: #ffffff;
-	text-decoration: none;
-	background-color: #3498db;
-	padding: 10px 15px;
-	border-radius: 50px;
-	display: inline-block;
-	transition: background-color 0.3s ease;´
+    font-size: 16px;
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #3498db;
+    padding: 10px 15px;
+    border-radius: 50px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
 }
 .top-link:hover {
-	background-color: #2980b9;
+    background-color: #2980b9;
 }
+
+/* Zusätzliche Eingabefelder */
 #noteContent {
     width: 100%;
     height: 200px;
@@ -111,20 +128,7 @@ button:hover {
     border: 2px solid #bdc3c7;
     border-radius: 5px;
 }
-button {
-    font-size: 18px;
-    padding: 12px 25px;
-    margin: 10px 5px 0 0;
-    background-color: #3498db;
-    color: #ffffff;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-button:hover {
-    background-color: #2980b9;
-}
+
 /* Drag & Drop Effekte */
 .note-item.dragging {
     opacity: 0.5;
@@ -132,6 +136,7 @@ button:hover {
 .group-content.drag-over {
     border: 2px dashed #3498db;
 }
+
 /* Gruppenkopf */
 .group-header {
     display: flex;
@@ -148,11 +153,176 @@ button:hover {
     margin-left: 5px;
 }
 
-/* Drag & Drop Effekte */
 .drag-over {
     border: 2px dashed #3498db;
 }
 
 .note-item.dragging {
     opacity: 0.5;
+}
+
+/* ============================
+   = DARK MODE & SOUND SWITCH =
+   ============================ */
+
+/* Dark-Mode-Container (oben links) */
+.darkmode-toggle-container {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 2000;
+}
+
+/* Switch-Design */
+#darkModeSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: #666;
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  vertical-align: middle;
+}
+#darkModeSwitch::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: transform 0.3s ease-in-out;
+}
+/* Dark on => Schalter rechts */
+.dark-on #darkModeSwitch {
+  background-color: #ffb500;
+}
+.dark-on #darkModeSwitch::before {
+  transform: translateX(20px);
+}
+/* Dark off => Schalter links */
+.dark-off #darkModeSwitch {
+  background-color: #666;
+}
+.dark-off #darkModeSwitch::before {
+  transform: translateX(0px);
+}
+
+/* Beschriftung */
+.checkbox-wrapper-35 label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  white-space: nowrap;
+  gap: 8px;
+}
+#darkModeStatusText {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Sound-Schalter */
+.sound-toggle-container {
+  position: absolute;
+  top: 60px; /* unter dem Dark-Mode-Schalter */
+  left: 15px;
+  z-index: 1000;
+}
+#soundSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: #666;
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+#soundSwitch::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: transform 0.3s ease-in-out;
+}
+.sound-on #soundSwitch {
+  background-color: #ffb500;
+}
+.sound-on #soundSwitch::before {
+  transform: translateX(20px);
+}
+.sound-muted #soundSwitch {
+  background-color: #666;
+}
+.sound-muted #soundSwitch::before {
+  transform: translateX(0px);
+}
+
+/* =========== BODY DARK MODE =========== */
+body.dark-mode {
+    background-color: #2c3e50;
+    color: #ffffff;
+}
+body.dark-mode h1 {
+    background-color: #16a085;
+    color: #ffffff;
+}
+/* Container im Dark Mode */
+body.dark-mode #container,
+body.dark-mode #noteEditor,
+body.dark-mode #noteList {
+    background-color: #34495e;
+    color: #ffffff;
+}
+/* Links in Dark Mode */
+body.dark-mode .top-link {
+    background-color: #2980b9;
+    color: #ffffff;
+}
+body.dark-mode .top-link:hover {
+    background-color: #1f70a2;
+}
+/* Buttons im Dark Mode */
+body.dark-mode button {
+    background-color: #2980b9;
+    color: #ffffff;
+}
+body.dark-mode button:hover {
+    background-color: #1f70a2;
+}
+/* Texteingabe im Dark Mode */
+body.dark-mode input[type="text"],
+body.dark-mode textarea,
+body.dark-mode select {
+    background-color: #2c3e50;
+    color: #ffffff;
+    border: 2px solid #aaa;
+}
+
+/* Überschriften, Notizen etc. im Dark Mode */
+body.dark-mode .note-item h3,
+body.dark-mode .note-item p,
+body.dark-mode #darkModeStatusText,
+body.dark-mode #soundStatusText,
+body.dark-mode .group-header h2 {
+    color: #ffffff !important;
+}
+/* Group Title, Buttons, etc. */
+body.dark-mode .group-header {
+    color: #ffffff;
+    border-bottom: 1px solid #aaa;
+}
+
+/* Drag & Drop Umriss in Dark Mode */
+body.dark-mode .drag-over {
+    border: 2px dashed #27ae60;
 }
