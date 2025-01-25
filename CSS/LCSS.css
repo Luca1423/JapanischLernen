@@ -289,3 +289,68 @@ th {
   font-weight: bold;
   color: #333;
 }
+
+/* =========================================
+   ============ DARK MODE STYLES ===========
+   ========================================= */
+body.dark-mode {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+}
+
+/* Header in Dark Mode */
+body.dark-mode h1 {
+    background-color: #16a085;
+    color: #ecf0f1;
+}
+
+/* Container-Hintergründe in Dark Mode */
+body.dark-mode #container,
+body.dark-mode #selection,
+body.dark-mode #learning {
+    background-color: #34495e;
+    color: #ecf0f1;
+}
+
+/* Buttons in Dark Mode */
+body.dark-mode button {
+    background-color: #2980b9;
+    color: #ffffff;
+}
+body.dark-mode button:hover {
+    background-color: #1f70a2;
+}
+
+/* Option-Buttons in Dark Mode */
+body.dark-mode .option-button {
+    background-color: #27ae60;
+    color: #ffffff;
+}
+body.dark-mode .option-button:hover {
+    background-color: #229e54;
+}
+
+/* Links in Dark Mode */
+body.dark-mode .top-link {
+    background-color: #2980b9;
+    color: #ffffff;
+}
+body.dark-mode .top-link:hover {
+    background-color: #1f70a2;
+}
+
+/* Fortschrittsleiste in Dark Mode */
+body.dark-mode #progress-container {
+    background-color: #2c3e50;
+}
+body.dark-mode #progress-bar {
+    background-color: #27ae60;
+}
+
+/* Container für den Dark-Mode-Button */
+.dark-mode-toggle-container {
+  position: absolute;
+  top: 65px; /* ein Stück unter dem Sound-Switch */
+  left: 15px;
+  z-index: 1001;
+}
