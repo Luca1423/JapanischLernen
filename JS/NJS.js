@@ -52,7 +52,8 @@ function saveGroups() {
 
 // Function to display groups and notes
 function displayGroups() {
-    const groupsContainer = document.getElementById('groupsContainer') || document.getElementById('noteList');
+    const groupsContainer = document.getElementById('groupsContainer');
+    if (!groupsContainer) return;
     groupsContainer.innerHTML = '';
 
     // Display ungrouped notes
@@ -117,13 +118,12 @@ function displayGroups() {
         groupsContainer.appendChild(ungroupedDiv);
     }
 
-    // Display groups and their notes
+    // Display groups
     groups.forEach((group, groupIndex) => {
-        // Create the group element
         const groupDiv = document.createElement('div');
         groupDiv.className = 'group';
 
-        // Group header with title and buttons
+        // Group header
         const groupHeader = document.createElement('div');
         groupHeader.className = 'group-header';
 
@@ -155,7 +155,7 @@ function displayGroups() {
         groupHeader.appendChild(groupTitle);
         groupHeader.appendChild(groupButtons);
 
-        // Make the group header clickable
+        // Klick auf Gruppen-Header
         groupHeader.onclick = (e) => {
             if (e.target === groupHeader || e.target === groupTitle) {
                 toggleGroup(groupIndex);
@@ -165,12 +165,11 @@ function displayGroups() {
 
         groupDiv.appendChild(groupHeader);
 
-        // Group notes
+        // Group content
         const groupContent = document.createElement('div');
         groupContent.className = 'group-content';
         groupContent.style.display = group.collapsed ? 'none' : 'block';
 
-        // Drag & drop events for the group
         groupContent.addEventListener('dragover', (e) => {
             e.preventDefault();
             groupContent.classList.add('drag-over');
@@ -205,7 +204,7 @@ function createNoteElement(note, noteIndex, groupIndex) {
     noteDiv.className = 'note-item';
     noteDiv.draggable = true;
 
-    // Drag & drop events for the note
+    // Drag & drop
     noteDiv.addEventListener('dragstart', (e) => {
         noteDiv.classList.add('dragging');
         const data = JSON.stringify({
@@ -253,7 +252,7 @@ function createNoteElement(note, noteIndex, groupIndex) {
     return noteDiv;
 }
 
-// Function to update the group select field
+// Update the group select field
 function updateGroupSelect() {
     const groupSelect = document.getElementById('groupSelect');
     if (!groupSelect) return;
@@ -273,7 +272,7 @@ function updateGroupSelect() {
     });
 }
 
-// Function to add a new group
+// Add a new group
 function addGroup() {
     const groupTitleInput = document.getElementById('groupTitle');
     const title = groupTitleInput.value.trim();
@@ -297,7 +296,7 @@ function addGroup() {
     }
 }
 
-// Function to delete a group
+// Delete a group
 function deleteGroup(groupIndex) {
     if (confirm('Do you really want to delete this group?')) {
         groups.splice(groupIndex, 1);
@@ -307,14 +306,14 @@ function deleteGroup(groupIndex) {
     }
 }
 
-// Function to collapse or expand a group
+// Collapse or expand a group
 function toggleGroup(groupIndex) {
     groups[groupIndex].collapsed = !groups[groupIndex].collapsed;
     saveGroups();
     displayGroups();
 }
 
-// Function to add or update a note
+// Add or update a note
 function addOrUpdateNote() {
     const titleInput = document.getElementById('noteTitle');
     const contentInput = document.getElementById('noteContent');
@@ -326,28 +325,21 @@ function addOrUpdateNote() {
 
     if (title && content) {
         if (groupIndex !== '') {
-            // Assign note to a group
+            // In einer Gruppe
             const group = groups[parseInt(groupIndex)];
-
-            // Check if the note already exists
             const existingIndex = group.notes.findIndex(note => note.title === title);
 
             if (existingIndex >= 0) {
-                // Update note
                 group.notes[existingIndex].content = content;
             } else {
-                // Add new note
                 group.notes.push({ title, content });
             }
         } else {
-            // Note without a group
+            // Ungrouped
             const existingIndex = ungroupedNotes.findIndex(note => note.title === title);
-
             if (existingIndex >= 0) {
-                // Update note
                 ungroupedNotes[existingIndex].content = content;
             } else {
-                // Add new note
                 ungroupedNotes.push({ title, content });
             }
         }
@@ -362,7 +354,7 @@ function addOrUpdateNote() {
     }
 }
 
-// Function to edit a note (grouped)
+// Edit a note (grouped)
 function editNote(groupIndex, noteIndex) {
     const note = groups[groupIndex].notes[noteIndex];
     document.getElementById('noteTitle').value = note.title;
@@ -370,7 +362,7 @@ function editNote(groupIndex, noteIndex) {
     document.getElementById('groupSelect').value = groupIndex.toString();
 }
 
-// Function to edit a note (ungrouped)
+// Edit a note (ungrouped)
 function editUngroupedNote(noteIndex) {
     const note = ungroupedNotes[noteIndex];
     document.getElementById('noteTitle').value = note.title;
@@ -378,7 +370,7 @@ function editUngroupedNote(noteIndex) {
     document.getElementById('groupSelect').value = '';
 }
 
-// Function to delete a note (grouped)
+// Delete a note (grouped)
 function deleteNote(groupIndex, noteIndex) {
     if (confirm('Do you really want to delete this note?')) {
         groups[groupIndex].notes.splice(noteIndex, 1);
@@ -387,7 +379,7 @@ function deleteNote(groupIndex, noteIndex) {
     }
 }
 
-// Function to delete a note (ungrouped)
+// Delete a note (ungrouped)
 function deleteUngroupedNote(noteIndex) {
     if (confirm('Do you really want to delete this note?')) {
         ungroupedNotes.splice(noteIndex, 1);
@@ -396,12 +388,12 @@ function deleteUngroupedNote(noteIndex) {
     }
 }
 
-// Function to move a note between groups
+// Move a note between groups
 function moveNoteBetweenGroups(sourceGroupIndex, targetGroupIndex, noteIndex) {
     noteIndex = parseInt(noteIndex);
     let note;
 
-    // Remove the note from the source group
+    // Remove from source
     if (sourceGroupIndex === 'ungrouped') {
         note = ungroupedNotes.splice(noteIndex, 1)[0];
     } else {
@@ -409,7 +401,7 @@ function moveNoteBetweenGroups(sourceGroupIndex, targetGroupIndex, noteIndex) {
         note = groups[sourceGroupIndex].notes.splice(noteIndex, 1)[0];
     }
 
-    // Add the note to the target group
+    // Add to target
     if (targetGroupIndex === 'ungrouped') {
         ungroupedNotes.push(note);
     } else {
@@ -423,15 +415,80 @@ function moveNoteBetweenGroups(sourceGroupIndex, targetGroupIndex, noteIndex) {
 
 // Initialize event listeners
 window.addEventListener('DOMContentLoaded', function() {
-    // Event listener for the save note button
     document.getElementById('saveNote').addEventListener('click', addOrUpdateNote);
 
-    // Event listener for the create group button
     const createGroupButton = document.getElementById('createGroup');
     if (createGroupButton) {
         createGroupButton.addEventListener('click', addGroup);
     }
 
-    // Display groups and notes when the page loads
+    // Load
     loadGroups();
+});
+
+/* ++++++++++++++++++++++++
+   SOUND & DARK MODE STUFF
+   ++++++++++++++++++++++++ */
+
+// SOUNDS (richtig/falsch) => Falls du in Zukunft "richtige" oder "falsche" Interaktionen 
+// in den Notizen hast, kannst du sie abspielen.
+const correctSound = new Audio('Sounds/right.mp3');
+const wrongSound = new Audio('Sounds/wrong.mp3');
+correctSound.load();
+wrongSound.load();
+
+// SOUND SWITCH
+document.addEventListener("DOMContentLoaded", function() {
+    let isSoundOn = localStorage.getItem("muteSound") !== "true";
+    const muteContainer = document.getElementById("muteContainer");
+
+    // Anfangsstatus
+    muteContainer.classList.toggle("sound-on", isSoundOn);
+    muteContainer.classList.toggle("sound-muted", !isSoundOn);
+    updateSoundStatus(isSoundOn);
+
+    // Klick Handler
+    document.getElementById("soundSwitch").addEventListener("click", function() {
+        let newIsSoundOn = !muteContainer.classList.contains("sound-on");
+        muteContainer.classList.toggle("sound-on", newIsSoundOn);
+        muteContainer.classList.toggle("sound-muted", !newIsSoundOn);
+        updateSoundStatus(newIsSoundOn);
+        localStorage.setItem("muteSound", !newIsSoundOn);
+    });
+});
+
+function updateSoundStatus(isSoundOn) {
+    // Hier: Falls du je "korrekt" oder "falsch" in Notizen abfragen willst
+    correctSound.muted = !isSoundOn;
+    wrongSound.muted = !isSoundOn;
+    document.getElementById("soundStatusText").innerText = isSoundOn ? "Sound is on" : "Sound is off";
+}
+
+// DARK MODE SWITCH
+document.addEventListener("DOMContentLoaded", function() {
+    const darkModeSwitch = document.getElementById("darkModeSwitch");
+    const darkModeStatusText = document.getElementById("darkModeStatusText");
+    const body = document.body;
+
+    let isDarkModeOn = (localStorage.getItem("darkMode") === "true");
+
+    body.classList.toggle("dark-mode", isDarkModeOn);
+    body.classList.toggle("dark-on", isDarkModeOn);
+    body.classList.toggle("dark-off", !isDarkModeOn);
+    updateDarkModeStatusText(isDarkModeOn);
+
+    darkModeSwitch.addEventListener("click", function() {
+        isDarkModeOn = !isDarkModeOn;
+        localStorage.setItem("darkMode", isDarkModeOn);
+
+        body.classList.toggle("dark-mode", isDarkModeOn);
+        body.classList.toggle("dark-on", isDarkModeOn);
+        body.classList.toggle("dark-off", !isDarkModeOn);
+
+        updateDarkModeStatusText(isDarkModeOn);
+    });
+
+    function updateDarkModeStatusText(isOn) {
+        darkModeStatusText.innerText = isOn ? "Dark Mode is on" : "Dark Mode is off";
+    }
 });
