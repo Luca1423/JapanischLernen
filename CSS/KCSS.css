@@ -24,12 +24,9 @@ h1 {
     top: 20px;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* nur rechtsbündig */
     align-items: center;
-}
-
-.nav-left {
-    margin-left: 20px;
+    gap: 10px;
 }
 
 .nav-right {
@@ -47,7 +44,6 @@ h1 {
     border-radius: 50px;
     transition: background-color 0.3s ease;
 }
-
 .top-link:hover {
     background-color: #2980b9;
 }
@@ -79,12 +75,10 @@ h1 {
 #score, #statistics {
     margin-top: 10px;
 }
-
 #score {
     font-size: 24px;
     color: #16a085;
 }
-
 #statistics {
     font-size: 18px;
     color: #34495e;
@@ -95,11 +89,9 @@ h1 {
     font-size: 24px;
     margin-top: 20px;
 }
-
 .correct {
     color: #27ae60;
 }
-
 .incorrect {
     color: #e74c3c;
 }
@@ -127,15 +119,12 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
 button:hover {
     background-color: #2980b9;
 }
-
 #backButton, #backButton2 {
     background-color: #e74c3c;
 }
-
 #backButton:hover, #backButton2:hover {
     background-color: #c0392b;
 }
@@ -149,7 +138,6 @@ button:hover {
     height: 20px;
     margin-top: 20px;
 }
-
 #progress-bar {
     height: 100%;
     width: 0%;
@@ -162,7 +150,6 @@ button:hover {
     text-align: left;
     margin-top: 20px;
 }
-
 #kanjiListContainer h3 {
     text-align: center;
     color: #2c3e50;
@@ -193,11 +180,9 @@ button:hover {
     align-items: center;
     justify-content: space-between;
 }
-
 #kanjiListDisplay .kanji-text {
     flex-grow: 1;
 }
-
 #kanjiListDisplay .button-group {
     display: flex;
     gap: 5px;
@@ -211,7 +196,6 @@ button:hover {
     border-radius: 5px;
     cursor: pointer;
 }
-
 #kanjiListDisplay .edit-button {
     background-color: #3498db;
     color: #ffffff;
@@ -231,18 +215,15 @@ button:hover {
 #addKanjiForm {
     text-align: left;
 }
-
 #addKanjiForm h3 {
     text-align: center;
     color: #2c3e50;
 }
-
 #addKanjiForm label {
     display: block;
     margin-bottom: 5px;
     color: #34495e;
 }
-
 #addKanjiForm input {
     width: 100%;
     margin-bottom: 15px;
@@ -252,20 +233,19 @@ button:hover {
 #groupSelection {
     margin-top: 20px;
 }
-
 #groupSelection label {
     font-size: 18px;
     color: #2c3e50;
 }
 
-/* ===============================
-   ====  DARK MODE STYLES   ======
-   =============================== */
+/* ==================================
+   DARK MODE - mit Switch etc.
+   ================================== */
 
 /* Container für Dark Mode Switch */
 .darkmode-toggle-container {
   position: absolute;
-  top: 15px; /* oberhalb der Nav / links */
+  top: 15px;
   left: 15px;
   z-index: 2000;
 }
@@ -293,7 +273,6 @@ button:hover {
   left: 3px;
   transition: transform 0.3s ease-in-out;
 }
-
 /* Zustand "Dark Mode an" => Schalter rechts */
 .dark-on #darkModeSwitch {
   background-color: #ffb500;
@@ -317,11 +296,54 @@ button:hover {
   white-space: nowrap;
   gap: 8px;
 }
-
-/* Text im Dark-Mode-Switch */
 #darkModeStatusText {
   font-weight: bold;
-  color: #333; 
+  color: #333;
+}
+
+/* Sound-Schalter (darunter) */
+.sound-toggle-container {
+  position: absolute;
+  top: 60px; /* etwas unter dem Dark-Mode-Schalter */
+  left: 15px;
+  z-index: 1000;
+}
+#soundSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: #666;
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+#soundSwitch::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: transform 0.3s ease-in-out;
+}
+/* Zustand "Sound an" (Schalter rechts) */
+.sound-on #soundSwitch {
+  background-color: #ffb500;
+}
+.sound-on #soundSwitch::before {
+  transform: translateX(20px);
+}
+/* Zustand "Sound aus" (Schalter links) */
+.sound-muted #soundSwitch {
+  background-color: #666;
+}
+.sound-muted #soundSwitch::before {
+  transform: translateX(0px);
 }
 
 /* ===== BODY im Dark Mode ===== */
@@ -330,7 +352,7 @@ body.dark-mode {
     color: #ffffff;
 }
 
-/* Header in Dark Mode */
+/* Header im Dark Mode */
 body.dark-mode h1 {
     background-color: #16a085;
     color: #ffffff;
