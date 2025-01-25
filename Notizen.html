@@ -4,16 +4,35 @@
     <meta charset="UTF-8">
     <title>Personal Notes</title>
     <link rel="icon" href="Bilder/Notizen.ico" type="image/x-icon">
-	<script src="JS/NJS.js" defer></script>
+    <script src="JS/NJS.js" defer></script>
     <link rel="stylesheet" href="CSS/NCSS.css">
 </head>
 <body>
     <h1>Notes</h1>
+
+    <!-- Navigation oben rechts -->
     <div class="top-links-container">
         <a href="Lernen.html" class="top-link">Kana</a>
         <a href="Vokabeln.html" id="vocabularyLink" class="top-link">Vocabulary</a>
         <a href="Kanji.html" class="top-link">Kanji</a>
     </div>
+
+    <!-- Dark-Mode-Schalter (oben links) -->
+    <div class="darkmode-toggle-container">
+      <div class="checkbox-wrapper-35">
+        <label for="darkModeSwitch">
+          <div id="darkModeSwitch" class="switch"></div>
+          <span id="darkModeStatusText">Dark Mode is off</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Sound-Schalter (darunter) -->
+    <div class="sound-toggle-container" id="muteContainer">
+        <div id="soundSwitch"></div>
+        <span id="soundStatusText">Sound is off</span>
+    </div>
+
     <div id="container">
         <!-- Bereich zum Erstellen neuer Gruppen -->
         <div id="groupCreator">
