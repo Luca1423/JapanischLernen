@@ -27,7 +27,6 @@ h1 {
     display: flex;
     gap: 10px;
 }
-
 .top-link {
     font-size: 16px;
     color: #ffffff;
@@ -41,10 +40,55 @@ h1 {
     background-color: #2980b9;
 }
 
+/* DARK-MODE-TOGGLE (oben links) */
+.darkmode-toggle-container {
+  position: absolute;
+  top: 15px; /* über dem Sound-Schalter */
+  left: 15px;
+  z-index: 1001;
+}
+/* Switch selbst */
+#darkModeSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: #666;
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  display: inline-block;
+  vertical-align: middle;
+}
+#darkModeSwitch::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: transform 0.3s ease-in-out;
+}
+/* Dark-Mode ON => Schalter rechts */
+.dark-on #darkModeSwitch {
+  background-color: #ffb500;
+}
+.dark-on #darkModeSwitch::before {
+  transform: translateX(20px);
+}
+/* Dark-Mode OFF => Schalter links */
+.dark-off #darkModeSwitch {
+  background-color: #666;
+}
+.dark-off #darkModeSwitch::before {
+  transform: translateX(0px);
+}
+
 /* Sound-Schalter links oben */
 .sound-toggle-container {
     position: absolute;
-    top: 15px;
+    top: 60px;  /* statt 15px, damit drunter */
     left: 15px;
     z-index: 1000;
 }
@@ -262,4 +306,88 @@ button:hover {
 }
 #highScoresTable th {
     background-color: #f9fafb;
+}
+
+/* ==================================
+   DARK MODE-KLASSEN UND STYLES
+   ================================== */
+
+/* Basis-Klasse für Dark Mode */
+body.dark-mode {
+    background-color: #2c3e50;
+    color: #ffffff; /* alle Standard-Texte weiß */
+}
+
+/* Header in Dark Mode */
+body.dark-mode h1 {
+    background-color: #16a085;
+    color: #ffffff;
+}
+
+/* Container im Dark Mode */
+body.dark-mode #container,
+body.dark-mode #selection,
+body.dark-mode #learning {
+    background-color: #34495e;
+    color: #ffffff;
+}
+
+/* Buttons im Dark Mode */
+body.dark-mode button {
+    background-color: #2980b9;
+    color: #ffffff;
+}
+body.dark-mode button:hover {
+    background-color: #1f70a2;
+}
+
+/* Option-Buttons in Dark Mode */
+body.dark-mode .option-item label,
+body.dark-mode #options h3 {
+    color: #ffffff !important;
+}
+body.dark-mode .option-button {
+    background-color: #27ae60;
+    color: #ffffff;
+}
+body.dark-mode .option-button:hover {
+    background-color: #229e54;
+}
+
+/* Links in Dark Mode */
+body.dark-mode .top-link {
+    background-color: #2980b9;
+    color: #ffffff;
+}
+body.dark-mode .top-link:hover {
+    background-color: #1f70a2;
+}
+
+/* Fortschrittsleiste in Dark Mode */
+body.dark-mode #progress-container {
+    background-color: #2c3e50;
+}
+body.dark-mode #progress-bar {
+    background-color: #27ae60;
+}
+
+/* Weitere Farben auf Weiß setzen */
+body.dark-mode #soundStatusText,
+body.dark-mode #darkModeStatusText,
+body.dark-mode #statistics,
+body.dark-mode #score,
+body.dark-mode #highscore,
+body.dark-mode #timer,
+body.dark-mode #selection p,
+body.dark-mode #question,
+body.dark-mode #addVocabSection h3 {
+    color: #ffffff !important;
+}
+
+/* ABER: Tabellenkopf in Highscore schwarz */
+body.dark-mode #highScoresTable th {
+    color: #000000 !important;
+}
+body.dark-mode #highScoresTable td {
+    color: #ffffff !important;
 }
