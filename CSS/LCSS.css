@@ -228,7 +228,7 @@ th {
 /* Dark-Mode-Schalter (oben links) */
 .darkmode-toggle-container {
   position: absolute;
-  top: 15px;
+  top: 15px; 
   left: 15px;
   z-index: 1001;
 }
@@ -310,7 +310,6 @@ th {
 .sound-on #soundSwitch {
   background-color: #ffb500;
 }
-
 .sound-on #soundSwitch::before {
   transform: translateX(20px);
 }
@@ -319,7 +318,6 @@ th {
 .sound-muted #soundSwitch {
   background-color: #666;
 }
-
 .sound-muted #soundSwitch::before {
   transform: translateX(0px);
 }
@@ -403,21 +401,14 @@ body.dark-mode #statistics,
 body.dark-mode #score,
 body.dark-mode #highscore,
 body.dark-mode .option-item label,
-body.dark-mode .checkbox-wrapper-35 label {
-    color: #ffffff !important;
-}
-
-/* Neu hinzugefügt, um auch den Inline-stylten Text, 
-   "Settings"-H3 und die Tabelle auf Weiß zu bekommen */
-body.dark-mode #selection p {
-    color: #ffffff !important;
-}
-
-body.dark-mode #options h3 {
-    color: #ffffff !important;
-}
-
-body.dark-mode #highScoresTable table th,
+body.dark-mode .checkbox-wrapper-35 label,
+body.dark-mode #selection p,
+body.dark-mode #options h3,
 body.dark-mode #highScoresTable table td {
     color: #ffffff !important;
+}
+
+/* ABER: Highscore-Tabelle Header-Text soll schwarz sein! */
+body.dark-mode #highScoresTable table th {
+    color: #000000 !important;
 }
