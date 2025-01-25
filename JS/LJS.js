@@ -259,7 +259,7 @@ function startLearning(alphabet) {
     if (learningMode === 'practice') {
         remainingCharacters = shuffleArray(selectedAlphabet.slice());
         incorrectCharacters = [];
-        totalCharacters = selectedAlphabet.length; // Für die Fortschrittsleiste
+        totalCharacters = selectedAlphabet.length;
         document.getElementById('progress-container').style.display = 'block';
         updateProgressBar();
     } else {
@@ -390,7 +390,6 @@ function markAnswer(isCorrect, userAnswer = '') {
         document.getElementById('correctAnswer').innerText = 'Richtig!';
         document.getElementById('correctAnswer').className = 'correct';
 
-        // Zeichen zu korrekt beantworteten hinzufügen
         if (!correctlyAnsweredCharacters.includes(currentChar.char)) {
             correctlyAnsweredCharacters.push(currentChar.char);
         }
@@ -556,7 +555,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const soundStatusText = document.getElementById("soundStatusText");
     const body = document.body;
 
-    // Standardmäßig Sound AN, wenn keine Einstellung gespeichert ist
     let isSoundOn = localStorage.getItem("muteSound") !== "true";
 
     body.classList.toggle("sound-on", isSoundOn);
@@ -583,9 +581,7 @@ document.body.addEventListener("click", function() {
 }, { once: true });
 
 /* 
-   MARKANSWER (wird bei dir doppelt definiert - hier nochmals, 
-   um Sound direkt abzuspielen - belassen wir so, 
-   da es in deinem Code so existierte)
+   Funktion markAnswer (erneut definiert für Sound):
 */
 function markAnswer(isCorrect, userAnswer = '') {
     clearInterval(timerInterval);
@@ -662,7 +658,6 @@ window.onload = function() {
     document.getElementById('timeLimit').addEventListener('change', saveSettings);
     document.getElementById('learningModeSelect').addEventListener('change', saveSettings);
 
-    // Event-Listener für STRG + Q
     document.addEventListener('keydown', function(event) {
         if (event.ctrlKey && event.key.toLowerCase() === 'q') {
             if (document.getElementById('selection').style.display !== 'none') {
@@ -672,24 +667,19 @@ window.onload = function() {
     });
 };
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// +++++++++++++   NEUER DARK-MODE-SCHALTER (Switch)   ++++++++++++++
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Dark-Mode-Schalter
 document.addEventListener("DOMContentLoaded", function() {
     const darkModeSwitch = document.getElementById("darkModeSwitch");
     const darkModeStatusText = document.getElementById("darkModeStatusText");
     const body = document.body;
 
-    // Aus Local Storage auslesen
     let isDarkModeOn = (localStorage.getItem("darkMode") === "true");
 
-    // Beim Laden Klassen anwenden
     body.classList.toggle("dark-mode", isDarkModeOn);
     body.classList.toggle("dark-on", isDarkModeOn);
     body.classList.toggle("dark-off", !isDarkModeOn);
     updateDarkModeStatusText(isDarkModeOn);
 
-    // Klick zum Umschalten
     darkModeSwitch.addEventListener("click", function() {
         isDarkModeOn = !isDarkModeOn;
         localStorage.setItem("darkMode", isDarkModeOn);
