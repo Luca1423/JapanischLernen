@@ -1,3 +1,7 @@
+// =============================
+// ============ KJS.js =========
+// =============================
+
 // Initialisiere die Kanji-Liste und Gruppen
 let kanjiList = [];
 let groupList = [];
@@ -8,7 +12,7 @@ let kanjiQueue = [];
 // Funktion zum Laden der Kanji aus der JSON-Datei
 async function loadKanjiData() {
     try {
-        const response = await fetch('JS/Json/kanjiData.json'); // Passe den Pfad entsprechend an
+        const response = await fetch('JS/Json/kanjiData.json'); // Passe den Pfad ggf. an
         if (!response.ok) {
             throw new Error(`HTTP-Fehler! Status: ${response.status}`);
         }
@@ -76,7 +80,7 @@ const backButton2 = document.getElementById('backButton2');
 const addKanjiButton = document.getElementById('addKanjiButton');
 const formTitle = document.getElementById('formTitle');
 
-// Event Listener
+// EVENT Listener
 startButton.addEventListener('click', startLearning);
 submitButton.addEventListener('click', function() {
     if (!isAnswerChecked) {
@@ -90,7 +94,7 @@ backButton2.addEventListener('click', goBack);
 addKanjiButton.addEventListener('click', addKanji);
 addKanjiLink.addEventListener('click', showAddKanjiForm);
 
-// Event Listener für Enter-Taste im Antwortfeld
+// ENTER -> check oder nächstes Kanji
 answerInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         if (!isAnswerChecked) {
@@ -101,7 +105,7 @@ answerInput.addEventListener('keydown', function(event) {
     }
 });
 
-// Funktion zum Mischen eines Arrays (Fisher-Yates-Algorithmus)
+// Shuffle Array (Fisher-Yates)
 function shuffleArray(array) {
     let currentIndex = array.length, temporaryValue, randomIndex;
     while (0 !== currentIndex) {
@@ -114,7 +118,7 @@ function shuffleArray(array) {
     return array;
 }
 
-// Funktionen
+// Learning
 function startLearning() {
     const selectedGroups = Array.from(document.querySelectorAll('#groupCheckboxes input[type="checkbox"]:checked')).map(cb => cb.value);
 
@@ -136,17 +140,13 @@ function startLearning() {
     score = 0;
     isAnswerChecked = false;
 
-    // Stelle sicher, dass das Eingabefeld und der Button sichtbar sind
     answerInput.style.display = 'inline-block';
     submitButton.style.display = 'inline-block';
 
-    // Erstelle eine gemischte Warteschlange der Kanji
+    // Erstelle gemischte Warteschlange
     kanjiQueue = shuffleArray(filteredKanjiList.slice());
 
-    // Setze den Fortschrittsbalken zurück
     progressBar.style.width = '0%';
-
-    // Speichere die anfängliche Gesamtzahl der Kanji für die Fortschrittsberechnung
     totalKanjiCount = kanjiQueue.length;
 
     showKanji();
@@ -162,10 +162,8 @@ function showKanji() {
         answerInput.value = '';
         correctAnswerDiv.textContent = '';
 
-        // Stelle sicher, dass das Eingabefeld und der Button sichtbar sind
         answerInput.style.display = 'inline-block';
         submitButton.style.display = 'inline-block';
-
         answerInput.focus();
     } else {
         questionDiv.textContent = 'Lernsession abgeschlossen!';
@@ -178,7 +176,7 @@ function showKanji() {
 }
 
 function checkAnswer() {
-    const currentKanji = kanjiQueue.shift(); // Nimm das aktuelle Kanji aus der Warteschlange
+    const currentKanji = kanjiQueue.shift();
     const userAnswer = answerInput.value.trim();
     const correctAnswer = currentKanji.meaning;
 
@@ -186,11 +184,15 @@ function checkAnswer() {
         correctAnswerDiv.textContent = 'Richtig!';
         correctAnswerDiv.className = 'correct';
         score++;
+        correctSound.currentTime = 0;
+        correctSound.play();
     } else {
         correctAnswerDiv.textContent = `Falsch! Die richtige Antwort ist: ${correctAnswer}`;
         correctAnswerDiv.className = 'incorrect';
-        // Füge das Kanji am Ende der Warteschlange wieder hinzu
+        // Wieder ans Ende
         kanjiQueue.push(currentKanji);
+        wrongSound.currentTime = 0;
+        wrongSound.play();
     }
 
     isAnswerChecked = true;
@@ -214,8 +216,8 @@ function goBack() {
     if (isEditing) {
         isEditing = false;
         currentEditIndex = null;
-        formTitle.textContent = 'Neues Kanji hinzufügen';
-        addKanjiButton.textContent = 'Kanji hinzufügen';
+        formTitle.textContent = 'Add new Kanji';
+        addKanjiButton.textContent = 'Add Kanji';
         document.getElementById('kanjiInput').value = '';
         document.getElementById('meaningInput').value = '';
         document.getElementById('groupInput').value = '';
@@ -235,38 +237,35 @@ function addKanji() {
 
     if (kanjiInputValue && meaningInputValue && groupInputValue) {
         if (isEditing) {
-            // Update existing Kanji
+            // Update
             kanjiList[currentEditIndex] = { kanji: kanjiInputValue, meaning: meaningInputValue, group: groupInputValue };
             alert('Kanji aktualisiert!');
             isEditing = false;
             currentEditIndex = null;
-            formTitle.textContent = 'Neues Kanji hinzufügen';
-            addKanjiButton.textContent = 'Kanji hinzufügen';
+            formTitle.textContent = 'Add new Kanji';
+            addKanjiButton.textContent = 'Add Kanji';
         } else {
-            // Add new Kanji
+            // Neu
             kanjiList.push({ kanji: kanjiInputValue, meaning: meaningInputValue, group: groupInputValue });
             alert('Kanji hinzugefügt!');
         }
         document.getElementById('kanjiInput').value = '';
         document.getElementById('meaningInput').value = '';
         document.getElementById('groupInput').value = '';
-        updateKanjiData(); // Speichere die aktualisierte Liste
+        updateKanjiData();
         generateGroupList();
         displayGroupCheckboxes();
         displayKanjiList();
-        // Zurück zur Auswahlseite
         goBack();
     } else {
         alert('Bitte alle Felder ausfüllen.');
     }
 }
 
-// Funktion zum Speichern der Gruppen-Zustände
+// Gruppen-Zustände speichern/laden
 function saveGroupStates(groupStates) {
     localStorage.setItem('groupStates', JSON.stringify(groupStates));
 }
-
-// Funktion zum Laden der Gruppen-Zustände
 function loadGroupStates() {
     const states = localStorage.getItem('groupStates');
     return states ? JSON.parse(states) : {};
@@ -276,7 +275,6 @@ function displayKanjiList() {
     const kanjiListDisplay = document.getElementById('kanjiListDisplay');
     kanjiListDisplay.innerHTML = '';
 
-    // Gruppiere die Kanji nach Gruppen
     const groupMap = {};
     kanjiList.forEach((kanjiItem, index) => {
         if (!groupMap[kanjiItem.group]) {
@@ -285,30 +283,23 @@ function displayKanjiList() {
         groupMap[kanjiItem.group].push({ ...kanjiItem, index });
     });
 
-    // Lade die gespeicherten Gruppen-Zustände
     const groupStates = loadGroupStates();
 
-    // Für jede Gruppe eine auf- und zuklappbare Sektion erstellen
     for (const groupName in groupMap) {
-        // Gruppen-Header erstellen
         const groupHeader = document.createElement('div');
         groupHeader.className = 'group-header';
         groupHeader.textContent = groupName;
 
-        // Container für die Kanji-Liste dieser Gruppe erstellen
         const kanjiListDiv = document.createElement('ul');
         kanjiListDiv.className = 'kanji-group-list';
 
-        // Prüfe, ob der Zustand der Gruppe gespeichert ist
         if (groupStates[groupName] === 'expanded') {
             kanjiListDiv.style.display = 'block';
         } else {
-            kanjiListDiv.style.display = 'none'; // Standardmäßig zugeklappt
+            kanjiListDiv.style.display = 'none';
         }
 
-        // Event Listener für das Auf- und Zuklappen
         groupHeader.addEventListener('click', function() {
-            // Toggle der Anzeige der Kanji-Liste
             if (kanjiListDiv.style.display === 'none') {
                 kanjiListDiv.style.display = 'block';
                 groupStates[groupName] = 'expanded';
@@ -316,23 +307,19 @@ function displayKanjiList() {
                 kanjiListDiv.style.display = 'none';
                 groupStates[groupName] = 'collapsed';
             }
-            // Speichere den aktuellen Zustand
             saveGroupStates(groupStates);
         });
 
-        // Für jedes Kanji in der Gruppe
         groupMap[groupName].forEach((kanjiItem) => {
             const li = document.createElement('li');
-            // Kanji Text
             const kanjiText = document.createElement('span');
             kanjiText.className = 'kanji-text';
             kanjiText.textContent = `${kanjiItem.kanji} - ${kanjiItem.meaning}`;
 
-            // Button Gruppe
             const buttonGroup = document.createElement('div');
             buttonGroup.className = 'button-group';
 
-            // Edit Button
+            // Edit
             const editButton = document.createElement('button');
             editButton.textContent = 'Bearbeiten';
             editButton.className = 'edit-button';
@@ -340,7 +327,7 @@ function displayKanjiList() {
                 editKanji(kanjiItem.index);
             });
 
-            // Delete Button
+            // Delete
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Löschen';
             deleteButton.className = 'delete-button';
@@ -356,7 +343,6 @@ function displayKanjiList() {
             kanjiListDiv.appendChild(li);
         });
 
-        // Füge den Gruppen-Header und die Kanji-Liste zum Hauptcontainer hinzu
         kanjiListDisplay.appendChild(groupHeader);
         kanjiListDisplay.appendChild(kanjiListDiv);
     }
@@ -367,17 +353,13 @@ function editKanji(index) {
     currentEditIndex = index;
 
     const kanjiItem = kanjiList[index];
-
-    // Befülle das Formular mit den bestehenden Daten
     document.getElementById('kanjiInput').value = kanjiItem.kanji;
     document.getElementById('meaningInput').value = kanjiItem.meaning;
     document.getElementById('groupInput').value = kanjiItem.group;
 
-    // Aktualisiere den Formular-Titel und Button-Text
     formTitle.textContent = 'Kanji bearbeiten';
     addKanjiButton.textContent = 'Kanji aktualisieren';
 
-    // Zeige das Formular
     selectionDiv.style.display = 'none';
     addKanjiForm.style.display = 'block';
     learningDiv.style.display = 'none';
@@ -386,12 +368,11 @@ function editKanji(index) {
 function deleteKanji(index) {
     if (confirm('Möchtest du dieses Kanji wirklich löschen?')) {
         const deletedKanji = kanjiList.splice(index, 1)[0];
-        updateKanjiData(); // Speichere die aktualisierte Liste
+        updateKanjiData();
         generateGroupList();
         displayGroupCheckboxes();
         displayKanjiList();
 
-        // Aktualisiere den Gruppen-Zustand, falls die Gruppe leer ist
         const groupStates = loadGroupStates();
         const groupName = deletedKanji.group;
         const groupExists = kanjiList.some(item => item.group === groupName);
@@ -402,12 +383,11 @@ function deleteKanji(index) {
     }
 }
 
-// Funktion zum Speichern der aktualisierten Kanji-Daten in den localStorage
 function updateKanjiData() {
     localStorage.setItem('kanjiData', JSON.stringify(kanjiList));
 }
 
-// Kanji-Liste beim Laden der Seite anzeigen
+// Laden der Kanji-Liste beim Start
 window.onload = function() {
     const storedKanjiData = localStorage.getItem('kanjiData');
     if (storedKanjiData) {
@@ -420,25 +400,54 @@ window.onload = function() {
     }
 };
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ++++++++   DARK-MODE-TOGGLE-FUNKTIONALITÄT (neu hinzu)   +++++++++++
-   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+// =======================
+// === SOUND-LOGIK ====
+// =======================
+const correctSound = new Audio('Sounds/right.mp3');
+const wrongSound = new Audio('Sounds/wrong.mp3');
+correctSound.load();
+wrongSound.load();
 
+document.addEventListener("DOMContentLoaded", function() {
+    let isSoundOn = localStorage.getItem("muteSound") !== "true";
+    const muteContainer = document.getElementById("muteContainer");
+
+    // Anfangszustand
+    muteContainer.classList.toggle("sound-on", isSoundOn);
+    muteContainer.classList.toggle("sound-muted", !isSoundOn);
+    updateSoundStatus(isSoundOn);
+
+    // Klick auf Switch
+    document.getElementById("soundSwitch").addEventListener("click", function() {
+        let newIsSoundOn = !muteContainer.classList.contains("sound-on");
+        muteContainer.classList.toggle("sound-on", newIsSoundOn);
+        muteContainer.classList.toggle("sound-muted", !newIsSoundOn);
+        updateSoundStatus(newIsSoundOn);
+        localStorage.setItem("muteSound", !newIsSoundOn);
+    });
+});
+
+function updateSoundStatus(isSoundOn) {
+    correctSound.muted = !isSoundOn;
+    wrongSound.muted = !isSoundOn;
+    document.getElementById("soundStatusText").innerText = isSoundOn ? "Sound is on" : "Sound is off";
+}
+
+// =======================
+// === DARK MODE LOGIK ===
+// =======================
 document.addEventListener("DOMContentLoaded", function() {
     const darkModeSwitch = document.getElementById("darkModeSwitch");
     const darkModeStatusText = document.getElementById("darkModeStatusText");
     const body = document.body;
 
-    // Lade gespeicherten Zustand (true => Dark Mode an)
     let isDarkModeOn = (localStorage.getItem("darkMode") === "true");
 
-    // Klassen beim Laden anwenden
     body.classList.toggle("dark-mode", isDarkModeOn);
     body.classList.toggle("dark-on", isDarkModeOn);
     body.classList.toggle("dark-off", !isDarkModeOn);
     updateDarkModeStatusText(isDarkModeOn);
 
-    // Klick zum Umschalten
     darkModeSwitch.addEventListener("click", function() {
         isDarkModeOn = !isDarkModeOn;
         localStorage.setItem("darkMode", isDarkModeOn);
@@ -446,7 +455,6 @@ document.addEventListener("DOMContentLoaded", function() {
         body.classList.toggle("dark-mode", isDarkModeOn);
         body.classList.toggle("dark-on", isDarkModeOn);
         body.classList.toggle("dark-off", !isDarkModeOn);
-
         updateDarkModeStatusText(isDarkModeOn);
     });
 
