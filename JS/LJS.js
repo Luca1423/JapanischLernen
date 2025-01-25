@@ -390,7 +390,7 @@ function markAnswer(isCorrect, userAnswer = '') {
         document.getElementById('correctAnswer').innerText = 'Richtig!';
         document.getElementById('correctAnswer').className = 'correct';
 
-        // Hinzugefügt: Zeichen zu korrekt beantworteten hinzufügen
+        // Zeichen zu korrekt beantworteten hinzufügen
         if (!correctlyAnsweredCharacters.includes(currentChar.char)) {
             correctlyAnsweredCharacters.push(currentChar.char);
         }
@@ -554,16 +554,14 @@ wrongSound.load();
 document.addEventListener("DOMContentLoaded", function() {
     const soundSwitch = document.getElementById("soundSwitch");
     const soundStatusText = document.getElementById("soundStatusText");
-    const body = document.body; // Für die Klassensteuerung
+    const body = document.body;
 
     // Standardmäßig Sound AN, wenn keine Einstellung gespeichert ist
     let isSoundOn = localStorage.getItem("muteSound") !== "true";
 
-    // Setze den richtigen Zustand beim Laden
     body.classList.toggle("sound-on", isSoundOn);
     updateSoundStatus(isSoundOn);
 
-    // Event Listener für das Umschalten
     soundSwitch.addEventListener("click", function() {
         let isNowSoundOn = body.classList.toggle("sound-on");
         updateSoundStatus(isNowSoundOn);
@@ -571,7 +569,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-// Funktion zum Umschalten von Sound & Text sofort
 function updateSoundStatus(isSoundOn) {
     correctSound.muted = !isSoundOn;
     wrongSound.muted = !isSoundOn;
@@ -585,7 +582,11 @@ document.body.addEventListener("click", function() {
     wrongSound.play().catch(error => console.log("Sound aktiviert nach User-Interaktion"));
 }, { once: true });
 
-// Funktion zur Bewertung der Antwort (erneut, da du sie doppelt hattest)
+/* 
+   MARKANSWER (wird bei dir doppelt definiert - hier nochmals, 
+   um Sound direkt abzuspielen - belassen wir so, 
+   da es in deinem Code so existierte)
+*/
 function markAnswer(isCorrect, userAnswer = '') {
     clearInterval(timerInterval);
     document.getElementById('timer').innerText = '';
@@ -605,7 +606,6 @@ function markAnswer(isCorrect, userAnswer = '') {
             correctlyAnsweredCharacters.push(currentChar.char);
         }
 
-        // Sound für richtige Antwort
         correctSound.currentTime = 0;
         correctSound.play();
 
@@ -623,7 +623,6 @@ function markAnswer(isCorrect, userAnswer = '') {
             incorrectCharacters.push(currentChar);
         }
 
-        // Sound für falsche Antwort
         wrongSound.currentTime = 0;
         wrongSound.play();
     }
@@ -663,7 +662,7 @@ window.onload = function() {
     document.getElementById('timeLimit').addEventListener('change', saveSettings);
     document.getElementById('learningModeSelect').addEventListener('change', saveSettings);
 
-    // Hinzufügen des Event-Listeners für Strg + Q
+    // Event-Listener für STRG + Q
     document.addEventListener('keydown', function(event) {
         if (event.ctrlKey && event.key.toLowerCase() === 'q') {
             if (document.getElementById('selection').style.display !== 'none') {
@@ -677,7 +676,6 @@ window.onload = function() {
 // +++++++++++++   NEUER DARK-MODE-SCHALTER (Switch)   ++++++++++++++
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 document.addEventListener("DOMContentLoaded", function() {
-    // Dark-Mode-Schalter analog zum Sound-Schalter
     const darkModeSwitch = document.getElementById("darkModeSwitch");
     const darkModeStatusText = document.getElementById("darkModeStatusText");
     const body = document.body;
