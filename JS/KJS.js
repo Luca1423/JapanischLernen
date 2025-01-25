@@ -104,20 +104,13 @@ answerInput.addEventListener('keydown', function(event) {
 // Funktion zum Mischen eines Arrays (Fisher-Yates-Algorithmus)
 function shuffleArray(array) {
     let currentIndex = array.length, temporaryValue, randomIndex;
-
-    // Solange es noch Elemente gibt
     while (0 !== currentIndex) {
-
-        // Wähle ein verbleibendes Element
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
-
-        // Und tausche es mit dem aktuellen Element
         temporaryValue = array[currentIndex];
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
 
@@ -426,3 +419,38 @@ window.onload = function() {
         loadKanjiData();
     }
 };
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   ++++++++   DARK-MODE-TOGGLE-FUNKTIONALITÄT (neu hinzu)   +++++++++++
+   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+document.addEventListener("DOMContentLoaded", function() {
+    const darkModeSwitch = document.getElementById("darkModeSwitch");
+    const darkModeStatusText = document.getElementById("darkModeStatusText");
+    const body = document.body;
+
+    // Lade gespeicherten Zustand (true => Dark Mode an)
+    let isDarkModeOn = (localStorage.getItem("darkMode") === "true");
+
+    // Klassen beim Laden anwenden
+    body.classList.toggle("dark-mode", isDarkModeOn);
+    body.classList.toggle("dark-on", isDarkModeOn);
+    body.classList.toggle("dark-off", !isDarkModeOn);
+    updateDarkModeStatusText(isDarkModeOn);
+
+    // Klick zum Umschalten
+    darkModeSwitch.addEventListener("click", function() {
+        isDarkModeOn = !isDarkModeOn;
+        localStorage.setItem("darkMode", isDarkModeOn);
+
+        body.classList.toggle("dark-mode", isDarkModeOn);
+        body.classList.toggle("dark-on", isDarkModeOn);
+        body.classList.toggle("dark-off", !isDarkModeOn);
+
+        updateDarkModeStatusText(isDarkModeOn);
+    });
+
+    function updateDarkModeStatusText(isOn) {
+        darkModeStatusText.innerText = isOn ? "Dark Mode is on" : "Dark Mode is off";
+    }
+});
