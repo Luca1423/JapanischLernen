@@ -12,11 +12,9 @@
 <body>
     <h1>Learn Kanji</h1>
 
-    <!-- Hauptnavigation -->
+    <!-- Navigation (nur rechts) -->
     <div class="nav-container">
-        <div class="nav-left">
-            <a href="#" class="top-link" id="addKanjiLink">Add Kanji</a>
-        </div>
+        <!-- NAV-LEFT ENTFERNT -->
         <div class="nav-right">
             <a href="Lernen.html" class="top-link">Kana</a>
             <a href="Vokabeln.html" class="top-link">Vocabulary</a>
@@ -34,6 +32,12 @@
       </div>
     </div>
 
+    <!-- Sound-Schalter (darunter) -->
+    <div class="sound-toggle-container" id="muteContainer">
+      <div id="soundSwitch"></div>
+      <span id="soundStatusText">Sound is off</span>
+    </div>
+
     <div id="container">
         <!-- Auswahlbereich -->
         <div id="selection">
@@ -45,7 +49,9 @@
                 <div id="groupCheckboxes"></div>
             </div>
 
+            <!-- Start Learning & Add Kanji Buttons -->
             <button id="startButton">Start Learning</button>
+            <button id="addKanjiLink">Add Kanji</button>
 
             <!-- Anzeige aller Kanji -->
             <div id="kanjiListContainer">
@@ -70,7 +76,7 @@
 
         <!-- Kanji hinzufügen / bearbeiten Bereich -->
         <div id="addKanjiForm" style="display: none;">
-            <h3 id="formTitle">Add new Kanji </h3>
+            <h3 id="formTitle">Add new Kanji</h3>
             <label for="kanjiInput">Kanji:</label>
             <input type="text" id="kanjiInput">
             <label for="meaningInput">Meaning:</label>
