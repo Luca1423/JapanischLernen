@@ -580,9 +580,7 @@ document.body.addEventListener("click", function() {
     wrongSound.play().catch(error => console.log("Sound aktiviert nach User-Interaktion"));
 }, { once: true });
 
-/* 
-   Funktion markAnswer (erneut definiert für Sound):
-*/
+/* markAnswer-Funktion (erneut für Sound) */
 function markAnswer(isCorrect, userAnswer = '') {
     clearInterval(timerInterval);
     document.getElementById('timer').innerText = '';
@@ -635,7 +633,7 @@ function markAnswer(isCorrect, userAnswer = '') {
     }
 }
 
-// Event-Listener für STRG + Q zum schnellen Starten
+// Event-Listener für STRG + Q
 document.addEventListener('keydown', function(event) {
     if (event.ctrlKey && event.key.toLowerCase() === 'q') {
         if (document.getElementById('selection').style.display !== 'none') {
