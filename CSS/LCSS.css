@@ -225,19 +225,67 @@ th {
     transition: width 0.3s ease;
 }
 
-/* Sound Mute Button oben links */
+/* Dark-Mode-Schalter (oben links) */
+.darkmode-toggle-container {
+  position: absolute;
+  top: 15px; /* liegt über dem Sound-Schalter */
+  left: 15px;
+  z-index: 1001;
+}
+
+#darkModeSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: #666; /* Standardmäßig auf AUS */
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#darkModeSwitch::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Bei "Dark Mode an" => Schalter rechts */
+.dark-on #darkModeSwitch {
+  background-color: #ffb500;
+}
+.dark-on #darkModeSwitch::before {
+  transform: translateX(20px);
+}
+
+/* Bei "Dark Mode aus" => Schalter links */
+.dark-off #darkModeSwitch {
+  background-color: #666;
+}
+.dark-off #darkModeSwitch::before {
+  transform: translateX(0px);
+}
+
+/* Sound Mute Button (nun nach unten versetzt) */
 .sound-toggle-container {
   position: absolute;
-  top: 15px;
+  top: 60px;  /* statt vorher 15px */
   left: 15px;
   z-index: 1000;
 }
 
-/* Schalter-Design */
+/* Schalter-Design für Sound */
 #soundSwitch {
   width: 40px;
   height: 20px;
-  background-color: #666; /* Standardmäßig auf "AUS" */
+  background-color: #666;
   border-radius: 15px;
   position: relative;
   cursor: pointer;
@@ -281,8 +329,8 @@ th {
   display: flex;
   align-items: center;
   font-size: 14px;
-  white-space: nowrap; /* Verhindert Zeilenumbrüche */
-  gap: 8px; /* Abstand zwischen Schalter und Text */
+  white-space: nowrap;
+  gap: 8px;
 }
 
 #soundStatusText {
@@ -290,26 +338,26 @@ th {
   color: #333;
 }
 
-/* =========================================
-   ============ DARK MODE STYLES ===========
-   ========================================= */
+/* ==================================
+   DARK MODE-KLASSEN UND STYLES
+   ================================== */
 body.dark-mode {
     background-color: #2c3e50;
-    color: #ecf0f1;
+    color: #ffffff; /* Im Dark Mode: Text auf Weiß */
 }
 
 /* Header in Dark Mode */
 body.dark-mode h1 {
     background-color: #16a085;
-    color: #ecf0f1;
+    color: #ffffff;
 }
 
-/* Container-Hintergründe in Dark Mode */
+/* Container im Dark Mode */
 body.dark-mode #container,
 body.dark-mode #selection,
 body.dark-mode #learning {
     background-color: #34495e;
-    color: #ecf0f1;
+    color: #ffffff;
 }
 
 /* Buttons in Dark Mode */
@@ -345,12 +393,4 @@ body.dark-mode #progress-container {
 }
 body.dark-mode #progress-bar {
     background-color: #27ae60;
-}
-
-/* Container für den Dark-Mode-Button */
-.dark-mode-toggle-container {
-  position: absolute;
-  top: 65px; /* ein Stück unter dem Sound-Switch */
-  left: 15px;
-  z-index: 1001;
 }
