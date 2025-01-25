@@ -38,6 +38,8 @@ var remainingVocab = [];
 // Sounds
 const correctSound = new Audio('Sounds/right.mp3');
 const wrongSound = new Audio('Sounds/wrong.mp3');
+correctSound.load();
+wrongSound.load();
 
 // ====================
 // Initialization
@@ -269,7 +271,7 @@ function markAnswer(isCorrect, userAnswer = '') {
         if (!uniqueCorrectSet.has(currentWord.word)) {
             uniqueCorrectSet.add(currentWord.word);
         }
-        document.getElementById('correctAnswer').innerText = 
+        document.getElementById('correctAnswer').innerText =
             'Correct! ' + currentWord.word + ' = ' + currentWord.meaning;
         document.getElementById('correctAnswer').className = 'correct';
         correctSound.currentTime = 0;
@@ -458,3 +460,37 @@ function updateSoundStatus(isSoundOn) {
     wrongSound.muted = !isSoundOn;
     document.getElementById("soundStatusText").innerText = isSoundOn ? "Sound is on" : "Sound is off";
 }
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++++++++++   NEUER DARK-MODE-SCHALTER (Switch)  +++++++++
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+document.addEventListener("DOMContentLoaded", function() {
+    const darkModeSwitch = document.getElementById("darkModeSwitch");
+    const darkModeStatusText = document.getElementById("darkModeStatusText");
+    const body = document.body;
+
+    // Dark-Mode-Zustand aus Local Storage lesen
+    let isDarkModeOn = (localStorage.getItem("darkMode") === "true");
+
+    // Klassen beim Laden setzen
+    body.classList.toggle("dark-mode", isDarkModeOn);
+    body.classList.toggle("dark-on", isDarkModeOn);
+    body.classList.toggle("dark-off", !isDarkModeOn);
+    updateDarkModeStatusText(isDarkModeOn);
+
+    // Klick-Event zum Umschalten
+    darkModeSwitch.addEventListener("click", function() {
+        isDarkModeOn = !isDarkModeOn;
+        localStorage.setItem("darkMode", isDarkModeOn);
+
+        body.classList.toggle("dark-mode", isDarkModeOn);
+        body.classList.toggle("dark-on", isDarkModeOn);
+        body.classList.toggle("dark-off", !isDarkModeOn);
+
+        updateDarkModeStatusText(isDarkModeOn);
+    });
+
+    function updateDarkModeStatusText(isOn) {
+        darkModeStatusText.innerText = isOn ? "Dark Mode is on" : "Dark Mode is off";
+    }
+});
