@@ -1,7 +1,3 @@
-// =============================
-// ============ KJS.js =========
-// =============================
-
 // Initialisiere die Kanji-Liste und Gruppen
 let kanjiList = [];
 let groupList = [];
@@ -12,7 +8,7 @@ let kanjiQueue = [];
 // Funktion zum Laden der Kanji aus der JSON-Datei
 async function loadKanjiData() {
     try {
-        const response = await fetch('JS/Json/kanjiData.json'); // Passe den Pfad ggf. an
+        const response = await fetch('JS/Json/kanjiData.json');
         if (!response.ok) {
             throw new Error(`HTTP-Fehler! Status: ${response.status}`);
         }
@@ -49,7 +45,7 @@ function displayGroupCheckboxes() {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.value = group;
-        checkbox.checked = true; // Standardmäßig ausgewählt
+        checkbox.checked = true;
 
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(' ' + group));
@@ -105,7 +101,7 @@ answerInput.addEventListener('keydown', function(event) {
     }
 });
 
-// Shuffle Array (Fisher-Yates)
+// Shuffle Array
 function shuffleArray(array) {
     let currentIndex = array.length, temporaryValue, randomIndex;
     while (0 !== currentIndex) {
@@ -189,7 +185,6 @@ function checkAnswer() {
     } else {
         correctAnswerDiv.textContent = `Falsch! Die richtige Antwort ist: ${correctAnswer}`;
         correctAnswerDiv.className = 'incorrect';
-        // Wieder ans Ende
         kanjiQueue.push(currentKanji);
         wrongSound.currentTime = 0;
         wrongSound.play();
